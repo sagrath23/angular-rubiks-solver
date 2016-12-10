@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Crossover Video Portal</title>
-</head>
-<body>
-	<h2>Crossover Video Portal</h2>
-	<hr />
-	If you see this page, it means you have configured the app correctly. Put your client side code in /client folder and the application will start serving your code.
-</body>
+  <head>
+    <title>Angular QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Polyfill(s) for older browsers -->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+
+    <script src="systemjs.config.js"></script>
+    <script>
+      System.import('app').catch(function(err){ console.error(err); });
+    </script>
+  </head>
+
+  <body>
+    <my-app>Loading AppComponent content here ...</my-app>
+  </body>
 </html>

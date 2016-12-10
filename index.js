@@ -1,5 +1,6 @@
 //requiring NPM modeles
 var express = require('express');
+var path = require('path');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -21,6 +22,9 @@ var helperFunctions = require('./helpers/helperFunctions');
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json.
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+//node_modules route
+app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));
 
 //connedting to mongoDB
 mongoose.connect('mongodb://'+configs.dbHost+'/'+configs.dbName);
