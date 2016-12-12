@@ -28,42 +28,12 @@ export class AuthService {
     				.catch(this.handleError);
 	}
 
-	getUsers(): Promise<User[]> {
-	    return this.http.get(this.authUrl)
-	    			.toPromise()
-	    			.then(response => response.json().data as User[])
-	    			.catch(this.handleError);
-	}
-
-	getUser(id: number): Promise<User> {
-  		const url = `${this.authUrl}/${id}`;
-  		return this.http.get(url)
-    				.toPromise()
-    				.then(response => response.json().data as User)
-    				.catch(this.handleError);
-	}
-
-	update(hero: User): Promise<User> {
-  		const url = `${this.authUrl}/${hero.id}`;
-  		return this.http.put(url, JSON.stringify(hero), {headers: this.headers})
-    				.toPromise()
-    				.then(() => hero)
-    				.catch(this.handleError);
-	}
-
-	create(name: string): Promise<User> {
-  		return this.http
-    				.post(this.authUrl, JSON.stringify({name: name}), {headers: this.headers})
+	logout(sessionId: string): Promise<User>{
+		const url = `${this.authUrl}/logout`;
+		return this.http
+    				.post(this.authUrl, JSON.stringify({sessionId: sessionId}), {headers: this.headers})
     				.toPromise()
     				.then(res => res.json().data)
-    				.catch(this.handleError);
-	}
-
-	delete(id: number): Promise<void> {
-  		const url = `${this.authUrl}/${id}`;
-  		return this.http.delete(url, {headers: this.headers})
-    				.toPromise()
-    				.then(() => null)
     				.catch(this.handleError);
 	}
 }
