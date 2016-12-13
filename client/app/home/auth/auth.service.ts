@@ -1,5 +1,6 @@
 import { Injectable } 		from '@angular/core';
 import { Headers, Http } 	from '@angular/http';
+//import { CryptoJS } 		from 'cryptojs';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -21,8 +22,9 @@ export class AuthService {
 
 	login(username: string,password: string): Promise<User>{
 		const url = `${this.authUrl}/auth`;
+		console.log(url);
 		return this.http
-    				.post(this.authUrl, JSON.stringify({username: username, password: password}), {headers: this.headers})
+    				.post(url, JSON.stringify({username: username, password: password}), {headers: this.headers})
     				.toPromise()
     				.then(res => res.json().data)
     				.catch(this.handleError);

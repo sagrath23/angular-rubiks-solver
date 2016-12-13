@@ -9,10 +9,11 @@ import { AppComponent }  from './app.component';
 
 //App Components
 import { LoginComponent } 	   from './login/login.component';
-import { HeroDetailComponent } from './hero-detail/hero-detail.component';
-import { HeroesComponent }     from './heroes/heroes.component';
-import { DashboardComponent }  from './dashboard/dashboard.component';
-import { HeroService }         from './hero/hero.service';
+import { AuthService }		from './auth/auth.service';
+//import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+//import { HeroesComponent }     from './heroes/heroes.component';
+//import { DashboardComponent }  from './dashboard/dashboard.component';
+//import { HeroService }         from './hero/hero.service';
 
 //App routes
 import { AppRoutingModule }    from './routes/app-routing.module';
@@ -26,10 +27,9 @@ import { InMemoryDataService }  from './in-memory-data.service';
   		BrowserModule , 
 		FormsModule ,
 		HttpModule,
-    	InMemoryWebApiModule.forRoot(InMemoryDataService),
     	AppRoutingModule],  
-  	declarations: [ AppComponent , LoginComponent, DashboardComponent, HeroesComponent , HeroDetailComponent ],
-  	providers: [ HeroService ], 
+  	declarations: [ AppComponent , LoginComponent ],
+  	providers: [ AuthService ], 
   	bootstrap:    [ AppComponent ]
 })
 
