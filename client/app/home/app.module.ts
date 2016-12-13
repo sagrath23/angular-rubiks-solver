@@ -23,13 +23,13 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
 
 @NgModule({
-  	imports:[ 
-  		BrowserModule , 
-		FormsModule ,
-		HttpModule,
+  	imports:[
+      BrowserModule ,
+		  FormsModule ,
+		  HttpModule,
     	AppRoutingModule],  
   	declarations: [ AppComponent , LoginComponent ],
-  	providers: [ AuthService ], 
+  	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })
 

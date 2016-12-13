@@ -1,6 +1,6 @@
 import { Injectable } 		from '@angular/core';
 import { Headers, Http } 	from '@angular/http';
-import { Md5 } 		from '../../../../node_modules/ts-md5/dist/md5';
+import { md5 } 		from './md5';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -24,7 +24,7 @@ export class AuthService {
 		const url = `${this.authUrl}/auth`;
 		console.log(url);
 		return this.http
-    				.post(url, JSON.stringify({username: username, password: Md5.hashStr(password) }), {headers: this.headers})
+    				.post(url, JSON.stringify({username: username, password: md5(password) }), {headers: this.headers})
     				.toPromise()
     				.then(res => res.json().data)
     				.catch(this.handleError);
