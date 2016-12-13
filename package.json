@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
+    "start": "tsc && concurrently \"tsc -w\" \"node index.js\" ",
     "e2e": "tsc && concurrently \"http-server -s\" \"protractor client/protractor.config.js\" --kill-others --success first",
     "lint": "tslint ./app/**/*.ts -t verbose",
     "lite": "lite-server",
@@ -25,24 +25,28 @@
     "@angular/platform-browser": "~2.3.0",
     "@angular/platform-browser-dynamic": "~2.3.0",
     "@angular/router": "~3.3.0",
-
     "angular-in-memory-web-api": "~0.1.17",
-    "systemjs": "0.19.40",
-    "core-js": "^2.4.1",
-    "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-rc.4",
-    "zone.js": "^0.7.2",
     "body-parser": "^1.15.1",
+    "bootstrap": "^4.0.0-alpha.5",
+    "core-js": "^2.4.1",
+    "crypto-js": "git+https://github.com/brix/crypto-js.git",
     "express": "^4.13.4",
     "mongoose": "^4.4.20",
     "morgan": "^1.7.0",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "reflect-metadata": "^0.1.8",
+    "rxjs": "5.0.0-rc.4",
+    "systemjs": "0.19.40",
+    "typings": "^2.0.0",
+    "zone.js": "^0.7.2"
+  },
+  "optionalDependencies": {
+    "fsevents": "*"
   },
   "devDependencies": {
     "concurrently": "^3.1.0",
     "lite-server": "^2.2.2",
     "typescript": "~2.0.10",
-
     "canonical-path": "0.0.2",
     "http-server": "^0.9.0",
     "tslint": "^3.15.1",
@@ -56,9 +60,12 @@
     "protractor": "4.0.9",
     "webdriver-manager": "10.2.5",
     "rimraf": "^2.5.4",
-
     "@types/node": "^6.0.46",
     "@types/jasmine": "^2.5.36",
     "@types/selenium-webdriver": "^2.53.33"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sagrath23/videoplayer.git"
   }
 }

@@ -8,6 +8,7 @@ import { HttpModule }    from '@angular/http';
 import { AppComponent }  from './app.component';
 
 //App Components
+import { LoginComponent } 	   from './login/login.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { HeroesComponent }     from './heroes/heroes.component';
 import { DashboardComponent }  from './dashboard/dashboard.component';
@@ -27,7 +28,7 @@ import { InMemoryDataService }  from './in-memory-data.service';
 		HttpModule,
     	InMemoryWebApiModule.forRoot(InMemoryDataService),
     	AppRoutingModule],  
-  	declarations: [ AppComponent , DashboardComponent, HeroesComponent , HeroDetailComponent ],
+  	declarations: [ AppComponent , LoginComponent, DashboardComponent, HeroesComponent , HeroDetailComponent ],
   	providers: [ HeroService ], 
   	bootstrap:    [ AppComponent ]
 })

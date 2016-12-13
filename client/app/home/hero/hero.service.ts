@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
+
+
 import 'rxjs/add/operator/toPromise';
 
 import { Hero } 	from './hero';
@@ -56,5 +58,5 @@ export class HeroService {
     				.toPromise()
     				.then(() => null)
     				.catch(this.handleError);
-}
+	}
 }
