@@ -5,11 +5,16 @@ import { md5 } 		from './md5';
 import 'rxjs/add/operator/toPromise';
 
 import { User } 	from './user';
+import { Video } 	from '../videoplayer/video';
+
 
 @Injectable()
 export class AuthService {
 
 	private authUrl = 'user';  // URL to web api
+	private videosUrl = 'videos';
+
+	private loggedUser: User;
 
 	private headers = new Headers({'Content-Type': 'application/json'});
 
@@ -22,20 +27,31 @@ export class AuthService {
 
 	login(username: string,password: string): Promise<User>{
 		const url = `${this.authUrl}/auth`;
-		console.log(url);
+
 		return this.http
     				.post(url, JSON.stringify({username: username, password: md5(password) }), {headers: this.headers})
     				.toPromise()
-    				.then(res => res.json().data)
-    				.catch(this.handleError);
+    				.then((data) => {
+							this.loggedUser = data.json() as User;
+							console.log(this.loggedUser,'AuthService.login.then');
+							return this.loggedUser;
+						}).catch(this.handleError);
 	}
 
-	logout(sessionId: string): Promise<User>{
+	logout(sessionId: string): Promise<any>{
 		const url = `${this.authUrl}/logout`;
 		return this.http
     				.post(this.authUrl, JSON.stringify({sessionId: sessionId}), {headers: this.headers})
     				.toPromise()
     				.then(res => res.json().data)
+    				.catch(this.handleError);
+	}
+
+	getVideos(sessionId: string): Promise<Video[]>{
+		const url = `${this.videosUrl}?sessionId=${sessionId}`;
+		return this.http.get(url)
+    				.toPromise()
+    				.then(res => res.json().data as Video[])
     				.catch(this.handleError);
 	}
 }

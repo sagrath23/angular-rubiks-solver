@@ -8,8 +8,10 @@ import { HttpModule }    from '@angular/http';
 import { AppComponent }  from './app.component';
 
 //App Components
-import { LoginComponent } 	   from './login/login.component';
-import { AuthService }		from './auth/auth.service';
+import { LoginComponent } 	   	from './login/login.component';
+import { AuthService }			from './auth/auth.service';
+import { VideoListComponent }	from './videolist/video-list.component';
+
 //import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 //import { HeroesComponent }     from './heroes/heroes.component';
 //import { DashboardComponent }  from './dashboard/dashboard.component';
@@ -18,17 +20,13 @@ import { AuthService }		from './auth/auth.service';
 //App routes
 import { AppRoutingModule }    from './routes/app-routing.module';
 
-// Imports for loading & configuring the in-memory web api
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
-
 @NgModule({
   	imports:[
       BrowserModule ,
 		  FormsModule ,
 		  HttpModule,
     	AppRoutingModule],  
-  	declarations: [ AppComponent , LoginComponent ],
+  	declarations: [ AppComponent , LoginComponent , VideoListComponent ],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })

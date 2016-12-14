@@ -1,6 +1,6 @@
 import { Component }                 from '@angular/core';
 import { OnInit }                    from '@angular/core';
-import { Router }    from '@angular/router';
+import { Router }                    from '@angular/router';
 import { Location }                  from '@angular/common';
 
 import { User } from '../auth/user';
@@ -25,6 +25,12 @@ export class LoginComponent {
     private authService: AuthService) { }
 
   login(username:string, password:string): void{
-    this.authService.login(username, password).then(loggedUser => this.loggedUser = loggedUser);
+    this.authService.login(username, password)
+          .then((data) => {
+            this.loggedUser = data;
+            if(this.loggedUser.sessionId){
+              this.router.navigate(['/videolist']);
+            }
+          });
   }
 }
