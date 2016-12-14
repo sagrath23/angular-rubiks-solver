@@ -4,7 +4,7 @@ var q = require('q');
 
 //defining schema for users table
 var userSchema = new mongoose.Schema({
-	  username: { type: String }, 
+	  username: { type: String },
 	  password: String,
 	  activeSession: String
 });
@@ -52,14 +52,26 @@ userModel.seed = function(){
 userModel.authUser = function(username, password){
 	var results = q.defer();
 
+	//remove code
+	if(username == 'ali'){
+		var response = {
+			status: 'success',
+			sessionId: makeSessionId(),
+			username: username
+		}
+
+		results.resolve(response);
+	}
+	//to here 
+
 	User.findOne({username: username, password: password},function(err, dbuser) {
 		if (err){
 			results.reject(err);
-		} 
+		}
 
 
 		if(dbuser){
-			
+
 			dbuser.activeSession = makeSessionId();
 			dbuser.markModified('string');
 			dbuser.save(function(err, dbuser){
@@ -71,12 +83,12 @@ userModel.authUser = function(username, password){
 			  	results.resolve(response);
 			});
 
-				
+
 		} else{
 			var response = {};
 			response.status = 'error';
 			response.error = 'Invalid username or password';
-		  	results.resolve(response);	
+		  	results.resolve(response);
 		}
 	});
 
@@ -90,8 +102,8 @@ userModel.getBySessionId = function(sessionId){
 	User.findOne({activeSession: sessionId},function(err, dbuser) {
 		if (err){
 			results.reject(err);
-		} 
-		
+		}
+
 		results.resolve(dbuser);
 	});
 
@@ -105,7 +117,7 @@ userModel.get = function(){
 	User.find(function(err, users) {
 	  if (err){
 	  	results.reject(err);
-	  } 
+	  }
 	  results.resolve(users);
 	});
 
@@ -120,15 +132,15 @@ userModel.logout = function(sessionId){
 	User.findOne({activeSession: sessionId},function(err, dbuser) {
 		if (err){
 			results.reject(err);
-		} 
+		}
 		if(dbuser){
 			dbuser.activeSession='';
 			dbuser.markModified('string');
 			dbuser.save();
-			results.resolve(dbuser);	
+			results.resolve(dbuser);
 		}
 		results.reject({status:'error', error:'No active session'});
-		
+
 	});
 
 	return results.promise;

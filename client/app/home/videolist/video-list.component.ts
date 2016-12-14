@@ -2,6 +2,8 @@ import { Component , Input , OnInit }   from '@angular/core';
 import { ActivatedRoute, Params }       from '@angular/router';
 import { Location }                     from '@angular/common';
 
+import 'rxjs/add/operator/switchMap';
+
 import { User } from '../auth/user';
 import { Video } from '../videoplayer/video';
 
@@ -17,7 +19,7 @@ import { AuthService } from '../auth/auth.service';
 export class VideoListComponent implements OnInit {
 
   @Input()
-  loggedUser: User;
+  sessionId: string;
 
 	videos: Video[];
 
@@ -30,11 +32,13 @@ export class VideoListComponent implements OnInit {
 		private location: Location) {}
 
 	ngOnInit(): void {
-
-		this.getVideos();
+    this.route.params.subscribe(params => {
+      this.sessionId = params['sessionId'];
+      this.getVideos();
+    });
   }
 
   getVideos(): void {
-    this.authService.getVideos('testSessionId').then(videos => this.videos = videos);
+    this.authService.getVideos(this.sessionId).then(videos => this.videos = videos);
   }
 }

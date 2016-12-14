@@ -29,7 +29,7 @@ export class LoginComponent {
           .then((data) => {
             this.loggedUser = data;
             if(this.loggedUser.sessionId){
-              this.router.navigate(['/videolist']);
+              this.router.navigate(['/videolist',this.loggedUser.sessionId]);
             }
           });
   }
