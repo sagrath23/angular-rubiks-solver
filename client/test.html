@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tracking.js - color hello world</title>
+  <!--<link rel="stylesheet" href="node_modules/tracking/examples/assets/demo.css">-->
+
+  <script src="node_modules/tracking/build/tracking-min.js"></script>
+
+  <style>
+  .rect {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: -1000px;
+    top: -1000px;
+  }
+  </style>
+</head>
+<body>
+  <div class="demo-title">
+    <p><a href="http://trackingjs.com" target="_parent">tracking.js</a> － detect certain colors in a image</p>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-container">
+      <img id="img" src="images/face1.jpg" width="100%" />
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      var img = document.getElementById('img');
+      var demoContainer = document.querySelector('.demo-container');
+
+      tracking.ColorTracker.registerColor('white', function(r, g, b) {
+        if (r > 150 && g > 150 && b > 150) {
+          return true;
+        }
+        return false;
+      });
+
+      tracking.ColorTracker.registerColor('blue', function(r, g, b) {
+        if (r < 100 && g < 100 && b > 110) {
+          return true;
+        }
+        return false;
+      });
+
+      tracking.ColorTracker.registerColor('green', function(r, g, b) {
+        if (r < 100 && g > 200 && b < 100) {
+          return true;
+        }
+        return false;
+      });
+
+      tracking.ColorTracker.registerColor('red', function(r, g, b) {
+        if (r > 200 && g < 50 && b < 50) {
+          return true;
+        }
+        return false;
+      });
+
+      tracking.ColorTracker.registerColor('orange', function(r, g, b) {
+        if (r > 200 && g > 60 && b < 70) {
+          return true;
+        }
+        return false;
+      });
+/*
+      tracking.ColorTracker.registerColor('yellow', function(r, g, b) {
+        if (r > 200 && g > 60 && b < 70) {
+          return true;
+        }
+        return false;
+      });
+*/
+
+
+
+
+      var tracker = new tracking.ColorTracker(['yellow','white', 'blue',  'red', 'green']);
+      tracker.on('track', function(event) {
+        event.data.forEach(function(rect) {
+          window.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
+        });
+      });
+      tracking.track('#img', tracker);
+      window.plot = function(x, y, w, h, color) {
+        var rect = document.createElement('div');
+        document.querySelector('.demo-container').appendChild(rect);
+        rect.classList.add('rect');
+        rect.style.border = '2px solid ' + color;
+        rect.style.width = w + 'px';
+        rect.style.height = h + 'px';
+        rect.style.left = (img.offsetLeft + x) + 'px';
+        rect.style.top = (img.offsetTop + y) + 'px';
+      };
+    };
+  </script>
+
+</body>
+</html>
