@@ -61,27 +61,24 @@
         return false;
       });
 
-      tracking.ColorTracker.registerColor('orange', function(r, g, b) {
-        if (r > 200 && g > 60 && b < 70) {
-          return true;
-        }
-        return false;
-      });
-/*
       tracking.ColorTracker.registerColor('yellow', function(r, g, b) {
-        if (r > 200 && g > 60 && b < 70) {
+        if (r > 140 && g > 140 && b < 50){
           return true;
         }
         return false;
       });
-*/
-
-
-
+      
+      tracking.ColorTracker.registerColor('orange', function(r, g, b) {
+        if (r > 141 && g < 150 && b < 150) {
+          return true;
+        }
+        return false;
+      });
 
       var tracker = new tracking.ColorTracker(['yellow','white', 'blue',  'red', 'green']);
       tracker.on('track', function(event) {
         event.data.forEach(function(rect) {
+          console.log(rect.color);
           window.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
         });
       });
