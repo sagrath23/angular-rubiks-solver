@@ -7,7 +7,16 @@ import { Hero } from '../hero/hero';
 
 import { HeroService } from '../hero/hero.service';
 
-declare var tracking: any;
+interface Tracking {
+    ColorTracker: registerColor;
+    track: Function;
+}
+
+interface registerColor {
+    registerColor: Function;
+}
+
+declare var tracking: Tracking;
 
 @Component({
   moduleId: module.id,
@@ -30,6 +39,7 @@ export class TrackerComponent implements OnInit {
   }
 
 	ngOnInit(): void {
+    /*
     var img = document.getElementById('img');
     
     var demoContainer = document.querySelector('.demo-container');
@@ -69,7 +79,7 @@ export class TrackerComponent implements OnInit {
       return false;
     });
 
-    this.tracker = new tracking.ColorTracker(['yellow','white', 'blue',  'red', 'green']);
+    this.tracker = new tracking.ColorTracker(['yellow', 'white', 'blue',  'red', 'green']);
     
     this.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
@@ -89,6 +99,7 @@ export class TrackerComponent implements OnInit {
       rect.style.left = (img.offsetLeft + x) + 'px';
       rect.style.top = (img.offsetTop + y) + 'px';
     };
+    */
   }
 
 }
