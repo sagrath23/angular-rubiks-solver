@@ -39,11 +39,16 @@ export class TrackerComponent implements OnInit {
   }
 
 	ngOnInit(): void {
-    /*
-    var img = document.getElementById('img');
+    console.log('init tracker...');
     
-    var demoContainer = document.querySelector('.demo-container');
 
+    //this.tracker = new tracking.ColorTracker(['yellow', 'white', 'blue',  'red', 'green']);    
+  }
+  
+  trackColors(): void{
+    console.log('image loaded...');
+    var me = this;
+    
     tracking.ColorTracker.registerColor('white', function(r:number, g:number, b: number) {
       if (r > 150 && g > 150 && b > 150) {
         return true;
@@ -77,29 +82,35 @@ export class TrackerComponent implements OnInit {
         return true;
       }
       return false;
-    });
-
-    this.tracker = new tracking.ColorTracker(['yellow', 'white', 'blue',  'red', 'green']);
+    });    
     
+    this.img = document.getElementById('img');
+    
+    var demoContainer = document.querySelector('.demo-container');
+    var colorsToTrack = ['yellow', 'white', 'blue',  'red', 'green']
+        
+    this.tracker = new(Function.prototype.bind.apply(tracking.ColorTracker,colorsToTrack));
+        
     this.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
-        this.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
+        console.log('color tracked!!!');
+        //this.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
+        me.plotRectangle(rect.x, rect.y, rect.width, rect.height, rect.color);
       });
     });
     
     tracking.track('#img', this.tracker);
-    
-    this.plot = function(x: number, y: number, w: number, h: number, color: string) {
-      var rect = document.createElement('div');
-      document.querySelector('.demo-container').appendChild(rect);
-      rect.classList.add('rect');
-      rect.style.border = '2px solid ' + color;
-      rect.style.width = w + 'px';
-      rect.style.height = h + 'px';
-      rect.style.left = (img.offsetLeft + x) + 'px';
-      rect.style.top = (img.offsetTop + y) + 'px';
-    };
-    */
   }
-
+  
+  plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
+    console.log('Plotting '+color+' rectangle');
+    var rect = document.createElement('div');
+    document.querySelector('.demo-container').appendChild(rect);
+    rect.classList.add('rect');
+    rect.style.border = '2px solid ' + color;
+    rect.style.width = width + 'px';
+    rect.style.height = height + 'px';
+    rect.style.left = (this.img.offsetLeft + x) + 'px';
+    rect.style.top = (this.img.offsetTop + y) + 'px';
+  }
 }
