@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
 
-	title = 'Angular Video Player';
+	title = "Angular rubik's solver";
 
 }

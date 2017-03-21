@@ -29,6 +29,8 @@ declare var tracking: Tracking;
 export class TrackerComponent implements OnInit { 
 
 	img: any;
+  
+  colorsToTrack: Array<string>;
 
 	tracker: any;
   
@@ -41,23 +43,15 @@ export class TrackerComponent implements OnInit {
 	ngOnInit(): void {
     console.log('init tracker...');
     
-
-    //this.tracker = new tracking.ColorTracker(['yellow', 'white', 'blue',  'red', 'green']);    
-  }
-  
-  trackColors(): void{
-    console.log('image loaded...');
-    var me = this;
-    
-    tracking.ColorTracker.registerColor('white', function(r:number, g:number, b: number) {
-      if (r > 150 && g > 150 && b > 150) {
+    tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
+      if (r < 100 && g < 100 && b > 110) {
         return true;
       }
       return false;
     });
-
-    tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
-      if (r < 100 && g < 100 && b > 110) {
+    
+    tracking.ColorTracker.registerColor('white', function(r:number, g:number, b: number) {
+      if (r > 150 && g > 150 && b > 150) {
         return true;
       }
       return false;
@@ -83,18 +77,29 @@ export class TrackerComponent implements OnInit {
       }
       return false;
     });    
+
+    //this.tracker = new tracking.ColorTracker(['yellow', 'white', 'blue',  'red', 'green']);    
+  }
+  
+  trackColors(): void{
+    console.log('image loaded...');
+    var me = this;
     
-    this.img = document.getElementById('img');
+    me.img = document.getElementById('img');
     
     var demoContainer = document.querySelector('.demo-container');
-    var colorsToTrack = ['yellow', 'white', 'blue',  'red', 'green']
+    //le pasamos a la librería JS un arreglo de 2 posiciones: 
+    //en la primera se envía el contexto de this
+    //en la segunda posición se envía un arreglo de parametros para la función
+    let colorsToTrack: any[] = [null,['yellow', 'white', 'blue',  'red', 'green', 'orange']];
+    me.tracker = new(Function.prototype.bind.apply(tracking.ColorTracker, colorsToTrack));
+    //me.tracker = new(Function.prototype.bind.apply(tracking.ColorTracker, me.colorsToTrack));
         
-    this.tracker = new(Function.prototype.bind.apply(tracking.ColorTracker,colorsToTrack));
-        
-    this.tracker.on('track', function(event: any) {
+    me.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
         console.log('color tracked!!!');
         //this.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
+        console.log(rect);
         me.plotRectangle(rect.x, rect.y, rect.width, rect.height, rect.color);
       });
     });
@@ -110,7 +115,13 @@ export class TrackerComponent implements OnInit {
     rect.style.border = '2px solid ' + color;
     rect.style.width = width + 'px';
     rect.style.height = height + 'px';
-    rect.style.left = (this.img.offsetLeft + x) + 'px';
-    rect.style.top = (this.img.offsetTop + y) + 'px';
+    console.log(this.img.offsetLeft,'Offset left');
+    console.log(this.img.offsetTop,'Offset top');
+    var left = (this.img.offsetLeft + x) + 'px',
+        top = (this.img.offsetTop + y) + 'px';
+    console.log('left '+left);
+    console.log('top '+top);
+    rect.style.left = left;
+    rect.style.top = top;
   }
 }
