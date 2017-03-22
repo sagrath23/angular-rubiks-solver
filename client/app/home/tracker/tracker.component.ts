@@ -23,35 +23,35 @@ declare var tracking: Tracking;
   selector: 'tracker-component',
   templateUrl: 'tracker.component.html',
   styleUrls: ['tracker.component.css'],
-  providers: [HeroService]			 
+  providers: [HeroService]
 })
 
-export class TrackerComponent implements OnInit { 
+export class TrackerComponent implements OnInit {
 
 	img: any;
-  
+
   colorsToTrack: Array<string>;
 
 	tracker: any;
-  
+
   plot: any;
 
 	constructor(private router: Router, private heroService: HeroService) {
-    
+
   }
 
 	ngOnInit(): void {
     console.log('init tracker...');
-    
+
     tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
       if (r < 100 && g < 100 && b > 110) {
         return true;
       }
       return false;
     });
-    
+
     tracking.ColorTracker.registerColor('white', function(r:number, g:number, b: number) {
-      if (r > 150 && g > 150 && b > 150) {
+      if (r > 120 && g > 120 && b > 80) {
         return true;
       }
       return false;
@@ -65,36 +65,40 @@ export class TrackerComponent implements OnInit {
     });
 
     tracking.ColorTracker.registerColor('red', function(r: number, g: number, b: number) {
-      if (r > 200 && g < 50 && b < 50) {
+      if (r > 150 && g < 40 && b < 70) {
         return true;
       }
       return false;
     });
 
     tracking.ColorTracker.registerColor('orange', function(r: number, g: number, b: number) {
-      if (r > 120 && g > 60 && b < 70) {
+      if (r > 120 && (g > 41 && g < 149) && b < 70) {
         return true;
       }
       return false;
-    });    
+    });
 
-    //this.tracker = new tracking.ColorTracker(['yellow', 'white', 'blue',  'red', 'green']);    
+    tracking.ColorTracker.registerColor('yellow', function(r: number, g: number, b: number) {
+      if (r > 150 && g > 150 && b < 50) {
+        return true;
+      }
+      return false;
+    });
   }
-  
+
   trackColors(): void{
     console.log('image loaded...');
     var me = this;
-    
+
     me.img = document.getElementById('img');
-    
+
     var demoContainer = document.querySelector('.demo-container');
-    //le pasamos a la librería JS un arreglo de 2 posiciones: 
+    //le pasamos a la librería JS un arreglo de 2 posiciones:
     //en la primera se envía el contexto de this
     //en la segunda posición se envía un arreglo de parametros para la función
     let colorsToTrack: any[] = [null,['yellow', 'white', 'blue',  'red', 'green', 'orange']];
     me.tracker = new(Function.prototype.bind.apply(tracking.ColorTracker, colorsToTrack));
-    //me.tracker = new(Function.prototype.bind.apply(tracking.ColorTracker, me.colorsToTrack));
-        
+
     me.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
         console.log('color tracked!!!');
@@ -103,10 +107,10 @@ export class TrackerComponent implements OnInit {
         me.plotRectangle(rect.x, rect.y, rect.width, rect.height, rect.color);
       });
     });
-    
+
     tracking.track('#img', this.tracker);
   }
-  
+
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
     console.log('Plotting '+color+' rectangle');
     var rect = document.createElement('div');
