@@ -7,6 +7,8 @@ import { Hero } from '../hero/hero';
 
 import { HeroService } from '../hero/hero.service';
 
+import { AuthService } from '../auth/auth.service';
+
 interface Tracking {
     ColorTracker: registerColor;
     track: Function;
@@ -33,25 +35,26 @@ export class TrackerComponent implements OnInit {
   colorsToTrack: Array<string>;
 
 	tracker: any;
+  
+  result: any;
 
   plot: any;
 
-	constructor(private router: Router, private heroService: HeroService) {
+	constructor(private router: Router, private authService: AuthService) {
 
   }
 
 	ngOnInit(): void {
-    console.log('init tracker...');
 
     tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
-      if (r < 100 && g < 100 && b > 110) {
+      if (r < 100 && g < 150 && b > 100) {
         return true;
       }
       return false;
     });
 
     tracking.ColorTracker.registerColor('white', function(r:number, g:number, b: number) {
-      if (r > 120 && g > 120 && b > 80) {
+      if (r > 220 && g > 220 && b > 220) {
         return true;
       }
       return false;
@@ -101,9 +104,6 @@ export class TrackerComponent implements OnInit {
 
     me.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
-        console.log('color tracked!!!');
-        //this.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
-        console.log(rect);
         me.plotRectangle(rect.x, rect.y, rect.width, rect.height, rect.color);
       });
     });
@@ -112,20 +112,36 @@ export class TrackerComponent implements OnInit {
   }
 
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
-    console.log('Plotting '+color+' rectangle');
     var rect = document.createElement('div');
+
     document.querySelector('.demo-container').appendChild(rect);
     rect.classList.add('rect');
     rect.style.border = '2px solid ' + color;
     rect.style.width = width + 'px';
     rect.style.height = height + 'px';
-    console.log(this.img.offsetLeft,'Offset left');
-    console.log(this.img.offsetTop,'Offset top');
+    
     var left = (this.img.offsetLeft + x) + 'px',
         top = (this.img.offsetTop + y) + 'px';
-    console.log('left '+left);
-    console.log('top '+top);
+
     rect.style.left = left;
     rect.style.top = top;
+  }
+  
+  resolveCube(): string {
+    var me = this;
+    
+    var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
+    console.log('resolve cube...');
+    
+    me.authService.solveCube(state)
+          .then((data) => {
+            me.result = data.result;
+            console.log(me.result);
+          });
+    
+    //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
+    //para resolver 
+    
+    return '';
   }
 }

@@ -12,6 +12,7 @@ import { Video } 	from '../videoplayer/video';
 export class AuthService {
 
 	private authUrl = 'user';  // URL to web api
+  private solverUrl = 'solver';//URL to solver API
 	private videosUrl = 'videos';
 
 	private loggedUser: User;
@@ -53,5 +54,20 @@ export class AuthService {
     				.toPromise()
     				.then(res => res.json().data as Video[])
     				.catch(this.handleError);
+	}
+  
+  solveCube(state: string): Promise<string>{
+    var me = this;
+    
+		const url = `${this.solverUrl}/solve`;
+		
+    return me.http
+    				.post(url, JSON.stringify({state: state}), {headers: me.headers})
+    				.toPromise()
+    				.then((data) => {
+              console.log(data,'AuthService.solveCube.then');
+              var result = data.json() as string;
+							return result;
+						}).catch(this.handleError);
 	}
 }
