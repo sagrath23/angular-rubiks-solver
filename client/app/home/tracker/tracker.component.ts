@@ -29,20 +29,22 @@ declare var tracking: Tracking;
 })
 
 export class TrackerComponent implements OnInit {
-
+  //instancia de la imágen que se está analizando
 	img: any;
-
+  //arreglo de colores a rastrear en la imágen
   colorsToTrack: Array<string>;
-
+  //formas encontradas que corresponden con los filtros definidos
+  shapes: Array<any> = [];
+  //margen de error entre superficies encontradas
+  deltaError: number = 0.05;
+  
 	tracker: any;
   
   result: any;
 
   plot: any;
 
-	constructor(private router: Router, private authService: AuthService) {
-
-  }
+	constructor(private router: Router, private authService: AuthService) {}
 
 	ngOnInit(): void {
 
@@ -104,13 +106,43 @@ export class TrackerComponent implements OnInit {
 
     me.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
-        me.plotRectangle(rect.x, rect.y, rect.width, rect.height, rect.color);
+        me.shapes.push(rect);
+        //analizamos las figuras encontradas
+        //TODO: optimizar esto
+        me.analizeShapes();
       });
     });
-
     tracking.track('#img', this.tracker);
   }
-
+  
+  analizeShapes(): void {
+    var me = this;
+    console.log('evaluating '+me.shapes.length+' shapes...','TrackerComponent.analizeShapes');
+    for(var i in me.shapes){
+      var actualShape = me.shapes[i],
+          countSimils = 0;
+      //se compara con los otras formas encontradas, para determinar si debe o no
+      //pintarla
+      for(var j in me.shapes){
+        if(i != j){
+          var currentShape = me.shapes[j],
+              deltaW = Math.abs(currentShape.width - actualShape.width),
+              deltaH = Math.abs(currentShape.height - actualShape.height),
+              currentErrorW = deltaW/actualShape.width,
+              currentErrorH = deltaH/actualShape.height;
+          //miramos si el delta es menos a un x porciento    
+          if((currentErrorW <= me.deltaError) && (currentErrorH <= me.deltaError)){
+            countSimils ++;
+          }
+        }
+      }
+      console.log('simils: '+countSimils,'TrackerComponent.analizeShapes');
+      if(countSimils == 5){
+        //debe graficarse
+        me.plotRectangle(actualShape.x, actualShape.y, actualShape.width, actualShape.height, actualShape.color);
+      }
+    }
+  }
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
     var rect = document.createElement('div');
 
@@ -132,16 +164,14 @@ export class TrackerComponent implements OnInit {
     
     var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
     console.log('resolve cube...');
-    
+    //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
+    //para resolver 
     me.authService.solveCube(state)
           .then((data) => {
-            me.result = data.result;
+            me.result = data;
             console.log(me.result);
           });
     
-    //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
-    //para resolver 
-    
-    return '';
+    return me.result;
   }
 }
