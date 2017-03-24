@@ -36,10 +36,10 @@ export class TrackerComponent implements OnInit {
   //formas encontradas que corresponden con los filtros definidos
   shapes: Array<any> = [];
   //margen de error entre superficies encontradas
-  deltaError: number = 0.05;
-  
+  deltaError: number = 0.1;
+
 	tracker: any;
-  
+
   result: any;
 
   plot: any;
@@ -114,7 +114,7 @@ export class TrackerComponent implements OnInit {
     });
     tracking.track('#img', this.tracker);
   }
-  
+
   analizeShapes(): void {
     var me = this;
     console.log('evaluating '+me.shapes.length+' shapes...','TrackerComponent.analizeShapes');
@@ -130,14 +130,14 @@ export class TrackerComponent implements OnInit {
               deltaH = Math.abs(currentShape.height - actualShape.height),
               currentErrorW = deltaW/actualShape.width,
               currentErrorH = deltaH/actualShape.height;
-          //miramos si el delta es menos a un x porciento    
+          //miramos si el delta es menos a un x porciento
           if((currentErrorW <= me.deltaError) && (currentErrorH <= me.deltaError)){
             countSimils ++;
           }
         }
       }
       console.log('simils: '+countSimils,'TrackerComponent.analizeShapes');
-      if(countSimils == 5){
+      if(countSimils > 5){
         //debe graficarse
         me.plotRectangle(actualShape.x, actualShape.y, actualShape.width, actualShape.height, actualShape.color);
       }
@@ -151,27 +151,27 @@ export class TrackerComponent implements OnInit {
     rect.style.border = '2px solid ' + color;
     rect.style.width = width + 'px';
     rect.style.height = height + 'px';
-    
+
     var left = (this.img.offsetLeft + x) + 'px',
         top = (this.img.offsetTop + y) + 'px';
 
     rect.style.left = left;
     rect.style.top = top;
   }
-  
+
   resolveCube(): string {
     var me = this;
-    
+
     var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
     console.log('resolve cube...');
     //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
-    //para resolver 
+    //para resolver
     me.authService.solveCube(state)
           .then((data) => {
             me.result = data;
             console.log(me.result);
           });
-    
+
     return me.result;
   }
 }
