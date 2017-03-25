@@ -4,7 +4,12 @@ h1 {
   font-size: 250%;
 }
 
-.demo-container > .rect{
+.container-red > .rect,
+.container-blue > .rect,
+.container-green > .rect,
+.container-white > .rect,
+.container-yellow > .rect,
+.container-orange > .rect{
   position: absolute;
   z-index: 0;
 }

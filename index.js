@@ -3,11 +3,11 @@ var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var db = mongoose.connection;
+//var mongoose = require('mongoose');
+//var db = mongoose.connection;
 var app = express();
 
-db.on('error', console.error);
+//db.on('error', console.error);
 
 //requiring local modeles
 var configs = require('./config');
@@ -27,9 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));
 
 //connedting to mongoDB
-mongoose.connect('mongodb://'+configs.dbHost+'/'+configs.dbName);
+//mongoose.connect('mongodb://'+configs.dbHost+'/'+configs.dbName);
 //populating data if DB is not already populated.
-helperFunctions.populateDb();
+//helperFunctions.populateDb();
 
 //Initilizing routes.
 routes(app);

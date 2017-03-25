@@ -99,9 +99,9 @@ export class TrackerComponent implements OnInit {
 
     console.log(me.imageName+' image loaded...');
 
-    me.img = document.getElementById('img');
+    me.img = document.getElementById('img-'+me.imageName);
 
-    var demoContainer = document.querySelector('.demo-container');
+    var demoContainer = document.querySelector('.container-'+me.imageName);
     //le pasamos a la librería JS un arreglo de 2 posiciones:
     //en la primera se envía el contexto de this
     //en la segunda posición se envía un arreglo de parametros para la función
@@ -111,17 +111,17 @@ export class TrackerComponent implements OnInit {
     me.tracker.on('track', function(event: any) {
       event.data.forEach(function(rect: any) {
         me.shapes.push(rect);
-        //analizamos las figuras encontradas
-        //TODO: optimizar esto
-        me.analizeShapes();
       });
+      me.analizeShapes();
     });
-    tracking.track('#img', this.tracker);
+
+    //analizamos las figuras encontradas
+    tracking.track('#img-'+me.imageName, this.tracker);
   }
 
   analizeShapes(): void {
     var me = this;
-    console.log('evaluating '+me.shapes.length+' shapes...','TrackerComponent.analizeShapes');
+
     for(var i in me.shapes){
       var actualShape = me.shapes[i],
           countSimils = 0;
@@ -140,7 +140,6 @@ export class TrackerComponent implements OnInit {
           }
         }
       }
-      console.log('simils: '+countSimils,'TrackerComponent.analizeShapes');
       if(countSimils > 5){
         //debe graficarse
         me.plotRectangle(actualShape.x, actualShape.y, actualShape.width, actualShape.height, actualShape.color);
@@ -149,9 +148,10 @@ export class TrackerComponent implements OnInit {
   }
 
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
-    var rect = document.createElement('div');
+    var me = this,
+        rect = document.createElement('div');
 
-    document.querySelector('.demo-container').appendChild(rect);
+    document.querySelector('.container-'+me.imageName).appendChild(rect);
     rect.classList.add('rect');
     rect.style.border = '4px solid ' + color;
     rect.style.width = width + 'px';
@@ -168,7 +168,6 @@ export class TrackerComponent implements OnInit {
     var me = this;
 
     var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
-    console.log('resolve cube...');
     //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
     //para resolver
     me.authService.solveCube(state)
