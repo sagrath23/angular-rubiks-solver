@@ -1,0 +1,6 @@
+<md-grid-list cols="2">
+  <md-grid-tile *ngFor="let face of images">
+		<h3>{{face}}</h3>
+		<tracker-component [imageName]="face"></tracker-component>
+	</md-grid-tile>
+</md-grid-list>

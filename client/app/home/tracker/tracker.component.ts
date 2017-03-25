@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 import { OnInit }    from '@angular/core';
 import { Router }    from '@angular/router';
 import { Location }  from '@angular/common';
@@ -29,6 +30,8 @@ declare var tracking: Tracking;
 })
 
 export class TrackerComponent implements OnInit {
+
+  @Input() imageName: string;
   //instancia de la imágen que se está analizando
 	img: any;
   //arreglo de colores a rastrear en la imágen
@@ -92,8 +95,9 @@ export class TrackerComponent implements OnInit {
   }
 
   trackColors(): void{
-    console.log('image loaded...');
     var me = this;
+
+    console.log(me.imageName+' image loaded...');
 
     me.img = document.getElementById('img');
 
@@ -143,12 +147,13 @@ export class TrackerComponent implements OnInit {
       }
     }
   }
+
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
     var rect = document.createElement('div');
 
     document.querySelector('.demo-container').appendChild(rect);
     rect.classList.add('rect');
-    rect.style.border = '2px solid ' + color;
+    rect.style.border = '4px solid ' + color;
     rect.style.width = width + 'px';
     rect.style.height = height + 'px';
 

@@ -1,6 +1,8 @@
-<div class="demo-frame">
-  <div class="demo-container">
-    <img id="img" src="images/set3/red.jpg" width="100%" (load)="trackColors()" />
+<div *ngIf="imageName">
+  <div class="demo-frame">
+    <div class="demo-container">
+      <img id="img" src="images/set3/{{imageName}}.jpg" width="100%" (load)="trackColors()" />
+    </div>
   </div>
 </div>
 

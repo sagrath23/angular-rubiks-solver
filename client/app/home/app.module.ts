@@ -15,6 +15,7 @@ import { AppComponent }  from './app.component';
 //App Components
 import { LoginComponent } 	   	from './login/login.component';
 import {TrackerComponent}       from './tracker/tracker.component';
+import {TrackmanagerComponent}  from './trackmanager/trackmanager.component';
 import { AuthService }			from './auth/auth.service';
 import { VideoListComponent }	from './videolist/video-list.component';
 
@@ -32,12 +33,10 @@ import { AppRoutingModule }    from './routes/app-routing.module';
       BrowserModule ,
 		  FormsModule ,
 		  HttpModule,
-    	AppRoutingModule],  
-  	declarations: [ AppComponent , LoginComponent , VideoListComponent, TrackerComponent ],
+    	AppRoutingModule],
+  	declarations: [ AppComponent , LoginComponent , VideoListComponent, TrackerComponent, TrackmanagerComponent ],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })
 
 export class AppModule { }
-
-
