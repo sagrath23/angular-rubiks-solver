@@ -163,19 +163,4 @@ export class TrackerComponent implements OnInit {
     rect.style.left = left;
     rect.style.top = top;
   }
-
-  resolveCube(): string {
-    var me = this;
-
-    var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
-    //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
-    //para resolver
-    me.authService.solveCube(state)
-          .then((data) => {
-            me.result = data;
-            console.log(me.result);
-          });
-
-    return me.result;
-  }
 }
