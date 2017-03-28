@@ -1,7 +1,22 @@
 <md-grid-list cols="2">
   <md-grid-tile *ngFor="let face of images">
-		<h3>{{face}}</h3>
-		<tracker-component [imageName]="face"></tracker-component>
+    <md-card class="example-card">
+      <md-card-header>
+        <div md-card-avatar class="example-header-image"></div>
+        <md-card-title><h2>{{face}}</h2></md-card-title>
+        <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+      </md-card-header>
+      <tracker-component [imageName]="face"></tracker-component>
+      <md-card-content>
+        <p>
+          {{face}} face of the cube.
+        </p>
+      </md-card-content>
+      <!--<md-card-actions>
+        <button md-button>LIKE</button>
+        <button md-button>SHARE</button>
+      </md-card-actions>-->
+    </md-card>
 	</md-grid-tile>
 </md-grid-list>
 <button md-raised-button (click)="resolveCube()">Resolver!</button>
