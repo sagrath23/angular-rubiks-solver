@@ -42,6 +42,7 @@ app.use('/images',express.static('images'));
 // serve client side code.
 app.use('/',express.static('client'));
 
+
 //Finally starting the listener
 app.listen(configs.applicationPort, function () {
   console.log('Example app listening on port '+configs.applicationPort+'!');
