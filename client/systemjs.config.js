@@ -32,7 +32,7 @@
     packages: {
       app: {
         main: './main.js',
-        defaultExtension: 'js'
+        defaultExtension: 'ts'
       },
       rxjs: {
         defaultExtension: 'js'
