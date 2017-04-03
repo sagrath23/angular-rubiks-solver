@@ -38,6 +38,8 @@ export class TrackerComponent implements OnInit {
   colorsToTrack: Array<string>;
   //formas encontradas que corresponden con los filtros definidos
   shapes: Array<any> = [];
+  //
+  cubies: Array<any> = [];
   //margen de error entre superficies encontradas
   deltaError: number = 0.1;
 
@@ -140,11 +142,14 @@ export class TrackerComponent implements OnInit {
           }
         }
       }
-      if(countSimils > 5){
+      if(countSimils > 4){
         //debe graficarse
+        me.cubies.push(actualShape);
         me.plotRectangle(actualShape.x, actualShape.y, actualShape.width, actualShape.height, actualShape.color);
       }
     }
+
+    me.defineCubies();
   }
 
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
@@ -162,5 +167,17 @@ export class TrackerComponent implements OnInit {
 
     rect.style.left = left;
     rect.style.top = top;
+  }
+
+  defineCubies(): void{
+    //aquí vamos a determinar qué cara estamos procesando
+    var me = this;
+
+    if(me.cubies.length < 9){
+      console.warning("No se detectaron todas las cuadriculas de la cara");
+    }
+    else{
+
+    }
   }
 }
