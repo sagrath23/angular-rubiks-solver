@@ -174,7 +174,7 @@ export class TrackerComponent implements OnInit {
     var me = this;
 
     if(me.cubies.length < 9){
-      console.warning("No se detectaron todas las cuadriculas de la cara");
+      console.log("No se detectaron todas las cuadriculas de la cara");
     }
     else{
 
