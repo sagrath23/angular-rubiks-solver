@@ -32,7 +32,7 @@ var TrackerComponent = (function () {
             return false;
         });
         tracking.ColorTracker.registerColor('white', function (r, g, b) {
-            if (r > 220 && g > 220 && b > 220) {
+            if (r > 190 && g > 190 && b > 190) {
                 return true;
             }
             return false;
@@ -76,6 +76,9 @@ var TrackerComponent = (function () {
             event.data.forEach(function (rect) {
                 me.shapes.push(rect);
             });
+            if (me.imageName == 'orange') {
+                console.log('tracked ' + me.shapes.length);
+            }
             me.analizeShapes();
         });
         //analizamos las figuras encontradas

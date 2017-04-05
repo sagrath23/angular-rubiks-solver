@@ -61,7 +61,7 @@ export class TrackerComponent implements OnInit {
     });
 
     tracking.ColorTracker.registerColor('white', function(r:number, g:number, b: number) {
-      if (r > 220 && g > 220 && b > 220) {
+      if (r > 190 && g > 190 && b > 190) {
         return true;
       }
       return false;
@@ -114,6 +114,10 @@ export class TrackerComponent implements OnInit {
       event.data.forEach(function(rect: any) {
         me.shapes.push(rect);
       });
+      
+      if(me.imageName =='orange'){
+        console.log('tracked '+me.shapes.length);
+      }
       me.analizeShapes();
     });
 
