@@ -12,12 +12,20 @@ import { AuthService } from '../auth/auth.service';
 
 interface Tracking {
     ColorTracker: registerColor;
+    Image: Image;
     track: Function;
 }
 
 interface registerColor {
     registerColor: Function;
 }
+
+interface Image {
+    separableConvolve: Function;
+    verticalConvolve: Function;
+    horizontalConvolve: Function;
+}
+
 
 declare var tracking: Tracking;
 
@@ -54,7 +62,7 @@ export class TrackerComponent implements OnInit {
 	ngOnInit(): void {
 
     tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
-      if (r < 100 && g < 150 && b > 100) {
+      if (r < 120 && g < 160 && b > 100) {
         return true;
       }
       return false;
@@ -104,6 +112,9 @@ export class TrackerComponent implements OnInit {
     me.img = document.getElementById('img-'+me.imageName);
 
     var demoContainer = document.querySelector('.container-'+me.imageName);
+    //aplicamos un filtro para mejorar la imágen
+    //tracking.Image.separableConvolve(pixels, width, height, horizWeights, vertWeights, opaque);
+    
     //le pasamos a la librería JS un arreglo de 2 posiciones:
     //en la primera se envía el contexto de this
     //en la segunda posición se envía un arreglo de parametros para la función

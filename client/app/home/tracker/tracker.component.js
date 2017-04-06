@@ -26,7 +26,7 @@ var TrackerComponent = (function () {
     }
     TrackerComponent.prototype.ngOnInit = function () {
         tracking.ColorTracker.registerColor('blue', function (r, g, b) {
-            if (r < 100 && g < 150 && b > 100) {
+            if (r < 120 && g < 160 && b > 100) {
                 return true;
             }
             return false;
@@ -67,6 +67,8 @@ var TrackerComponent = (function () {
         console.log(me.imageName + ' image loaded...');
         me.img = document.getElementById('img-' + me.imageName);
         var demoContainer = document.querySelector('.container-' + me.imageName);
+        //aplicamos un filtro para mejorar la imágen
+        //tracking.Image.separableConvolve(pixels, width, height, horizWeights, vertWeights, opaque);
         //le pasamos a la librería JS un arreglo de 2 posiciones:
         //en la primera se envía el contexto de this
         //en la segunda posición se envía un arreglo de parametros para la función
