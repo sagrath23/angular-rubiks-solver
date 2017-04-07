@@ -78,9 +78,6 @@ var TrackerComponent = (function () {
             event.data.forEach(function (rect) {
                 me.shapes.push(rect);
             });
-            if (me.imageName == 'orange') {
-                console.log('tracked ' + me.shapes.length);
-            }
             me.analizeShapes();
         });
         //analizamos las figuras encontradas
@@ -121,13 +118,37 @@ var TrackerComponent = (function () {
         rect.style.top = top;
     };
     TrackerComponent.prototype.defineCubies = function () {
-        //aquí vamos a determinar qué cara estamos procesando
-        var me = this;
-        if (me.cubies.length < 9) {
-            console.log("No se detectaron todas las cuadriculas de la cara");
+        var me = this, leftTopIndex = me.getLeftTopCubie();
+        if () {
         }
-        else {
+    };
+    TrackerComponent.prototype.getLeftTopCubie = function () {
+        var me = this, leftTopIndex = 0;
+        //busco el cubie que esté más a la izquierda
+        for (var i = 0; i < me.cubies.length; i++) {
+            if (i != leftTopIndex) {
+                var actualCubie = me.cubies[i], ltCubie = me.cubies[leftTopIndex];
+                console.log('color: - ' + actualCubie.color + ' actCubie - x: ' + actualCubie.x + ' - ' + 'actCubie - y: ' + actualCubie.y);
+                console.log('color: - ' + ltCubie.color + ' ltCubie - x: ' + ltCubie.x + ' - ' + 'ltCubie - y: ' + ltCubie.y);
+            }
         }
+        return leftTopIndex;
+    };
+    TrackerComponent.prototype.getRightTopCubie = function () {
+        var me = this, leftTopIndex = 0;
+        return leftTopIndex;
+    };
+    TrackerComponent.prototype.getLeftBottomCubie = function () {
+        var me = this, leftBottomIndex = 0;
+        return leftBottomIndex;
+    };
+    TrackerComponent.prototype.getRightBottomCubie = function () {
+        var me = this, leftBottomIndex = 0;
+        return leftBottomIndex;
+    };
+    TrackerComponent.prototype.getCenterCubie = function (leftTopIndex, leftBottomIndex, rightTopIndex, rightBottomIndex) {
+        var me = this, leftBottomIndex = 0;
+        return leftBottomIndex;
     };
     __decorate([
         core_2.Input(), 

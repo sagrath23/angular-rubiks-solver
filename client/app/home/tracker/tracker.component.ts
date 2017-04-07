@@ -126,9 +126,6 @@ export class TrackerComponent implements OnInit {
         me.shapes.push(rect);
       });
       
-      if(me.imageName =='orange'){
-        console.log('tracked '+me.shapes.length);
-      }
       me.analizeShapes();
     });
 
@@ -183,16 +180,62 @@ export class TrackerComponent implements OnInit {
     rect.style.left = left;
     rect.style.top = top;
   }
-
-  defineCubies(): void{
-    //aquí vamos a determinar qué cara estamos procesando
-    var me = this;
-
-    if(me.cubies.length < 9){
-      console.log("No se detectaron todas las cuadriculas de la cara");
+  
+  defineCubies():any{
+    var me = this,
+        leftTopIndex = me.getLeftTopCubie();
+        
+    if(){
+      
+    }    
+  }
+  
+  getLeftTopCubie(): number{
+    var me = this,
+        leftTopIndex = 0;
+    //busco el cubie que esté más a la izquierda
+    for(var i = 0; i < me.cubies.length; i++){
+      if(i != leftTopIndex){
+        var actualCubie = me.cubies[i],
+            ltCubie = me.cubies[leftTopIndex];
+        console.log('color: - '+actualCubie.color+' actCubie - x: '+actualCubie.x +' - '+'actCubie - y: '+actualCubie.y);
+        console.log('color: - '+ltCubie.color+' ltCubie - x: '+ltCubie.x+' - '+'ltCubie - y: '+ltCubie.y);
+        
+        // if(((Math.abs(actualCubie.x - ltCubie.x)/ actualCubie.x )< 0.04)  && ((Math.abs(actualCubie.y - ltCubie.y)/ actualCubie.y )< 0.04)){
+        //   //está más hacia el origen
+        //   leftTopIndex = i;
+        // }
+      }
     }
-    else{
-
-    }
+    
+    return leftTopIndex;
+  }
+  
+  getRightTopCubie(): number{
+    var me = this,
+        leftTopIndex = 0;
+    
+    return leftTopIndex;
+  }
+  
+  getLeftBottomCubie(): number{
+    var me = this,
+        leftBottomIndex = 0;
+    
+    return leftBottomIndex;
+  }
+  
+  getRightBottomCubie(): number{
+    var me = this,
+        leftBottomIndex = 0;
+    
+    return leftBottomIndex;
+  }
+  
+  getCenterCubie(leftTopIndex:number,leftBottomIndex:number,rightTopIndex:number,rightBottomIndex:number): number{
+    var me = this,
+        leftBottomIndex = 0;
+    
+    return leftBottomIndex;
   }
 }
