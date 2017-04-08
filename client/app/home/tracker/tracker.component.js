@@ -26,7 +26,7 @@ var TrackerComponent = (function () {
     }
     TrackerComponent.prototype.ngOnInit = function () {
         tracking.ColorTracker.registerColor('blue', function (r, g, b) {
-            if (r < 120 && g < 160 && b > 100) {
+            if (r < 140 && g < 190 && b > 80) {
                 return true;
             }
             return false;
