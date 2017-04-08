@@ -114,7 +114,7 @@ export class TrackerComponent implements OnInit {
     var demoContainer = document.querySelector('.container-'+me.imageName);
     //aplicamos un filtro para mejorar la imágen
     //tracking.Image.separableConvolve(pixels, width, height, horizWeights, vertWeights, opaque);
-    
+
     //le pasamos a la librería JS un arreglo de 2 posiciones:
     //en la primera se envía el contexto de this
     //en la segunda posición se envía un arreglo de parametros para la función
@@ -125,7 +125,7 @@ export class TrackerComponent implements OnInit {
       event.data.forEach(function(rect: any) {
         me.shapes.push(rect);
       });
-      
+
       me.analizeShapes();
     });
 
@@ -180,16 +180,12 @@ export class TrackerComponent implements OnInit {
     rect.style.left = left;
     rect.style.top = top;
   }
-  
-  defineCubies():any{
+
+  defineCubies():void{
     var me = this,
         leftTopIndex = me.getLeftTopCubie();
-        
-    if(){
-      
-    }    
   }
-  
+
   getLeftTopCubie(): number{
     var me = this,
         leftTopIndex = 0;
@@ -200,42 +196,42 @@ export class TrackerComponent implements OnInit {
             ltCubie = me.cubies[leftTopIndex];
         console.log('color: - '+actualCubie.color+' actCubie - x: '+actualCubie.x +' - '+'actCubie - y: '+actualCubie.y);
         console.log('color: - '+ltCubie.color+' ltCubie - x: '+ltCubie.x+' - '+'ltCubie - y: '+ltCubie.y);
-        
+
         // if(((Math.abs(actualCubie.x - ltCubie.x)/ actualCubie.x )< 0.04)  && ((Math.abs(actualCubie.y - ltCubie.y)/ actualCubie.y )< 0.04)){
         //   //está más hacia el origen
         //   leftTopIndex = i;
         // }
       }
     }
-    
+
     return leftTopIndex;
   }
-  
+
   getRightTopCubie(): number{
     var me = this,
         leftTopIndex = 0;
-    
+
     return leftTopIndex;
   }
-  
+
   getLeftBottomCubie(): number{
     var me = this,
         leftBottomIndex = 0;
-    
+
     return leftBottomIndex;
   }
-  
+
   getRightBottomCubie(): number{
     var me = this,
         leftBottomIndex = 0;
-    
+
     return leftBottomIndex;
   }
-  
+
   getCenterCubie(leftTopIndex:number,leftBottomIndex:number,rightTopIndex:number,rightBottomIndex:number): number{
     var me = this,
         leftBottomIndex = 0;
-    
+
     return leftBottomIndex;
   }
 }

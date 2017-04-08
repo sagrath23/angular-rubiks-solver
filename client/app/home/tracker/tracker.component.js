@@ -119,8 +119,6 @@ var TrackerComponent = (function () {
     };
     TrackerComponent.prototype.defineCubies = function () {
         var me = this, leftTopIndex = me.getLeftTopCubie();
-        if () {
-        }
     };
     TrackerComponent.prototype.getLeftTopCubie = function () {
         var me = this, leftTopIndex = 0;
