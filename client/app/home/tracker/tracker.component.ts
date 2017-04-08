@@ -62,7 +62,7 @@ export class TrackerComponent implements OnInit {
 	ngOnInit(): void {
 
     tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
-      if (r < 140 && g < 160 && b > 80) {
+      if (r < 140 && g < 180 && b > 80) {
         return true;
       }
       return false;
