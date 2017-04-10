@@ -26,7 +26,7 @@ var TrackerComponent = (function () {
     }
     TrackerComponent.prototype.ngOnInit = function () {
         tracking.ColorTracker.registerColor('blue', function (r, g, b) {
-            if (r < 140 && g < 210 && b > 80) {
+            if (r < 140 && g < 200 && b > 80) {
                 return true;
             }
             return false;
@@ -79,9 +79,12 @@ var TrackerComponent = (function () {
                 me.shapes.push(rect);
             });
             me.analizeShapes();
+            me.clasifyShapes();
         });
         //analizamos las figuras encontradas
         tracking.track('#img-' + me.imageName, this.tracker);
+    };
+    TrackerComponent.prototype.clasifyShapes = function () {
     };
     TrackerComponent.prototype.analizeShapes = function () {
         var me = this;
@@ -104,10 +107,10 @@ var TrackerComponent = (function () {
                 me.plotRectangle(actualShape.x, actualShape.y, actualShape.width, actualShape.height, actualShape.color);
             }
         }
-        me.defineCubies();
     };
     TrackerComponent.prototype.plotRectangle = function (x, y, width, height, color) {
         var me = this, rect = document.createElement('div');
+        rect.innerHTML += "(" + x + "," + y + ") - " + width + "x" + height + " ";
         document.querySelector('.container-' + me.imageName).appendChild(rect);
         rect.classList.add('rect');
         rect.style.border = '4px solid ' + color;
@@ -119,18 +122,38 @@ var TrackerComponent = (function () {
     };
     TrackerComponent.prototype.defineCubies = function () {
         var me = this, leftTopIndex = me.getLeftTopCubie();
+        console.log(me.cubies);
+        console.log(me.imageName + ' - leftTopIndex: ' + leftTopIndex);
     };
     TrackerComponent.prototype.getLeftTopCubie = function () {
-        var me = this, leftTopIndex = 0;
-        //busco el cubie que esté más a la izquierda
-        for (var i = 0; i < me.cubies.length; i++) {
-            if (i != leftTopIndex) {
-                var actualCubie = me.cubies[i], ltCubie = me.cubies[leftTopIndex];
-                console.log('color: - ' + actualCubie.color + ' actCubie - x: ' + actualCubie.x + ' - ' + 'actCubie - y: ' + actualCubie.y);
-                console.log('color: - ' + ltCubie.color + ' ltCubie - x: ' + ltCubie.x + ' - ' + 'ltCubie - y: ' + ltCubie.y);
+        var me = this, leftTopIndex = 0, minX = Number.MAX_VALUE;
+        if (me.cubies.length === 9) {
+            //busco el cubie que esté más a la izquierda
+            for (var i = 0; i < me.cubies.length; i++) {
+                if (i != leftTopIndex) {
+                    var actualCubie = me.cubies[i], ltCubie = me.cubies[leftTopIndex], 
+                    //lo mejor es clasificarlos apenas se detecte si es un cubie, que lo mande
+                    //a la izquierda, a la derecha o al medio
+                    deltaMin = Math.abs(actualCubie.x - minX), error = deltaMin / ((ltCubie.width + actualCubie.width) / 2);
+                    console.log('color: - ' + actualCubie.color + ' actCubie - x: ' + actualCubie.x + ' - ' + 'actCubie - y: ' + actualCubie.y);
+                    console.log('color: - ' + ltCubie.color + ' ltCubie - x: ' + ltCubie.x + ' - ' + 'ltCubie - y: ' + ltCubie.y);
+                    console.log('delta: ' + deltaMin);
+                    console.log('error: ' + error);
+                    if (error <= 0.1) {
+                        //verificamos el valor de y
+                        if (actualCubie.y < ltCubie.y) {
+                            console.log('change ' + leftTopIndex + ' por ' + i);
+                            leftTopIndex = i;
+                            minX = actualCubie.x;
+                        }
+                    }
+                }
             }
+            return leftTopIndex;
         }
-        return leftTopIndex;
+        else {
+            return -1;
+        }
     };
     TrackerComponent.prototype.getRightTopCubie = function () {
         var me = this, leftTopIndex = 0;
