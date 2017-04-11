@@ -85,6 +85,35 @@ var TrackerComponent = (function () {
         tracking.track('#img-' + me.imageName, this.tracker);
     };
     TrackerComponent.prototype.clasifyShapes = function () {
+        var me = this, left = [], middle = [], right = [], minX = Number.MAX_VALUE, maxX = Number.MIN_VALUE;
+        //busco el mínimo y el máximo
+        for (var i = 0; i < me.cubies.length; i++) {
+            if (me.cubies[i].x < minX) {
+                minX = me.cubies[i].x;
+            }
+            if (me.cubies[i].x > maxX) {
+                maxX = me.cubies[i].x;
+            }
+        }
+        console.log("minX = " + minX);
+        console.log("maxX = " + maxX);
+        //con estos valores, clasifico los cubies a la izquierda, derecha o al medio
+        for (var i = 0; i < me.cubies.length; i++) {
+            var actualCubie = me.cubies[i], deltaXmin = Math.abs(actualCubie.x - minX), deltaXmax = Math.abs(actualCubie.x - maxX), errorXmin = (deltaXmin / (actualCubie.width)), errorXmax = (deltaXmax / (actualCubie.width));
+            console.log(me.imageName + " error minx= " + errorXmin + " error maxx= " + errorXmax);
+            if (errorXmin <= 0.15) {
+                left.push(actualCubie);
+            }
+            else {
+                if (errorXmax <= 0.15) {
+                    right.push(actualCubie);
+                }
+                else {
+                    middle.push(actualCubie);
+                }
+            }
+        }
+        console.log(left, middle, right);
     };
     TrackerComponent.prototype.analizeShapes = function () {
         var me = this;

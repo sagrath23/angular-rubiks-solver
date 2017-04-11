@@ -127,18 +127,56 @@ export class TrackerComponent implements OnInit {
       });
 
       me.analizeShapes();
-      
+
       me.clasifyShapes();
     });
-    
+
 
     //analizamos las figuras encontradas
     tracking.track('#img-'+me.imageName, this.tracker);
   }
-  
+
   clasifyShapes():void{
-    
-    
+    var me = this,
+        left = [],
+        middle = [],
+        right = [],
+        minX = Number.MAX_VALUE,
+        maxX = Number.MIN_VALUE;
+    //busco el mínimo y el máximo
+    for(var i =0; i < me.cubies.length; i++){
+      if(me.cubies[i].x < minX){
+        minX = me.cubies[i].x;
+      }
+      if(me.cubies[i].x > maxX){
+        maxX = me.cubies[i].x;
+      }
+    }
+    console.log("minX = "+ minX);
+    console.log("maxX = "+ maxX);
+    //con estos valores, clasifico los cubies a la izquierda, derecha o al medio
+    for(var i =0; i < me.cubies.length; i++){
+      var actualCubie = me.cubies[i],
+          deltaXmin = Math.abs(actualCubie.x - minX),
+          deltaXmax = Math.abs(actualCubie.x - maxX),
+          errorXmin = (deltaXmin /(actualCubie.width)),
+          errorXmax = (deltaXmax /(actualCubie.width));
+          console.log(me.imageName+" error minx= "+errorXmin+" error maxx= "+errorXmax);
+      if(errorXmin <= 0.15){
+        left.push(actualCubie);
+      }
+      else{
+        if(errorXmax <= 0.15){
+          right.push(actualCubie);
+        }
+        else{
+          middle.push(actualCubie);
+        }
+      }
+    }
+
+    console.log(left,middle,right);
+
   }
 
   analizeShapes(): void {
@@ -173,7 +211,7 @@ export class TrackerComponent implements OnInit {
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
     var me = this,
         rect = document.createElement('div');
-        
+
     rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
     document.querySelector('.container-'+me.imageName).appendChild(rect);
     rect.classList.add('rect');
@@ -208,12 +246,12 @@ export class TrackerComponent implements OnInit {
               //lo mejor es clasificarlos apenas se detecte si es un cubie, que lo mande
               //a la izquierda, a la derecha o al medio
               deltaMin = Math.abs(actualCubie.x - minX),
-              error = deltaMin / ((ltCubie.width + actualCubie.width)/2);            
+              error = deltaMin / ((ltCubie.width + actualCubie.width)/2);
           console.log('color: - '+actualCubie.color+' actCubie - x: '+actualCubie.x +' - '+'actCubie - y: '+actualCubie.y);
           console.log('color: - '+ltCubie.color+' ltCubie - x: '+ltCubie.x+' - '+'ltCubie - y: '+ltCubie.y);
           console.log('delta: '+ deltaMin);
           console.log('error: '+ error);
-          
+
           if(error <= 0.1){
             //verificamos el valor de y
             if(actualCubie.y < ltCubie.y){
@@ -229,7 +267,7 @@ export class TrackerComponent implements OnInit {
     }
     else{
       return -1;
-    }          
+    }
   }
 
   getRightTopCubie(): number{
