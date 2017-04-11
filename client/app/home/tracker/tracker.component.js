@@ -95,12 +95,9 @@ var TrackerComponent = (function () {
                 maxX = me.cubies[i].x;
             }
         }
-        console.log("minX = " + minX);
-        console.log("maxX = " + maxX);
         //con estos valores, clasifico los cubies a la izquierda, derecha o al medio
         for (var i = 0; i < me.cubies.length; i++) {
             var actualCubie = me.cubies[i], deltaXmin = Math.abs(actualCubie.x - minX), deltaXmax = Math.abs(actualCubie.x - maxX), errorXmin = (deltaXmin / (actualCubie.width)), errorXmax = (deltaXmax / (actualCubie.width));
-            console.log(me.imageName + " error minx= " + errorXmin + " error maxx= " + errorXmax);
             if (errorXmin <= 0.15) {
                 left.push(actualCubie);
             }
@@ -113,7 +110,7 @@ var TrackerComponent = (function () {
                 }
             }
         }
-        console.log(left, middle, right);
+        console.log(left[me.getLeftTopCubie(left)]);
     };
     TrackerComponent.prototype.analizeShapes = function () {
         var me = this;
@@ -149,40 +146,15 @@ var TrackerComponent = (function () {
         rect.style.left = left;
         rect.style.top = top;
     };
-    TrackerComponent.prototype.defineCubies = function () {
-        var me = this, leftTopIndex = me.getLeftTopCubie();
-        console.log(me.cubies);
-        console.log(me.imageName + ' - leftTopIndex: ' + leftTopIndex);
-    };
-    TrackerComponent.prototype.getLeftTopCubie = function () {
-        var me = this, leftTopIndex = 0, minX = Number.MAX_VALUE;
-        if (me.cubies.length === 9) {
-            //busco el cubie que esté más a la izquierda
-            for (var i = 0; i < me.cubies.length; i++) {
-                if (i != leftTopIndex) {
-                    var actualCubie = me.cubies[i], ltCubie = me.cubies[leftTopIndex], 
-                    //lo mejor es clasificarlos apenas se detecte si es un cubie, que lo mande
-                    //a la izquierda, a la derecha o al medio
-                    deltaMin = Math.abs(actualCubie.x - minX), error = deltaMin / ((ltCubie.width + actualCubie.width) / 2);
-                    console.log('color: - ' + actualCubie.color + ' actCubie - x: ' + actualCubie.x + ' - ' + 'actCubie - y: ' + actualCubie.y);
-                    console.log('color: - ' + ltCubie.color + ' ltCubie - x: ' + ltCubie.x + ' - ' + 'ltCubie - y: ' + ltCubie.y);
-                    console.log('delta: ' + deltaMin);
-                    console.log('error: ' + error);
-                    if (error <= 0.1) {
-                        //verificamos el valor de y
-                        if (actualCubie.y < ltCubie.y) {
-                            console.log('change ' + leftTopIndex + ' por ' + i);
-                            leftTopIndex = i;
-                            minX = actualCubie.x;
-                        }
-                    }
-                }
+    TrackerComponent.prototype.getLeftTopCubie = function (leftCubies) {
+        var me = this, leftTopIndex = 0, minY = Number.MAX_VALUE;
+        for (var i = 0; i < leftCubies.length; i++) {
+            if (leftCubies[i].y < minY) {
+                leftTopIndex = i;
+                minY = leftCubies[i].y;
             }
-            return leftTopIndex;
         }
-        else {
-            return -1;
-        }
+        return leftTopIndex;
     };
     TrackerComponent.prototype.getRightTopCubie = function () {
         var me = this, leftTopIndex = 0;

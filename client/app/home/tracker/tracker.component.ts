@@ -138,9 +138,9 @@ export class TrackerComponent implements OnInit {
 
   clasifyShapes():void{
     var me = this,
-        left = [],
-        middle = [],
-        right = [],
+        left:any[] = [],
+        middle:any[] = [],
+        right:any[] = [],
         minX = Number.MAX_VALUE,
         maxX = Number.MIN_VALUE;
     //busco el mínimo y el máximo
@@ -152,8 +152,6 @@ export class TrackerComponent implements OnInit {
         maxX = me.cubies[i].x;
       }
     }
-    console.log("minX = "+ minX);
-    console.log("maxX = "+ maxX);
     //con estos valores, clasifico los cubies a la izquierda, derecha o al medio
     for(var i =0; i < me.cubies.length; i++){
       var actualCubie = me.cubies[i],
@@ -161,12 +159,11 @@ export class TrackerComponent implements OnInit {
           deltaXmax = Math.abs(actualCubie.x - maxX),
           errorXmin = (deltaXmin /(actualCubie.width)),
           errorXmax = (deltaXmax /(actualCubie.width));
-          console.log(me.imageName+" error minx= "+errorXmin+" error maxx= "+errorXmax);
       if(errorXmin <= 0.15){
         left.push(actualCubie);
       }
       else{
-        if(errorXmax <= 0.15){
+        if(errorXmax <= 0.15){//margen de error del 15% en la posicion
           right.push(actualCubie);
         }
         else{
@@ -175,8 +172,7 @@ export class TrackerComponent implements OnInit {
       }
     }
 
-    console.log(left,middle,right);
-
+    console.log(left[me.getLeftTopCubie(left)]);
   }
 
   analizeShapes(): void {
@@ -226,48 +222,19 @@ export class TrackerComponent implements OnInit {
     rect.style.top = top;
   }
 
-  defineCubies():void{
-    var me = this,
-        leftTopIndex = me.getLeftTopCubie();
-        console.log(me.cubies);
-        console.log(me.imageName+' - leftTopIndex: '+leftTopIndex);
-  }
-
-  getLeftTopCubie(): number{
+  getLeftTopCubie(leftCubies: any[]): number{
     var me = this,
         leftTopIndex = 0,
-        minX = Number.MAX_VALUE;
-    if(me.cubies.length === 9){
-      //busco el cubie que esté más a la izquierda
-      for(var i = 0; i < me.cubies.length; i++){
-        if(i != leftTopIndex){
-          var actualCubie = me.cubies[i],
-              ltCubie = me.cubies[leftTopIndex],
-              //lo mejor es clasificarlos apenas se detecte si es un cubie, que lo mande
-              //a la izquierda, a la derecha o al medio
-              deltaMin = Math.abs(actualCubie.x - minX),
-              error = deltaMin / ((ltCubie.width + actualCubie.width)/2);
-          console.log('color: - '+actualCubie.color+' actCubie - x: '+actualCubie.x +' - '+'actCubie - y: '+actualCubie.y);
-          console.log('color: - '+ltCubie.color+' ltCubie - x: '+ltCubie.x+' - '+'ltCubie - y: '+ltCubie.y);
-          console.log('delta: '+ deltaMin);
-          console.log('error: '+ error);
+        minY = Number.MAX_VALUE;
 
-          if(error <= 0.1){
-            //verificamos el valor de y
-            if(actualCubie.y < ltCubie.y){
-              console.log('change '+leftTopIndex+' por '+i);
-              leftTopIndex = i;
-              minX = actualCubie.x;
-            }
-          }
-        }
+    for(var i = 0; i < leftCubies.length; i++){
+      if(leftCubies[i].y < minY){
+        leftTopIndex = i;
+        minY = leftCubies[i].y;
       }
+    }
 
-      return leftTopIndex;
-    }
-    else{
-      return -1;
-    }
+    return leftTopIndex;
   }
 
   getRightTopCubie(): number{
