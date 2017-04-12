@@ -24,6 +24,10 @@ var TrackerComponent = (function () {
         //margen de error entre superficies encontradas
         this.deltaError = 0.1;
     }
+    /*
+    Función que se ejecuta cuando se inicializa el rastreador de colores.
+    Crea los filtros de colores que debe buscar en la imágen.
+    */
     TrackerComponent.prototype.ngOnInit = function () {
         tracking.ColorTracker.registerColor('blue', function (r, g, b) {
             if (r < 140 && g < 200 && b > 80) {
@@ -62,6 +66,9 @@ var TrackerComponent = (function () {
             return false;
         });
     };
+    /*
+    Inicializa el rastreador de colores sobre la imágen.
+    */
     TrackerComponent.prototype.trackColors = function () {
         var me = this;
         console.log(me.imageName + ' image loaded...');
@@ -84,6 +91,10 @@ var TrackerComponent = (function () {
         //analizamos las figuras encontradas
         tracking.track('#img-' + me.imageName, this.tracker);
     };
+    /*
+    Determina de las formas seleccionadas como parte del cubo cuales están a la
+    izquierda, al centro y a la derecha
+    */
     TrackerComponent.prototype.clasifyShapes = function () {
         var me = this, left = [], middle = [], right = [], minX = Number.MAX_VALUE, maxX = Number.MIN_VALUE;
         //busco el mínimo y el máximo
@@ -110,8 +121,12 @@ var TrackerComponent = (function () {
                 }
             }
         }
-        console.log(left[me.getLeftTopCubie(left)]);
+        console.log(me.imageName, left[me.getLeftTopCubie(left)]);
     };
+    /*
+    Analiza los patrones encontrados en la imágen y dibuja solo los estadisticamente
+    similares
+    */
     TrackerComponent.prototype.analizeShapes = function () {
         var me = this;
         for (var i in me.shapes) {
@@ -134,6 +149,9 @@ var TrackerComponent = (function () {
             }
         }
     };
+    /*
+    Dibuja el rectangulo sobre la posición en la que se encontró el patrón de color
+    */
     TrackerComponent.prototype.plotRectangle = function (x, y, width, height, color) {
         var me = this, rect = document.createElement('div');
         rect.innerHTML += "(" + x + "," + y + ") - " + width + "x" + height + " ";
@@ -146,6 +164,9 @@ var TrackerComponent = (function () {
         rect.style.left = left;
         rect.style.top = top;
     };
+    /*
+    Obtiene el cubie de la esquina superior izquierda
+    */
     TrackerComponent.prototype.getLeftTopCubie = function (leftCubies) {
         var me = this, leftTopIndex = 0, minY = Number.MAX_VALUE;
         for (var i = 0; i < leftCubies.length; i++) {
@@ -156,9 +177,21 @@ var TrackerComponent = (function () {
         }
         return leftTopIndex;
     };
-    TrackerComponent.prototype.getRightTopCubie = function () {
-        var me = this, leftTopIndex = 0;
-        return leftTopIndex;
+    /*
+    Obtiene el cubie de la esquina superior derecha
+    */
+    TrackerComponent.prototype.getRightTopCubie = function (rightCubies) {
+        var me = this, rightTopIndex = 0, minY = Number.MAX_VALUE;
+        for (var i = 0; i < rightCubies.length; i++) {
+            if (rightCubies[i].y < minY) {
+                rightTopIndex = i;
+                minY = rightCubies[i].y;
+            }
+        }
+        return rightTopIndex;
+    };
+    TrackerComponent.prototype.getMiddleTopCubie = function (middleCubies) {
+        return 0;
     };
     TrackerComponent.prototype.getLeftBottomCubie = function () {
         var me = this, leftBottomIndex = 0;

@@ -59,6 +59,10 @@ export class TrackerComponent implements OnInit {
 
 	constructor(private router: Router, private authService: AuthService) {}
 
+  /*
+  Función que se ejecuta cuando se inicializa el rastreador de colores.
+  Crea los filtros de colores que debe buscar en la imágen.
+  */
 	ngOnInit(): void {
 
     tracking.ColorTracker.registerColor('blue', function(r: number, g: number, b: number) {
@@ -104,6 +108,9 @@ export class TrackerComponent implements OnInit {
     });
   }
 
+  /*
+  Inicializa el rastreador de colores sobre la imágen.
+  */
   trackColors(): void{
     var me = this;
 
@@ -135,7 +142,11 @@ export class TrackerComponent implements OnInit {
     //analizamos las figuras encontradas
     tracking.track('#img-'+me.imageName, this.tracker);
   }
-
+  
+  /*
+  Determina de las formas seleccionadas como parte del cubo cuales están a la 
+  izquierda, al centro y a la derecha
+  */
   clasifyShapes():void{
     var me = this,
         left:any[] = [],
@@ -171,10 +182,14 @@ export class TrackerComponent implements OnInit {
         }
       }
     }
-
-    console.log(left[me.getLeftTopCubie(left)]);
+    
+    console.log(me.imageName,left[me.getLeftTopCubie(left)]);
   }
-
+  
+  /*
+  Analiza los patrones encontrados en la imágen y dibuja solo los estadisticamente
+  similares
+  */
   analizeShapes(): void {
     var me = this;
 
@@ -203,7 +218,10 @@ export class TrackerComponent implements OnInit {
       }
     }
   }
-
+  
+  /*
+  Dibuja el rectangulo sobre la posición en la que se encontró el patrón de color
+  */
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
     var me = this,
         rect = document.createElement('div');
@@ -222,6 +240,9 @@ export class TrackerComponent implements OnInit {
     rect.style.top = top;
   }
 
+  /*
+  Obtiene el cubie de la esquina superior izquierda
+  */
   getLeftTopCubie(leftCubies: any[]): number{
     var me = this,
         leftTopIndex = 0,
@@ -233,15 +254,27 @@ export class TrackerComponent implements OnInit {
         minY = leftCubies[i].y;
       }
     }
-
     return leftTopIndex;
   }
-
-  getRightTopCubie(): number{
+  /*
+  Obtiene el cubie de la esquina superior derecha
+  */
+  getRightTopCubie(rightCubies: any[]): number{
     var me = this,
-        leftTopIndex = 0;
+        rightTopIndex = 0,
+        minY = Number.MAX_VALUE;
 
-    return leftTopIndex;
+    for(var i = 0; i < rightCubies.length; i++){
+      if(rightCubies[i].y < minY){
+        rightTopIndex = i;
+        minY = rightCubies[i].y;
+      }
+    }
+    return rightTopIndex;
+  }
+
+  getMiddleTopCubie(middleCubies: any[]): number{
+    return 0;
   }
 
   getLeftBottomCubie(): number{
