@@ -252,7 +252,6 @@ RubiksCubeSolver.prototype.verifyState = function() {
   return true;
 };
 
-
 RubiksCubeSolver.prototype.solve = function(cube) {
   this.solution = "";
   this.phase = 0;

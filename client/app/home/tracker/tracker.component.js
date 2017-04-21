@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var core_2 = require('@angular/core');
+var core_3 = require('@angular/core');
 var router_1 = require('@angular/router');
 var hero_service_1 = require('../hero/hero.service');
 var auth_service_1 = require('../auth/auth.service');
@@ -17,12 +18,23 @@ var TrackerComponent = (function () {
     function TrackerComponent(router, authService) {
         this.router = router;
         this.authService = authService;
+        this.UP = 'U';
+        this.DOWN = 'D';
+        this.FRONT = 'F';
+        this.BACK = 'B';
+        this.LEFT = 'L';
+        this.RIGHT = 'R';
+        this.UNDEFINED = 'N/A';
         //formas encontradas que corresponden con los filtros definidos
         this.shapes = [];
         //
         this.cubies = [];
         //margen de error entre superficies encontradas
         this.deltaError = 0.1;
+        //identificador de la cara de la imágen
+        this.faceId = this.UNDEFINED;
+        this.returnFaceId = new core_2.EventEmitter();
+        this.returnResponseString = new core_2.EventEmitter();
     }
     /*
     Función que se ejecuta cuando se inicializa el rastreador de colores.
@@ -121,7 +133,13 @@ var TrackerComponent = (function () {
                 }
             }
         }
-        console.log(me.imageName, left[me.getLeftTopCubie(left)]);
+        //despues de clasificarlas, verificamos la cara que estámos analizando
+        me.defineCubeFace(middle[me.getCenterCubie(middle)]);
+        //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara 
+        //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
+        if (me.faceId != me.UNDEFINED) {
+            me.setResponseString();
+        }
     };
     /*
     Analiza los patrones encontrados en la imágen y dibuja solo los estadisticamente
@@ -201,14 +219,90 @@ var TrackerComponent = (function () {
         var me = this, leftBottomIndex = 0;
         return leftBottomIndex;
     };
-    TrackerComponent.prototype.getCenterCubie = function (leftTopIndex, leftBottomIndex, rightTopIndex, rightBottomIndex) {
-        var me = this, leftBottomIndex = 0;
-        return leftBottomIndex;
+    TrackerComponent.prototype.getCenterCubie = function (middleCubies) {
+        var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
+        //extraemos los míninos y máximos de los cubies del medio
+        for (var i = 0; i < middleCubies.length; i++) {
+            if (middleCubies[i].y < minY) {
+                minIndex = i;
+                minY = middleCubies[i].y;
+            }
+            if (middleCubies[i].y > maxY) {
+                maxIndex = i;
+                maxY = middleCubies[i].y;
+            }
+        }
+        //con estos valores identificados, se 
+        for (var i = 0; i < middleCubies.length; i++) {
+            if (i != minIndex && i != maxIndex) {
+                centerIndex = i;
+                break;
+            }
+        }
+        return centerIndex;
+    };
+    TrackerComponent.prototype.defineCubeFace = function (centerCubbie) {
+        var me = this;
+        switch (centerCubbie.color) {
+            case 'white':
+                {
+                    me.faceId = me.UP;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.UP });
+                }
+                break;
+            case 'blue':
+                {
+                    me.faceId = me.FRONT;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.FRONT });
+                }
+                break;
+            case 'red':
+                {
+                    me.faceId = me.LEFT;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.LEFT });
+                }
+                break;
+            case 'green':
+                {
+                    me.faceId = me.BACK;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.BACK });
+                }
+                break;
+            case 'orange':
+                {
+                    me.faceId = me.RIGHT;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.RIGHT });
+                }
+                break;
+            case 'yellow':
+                {
+                    me.faceId = me.DOWN;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.DOWN });
+                }
+                break;
+            default:
+                {
+                    me.faceId = me.UNDEFINED;
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.UNDEFINED });
+                }
+                break;
+        }
+    };
+    TrackerComponent.prototype.setResponseString = function () {
+        //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
     };
     __decorate([
-        core_2.Input(), 
+        core_3.Input(), 
         __metadata('design:type', String)
     ], TrackerComponent.prototype, "imageName", void 0);
+    __decorate([
+        core_3.Output(), 
+        __metadata('design:type', Object)
+    ], TrackerComponent.prototype, "returnFaceId", void 0);
+    __decorate([
+        core_3.Output(), 
+        __metadata('design:type', Object)
+    ], TrackerComponent.prototype, "returnResponseString", void 0);
     TrackerComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

@@ -14,12 +14,15 @@ var TrackmanagerComponent = (function () {
     function TrackmanagerComponent(authService) {
         this.authService = authService;
         this.images = ['white', 'blue', 'red', 'orange', 'yellow', 'green'];
+        //images: string[] = ['blue'];
+        this.faces = new Array(6);
     }
     TrackmanagerComponent.prototype.ngOnInit = function () {
-        console.log('loaging trackers...');
+        console.log('loading trackers...');
     };
     TrackmanagerComponent.prototype.resolveCube = function () {
         var me = this;
+        //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
         var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
         //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
         //para resolver
@@ -29,6 +32,10 @@ var TrackmanagerComponent = (function () {
             console.log(me.result);
         });
         return me.result;
+    };
+    TrackmanagerComponent.prototype.setFaceId = function (event) {
+        var me = this;
+        me.faces[me.images.indexOf(event.imageName)] = event.faceId;
     };
     TrackmanagerComponent = __decorate([
         core_1.Component({

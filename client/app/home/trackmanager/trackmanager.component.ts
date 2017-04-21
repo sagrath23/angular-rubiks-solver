@@ -17,16 +17,21 @@ export class TrackmanagerComponent implements OnInit {
 
     images: string[] = ['white','blue','red','orange','yellow','green'];
     //images: string[] = ['blue'];
+    faces: string[] = new Array(6);
+
+
     result: any;
 
   	constructor(private authService: AuthService) { }
 
   	ngOnInit(): void {
-    	console.log('loaging trackers...');
+    	console.log('loading trackers...');
   	}
 
     resolveCube(): string {
       var me = this;
+
+      //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
 
       var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
@@ -38,5 +43,10 @@ export class TrackmanagerComponent implements OnInit {
             });
 
       return me.result;
+    }
+
+    setFaceId(event: any):void{
+      var me = this;
+      me.faces[me.images.indexOf(event.imageName)] = event.faceId;
     }
 }

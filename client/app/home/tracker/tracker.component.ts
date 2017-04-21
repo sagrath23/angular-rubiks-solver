@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Input } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { Input, Output } from '@angular/core';
 import { OnInit }    from '@angular/core';
 import { Router }    from '@angular/router';
 import { Location }  from '@angular/common';
@@ -38,8 +39,17 @@ declare var tracking: Tracking;
 })
 
 export class TrackerComponent implements OnInit {
+  readonly UP: string = 'U';
+  readonly DOWN: string = 'D';
+  readonly FRONT: string = 'F';
+  readonly BACK: string = 'B';
+  readonly LEFT: string = 'L';
+  readonly RIGHT: string = 'R';
+  readonly UNDEFINED: string = 'N/A';
 
+  //nombre de la imágen cargada
   @Input() imageName: string;
+
   //instancia de la imágen que se está analizando
 	img: any;
   //arreglo de colores a rastrear en la imágen
@@ -51,11 +61,18 @@ export class TrackerComponent implements OnInit {
   //margen de error entre superficies encontradas
   deltaError: number = 0.1;
 
+  //identificador de la cara de la imágen
+  faceId: string = this.UNDEFINED;
+
 	tracker: any;
 
   result: any;
 
   plot: any;
+
+  @Output() returnFaceId =  new EventEmitter();
+
+  @Output() returnResponseString =  new EventEmitter();
 
 	constructor(private router: Router, private authService: AuthService) {}
 
@@ -182,8 +199,16 @@ export class TrackerComponent implements OnInit {
         }
       }
     }
-    
-    console.log(me.imageName,left[me.getLeftTopCubie(left)]);
+
+    //despues de clasificarlas, verificamos la cara que estámos analizando
+    me.defineCubeFace(middle[me.getCenterCubie(middle)]);
+    //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara 
+    //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
+
+    if(me.faceId != me.UNDEFINED){
+      me.setResponseString();
+    }
+
   }
   
   /*
@@ -274,6 +299,7 @@ export class TrackerComponent implements OnInit {
   }
 
   getMiddleTopCubie(middleCubies: any[]): number{
+
     return 0;
   }
 
@@ -291,10 +317,81 @@ export class TrackerComponent implements OnInit {
     return leftBottomIndex;
   }
 
-  getCenterCubie(leftTopIndex:number,leftBottomIndex:number,rightTopIndex:number,rightBottomIndex:number): number{
+  getCenterCubie(middleCubies: any[]): number{
     var me = this,
-        leftBottomIndex = 0;
+        minY = Number.MAX_VALUE,
+        maxY = Number.MIN_VALUE,
+        minIndex = -1, 
+        maxIndex = -1,
+        centerIndex = -1;
 
-    return leftBottomIndex;
+    //extraemos los míninos y máximos de los cubies del medio
+    for(var i = 0; i < middleCubies.length; i++){
+      if(middleCubies[i].y < minY){
+        minIndex = i;
+        minY = middleCubies[i].y;
+      }
+      if(middleCubies[i].y > maxY){
+        maxIndex = i;
+        maxY = middleCubies[i].y;
+      }
+    }
+
+    //con estos valores identificados, se 
+    for(var i = 0; i < middleCubies.length; i++){
+      if(i != minIndex && i != maxIndex){
+        centerIndex = i;
+        break;
+      }
+    }
+
+    return centerIndex;
+  }
+
+  defineCubeFace(centerCubbie: any): void{
+    var me = this;
+
+    switch(centerCubbie.color){
+      case 'white':{
+        me.faceId = me.UP;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UP});
+      }break;
+
+      case 'blue':{
+        me.faceId = me.FRONT;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.FRONT});
+      }break;
+
+      case 'red':{
+        me.faceId = me.LEFT;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.LEFT});
+      }break;
+
+      case 'green':{
+        me.faceId = me.BACK;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.BACK});
+      }break;
+
+      case 'orange':{
+        me.faceId = me.RIGHT;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.RIGHT});
+      }break;
+
+      case 'yellow':{
+        me.faceId = me.DOWN;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.DOWN});
+      }break;
+
+      default:{
+        me.faceId = me.UNDEFINED;
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UNDEFINED});
+      }break;
+    }
+  }
+
+  setResponseString(): void{
+    //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
+    
+
   }
 }

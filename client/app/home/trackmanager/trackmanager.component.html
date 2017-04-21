@@ -6,7 +6,8 @@
         <md-card-title><h2>{{face}}</h2></md-card-title>
         <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
       </md-card-header>
-      <tracker-component [imageName]="face"></tracker-component>
+      <!-- Tracker component-->
+      <tracker-component [imageName]="face" (returnFaceId)="setFaceId($event)"></tracker-component>
       <md-card-content>
         <p>
           {{face}} face of the cube.
