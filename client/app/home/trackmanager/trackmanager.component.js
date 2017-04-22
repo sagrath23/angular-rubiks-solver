@@ -37,6 +37,7 @@ var TrackmanagerComponent = (function () {
     TrackmanagerComponent.prototype.setFaceId = function (event) {
         var me = this;
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
+        console.log(me.faces);
     };
     return TrackmanagerComponent;
 }());

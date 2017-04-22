@@ -31,7 +31,7 @@ var TrackerComponent = (function () {
         //
         this.cubies = [];
         //margen de error entre superficies encontradas
-        this.deltaError = 0.1;
+        this.deltaError = 0.15;
         //identificador de la cara de la imágen
         this.faceId = this.UNDEFINED;
         this.returnFaceId = new core_2.EventEmitter();
@@ -136,7 +136,7 @@ var TrackerComponent = (function () {
         }
         //despues de clasificarlas, verificamos la cara que estámos analizando
         me.defineCubeFace(middle[me.getCenterCubie(middle)]);
-        //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara 
+        //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara
         //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
         if (me.faceId != me.UNDEFINED) {
             me.setResponseString();
@@ -173,7 +173,8 @@ var TrackerComponent = (function () {
     */
     TrackerComponent.prototype.plotRectangle = function (x, y, width, height, color) {
         var me = this, rect = document.createElement('div');
-        rect.innerHTML += "(" + x + "," + y + ") - " + width + "x" + height + " ";
+        //show for debug purposes
+        //rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
         document.querySelector('.container-' + me.imageName).appendChild(rect);
         rect.classList.add('rect');
         rect.style.border = '4px solid ' + color;
@@ -209,17 +210,10 @@ var TrackerComponent = (function () {
         }
         return rightTopIndex;
     };
-    TrackerComponent.prototype.getMiddleTopCubie = function (middleCubies) {
-        return 0;
-    };
-    TrackerComponent.prototype.getLeftBottomCubie = function () {
-        var me = this, leftBottomIndex = 0;
-        return leftBottomIndex;
-    };
-    TrackerComponent.prototype.getRightBottomCubie = function () {
-        var me = this, leftBottomIndex = 0;
-        return leftBottomIndex;
-    };
+    /*
+    obtiene el cubie central de los patrones reconocidos,
+    que define la cara que estoy viendo
+    */
     TrackerComponent.prototype.getCenterCubie = function (middleCubies) {
         var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
         //extraemos los míninos y máximos de los cubies del medio
@@ -233,7 +227,7 @@ var TrackerComponent = (function () {
                 maxY = middleCubies[i].y;
             }
         }
-        //con estos valores identificados, se 
+        //con estos valores identificados, se
         for (var i = 0; i < middleCubies.length; i++) {
             if (i != minIndex && i != maxIndex) {
                 centerIndex = i;
@@ -241,6 +235,17 @@ var TrackerComponent = (function () {
             }
         }
         return centerIndex;
+    };
+    TrackerComponent.prototype.getMiddleTopCubie = function (middleCubies) {
+        return 0;
+    };
+    TrackerComponent.prototype.getLeftBottomCubie = function () {
+        var me = this, leftBottomIndex = 0;
+        return leftBottomIndex;
+    };
+    TrackerComponent.prototype.getRightBottomCubie = function () {
+        var me = this, leftBottomIndex = 0;
+        return leftBottomIndex;
     };
     TrackerComponent.prototype.defineCubeFace = function (centerCubbie) {
         var me = this;
@@ -291,6 +296,8 @@ var TrackerComponent = (function () {
     };
     TrackerComponent.prototype.setResponseString = function () {
         //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
+        var me = this, response = '';
+        me.returnResponseString.emit({ imageName: me.imageName, response: '' });
     };
     return TrackerComponent;
 }());

@@ -11,6 +11,7 @@ import { HeroService } from '../hero/hero.service';
 
 import { AuthService } from '../auth/auth.service';
 
+//interfaces para llamado de librerías en JS
 interface Tracking {
     ColorTracker: registerColor;
     Image: Image;
@@ -59,7 +60,7 @@ export class TrackerComponent implements OnInit {
   //
   cubies: Array<any> = [];
   //margen de error entre superficies encontradas
-  deltaError: number = 0.1;
+  deltaError: number = 0.15;
 
   //identificador de la cara de la imágen
   faceId: string = this.UNDEFINED;
@@ -155,13 +156,12 @@ export class TrackerComponent implements OnInit {
       me.clasifyShapes();
     });
 
-
     //analizamos las figuras encontradas
     tracking.track('#img-'+me.imageName, this.tracker);
   }
-  
+
   /*
-  Determina de las formas seleccionadas como parte del cubo cuales están a la 
+  Determina de las formas seleccionadas como parte del cubo cuales están a la
   izquierda, al centro y a la derecha
   */
   clasifyShapes():void{
@@ -202,7 +202,7 @@ export class TrackerComponent implements OnInit {
 
     //despues de clasificarlas, verificamos la cara que estámos analizando
     me.defineCubeFace(middle[me.getCenterCubie(middle)]);
-    //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara 
+    //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara
     //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
 
     if(me.faceId != me.UNDEFINED){
@@ -210,7 +210,7 @@ export class TrackerComponent implements OnInit {
     }
 
   }
-  
+
   /*
   Analiza los patrones encontrados en la imágen y dibuja solo los estadisticamente
   similares
@@ -243,15 +243,15 @@ export class TrackerComponent implements OnInit {
       }
     }
   }
-  
+
   /*
   Dibuja el rectangulo sobre la posición en la que se encontró el patrón de color
   */
   plotRectangle(x:number,y:number,width:number,height:number,color:string): void {
     var me = this,
         rect = document.createElement('div');
-
-    rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
+    //show for debug purposes
+    //rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
     document.querySelector('.container-'+me.imageName).appendChild(rect);
     rect.classList.add('rect');
     rect.style.border = '4px solid ' + color;
@@ -297,6 +297,40 @@ export class TrackerComponent implements OnInit {
     }
     return rightTopIndex;
   }
+  /*
+  obtiene el cubie central de los patrones reconocidos,
+  que define la cara que estoy viendo
+  */
+  getCenterCubie(middleCubies: any[]): number{
+    var me = this,
+        minY = Number.MAX_VALUE,
+        maxY = Number.MIN_VALUE,
+        minIndex = -1,
+        maxIndex = -1,
+        centerIndex = -1;
+
+    //extraemos los míninos y máximos de los cubies del medio
+    for(var i = 0; i < middleCubies.length; i++){
+      if(middleCubies[i].y < minY){
+        minIndex = i;
+        minY = middleCubies[i].y;
+      }
+      if(middleCubies[i].y > maxY){
+        maxIndex = i;
+        maxY = middleCubies[i].y;
+      }
+    }
+
+    //con estos valores identificados, se
+    for(var i = 0; i < middleCubies.length; i++){
+      if(i != minIndex && i != maxIndex){
+        centerIndex = i;
+        break;
+      }
+    }
+
+    return centerIndex;
+  }
 
   getMiddleTopCubie(middleCubies: any[]): number{
 
@@ -317,36 +351,6 @@ export class TrackerComponent implements OnInit {
     return leftBottomIndex;
   }
 
-  getCenterCubie(middleCubies: any[]): number{
-    var me = this,
-        minY = Number.MAX_VALUE,
-        maxY = Number.MIN_VALUE,
-        minIndex = -1, 
-        maxIndex = -1,
-        centerIndex = -1;
-
-    //extraemos los míninos y máximos de los cubies del medio
-    for(var i = 0; i < middleCubies.length; i++){
-      if(middleCubies[i].y < minY){
-        minIndex = i;
-        minY = middleCubies[i].y;
-      }
-      if(middleCubies[i].y > maxY){
-        maxIndex = i;
-        maxY = middleCubies[i].y;
-      }
-    }
-
-    //con estos valores identificados, se 
-    for(var i = 0; i < middleCubies.length; i++){
-      if(i != minIndex && i != maxIndex){
-        centerIndex = i;
-        break;
-      }
-    }
-
-    return centerIndex;
-  }
 
   defineCubeFace(centerCubbie: any): void{
     var me = this;
@@ -391,7 +395,9 @@ export class TrackerComponent implements OnInit {
 
   setResponseString(): void{
     //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
-    
+    var me = this,
+        response:string = '';
 
+    me.returnResponseString.emit({imageName: me.imageName,response: ''});
   }
 }
