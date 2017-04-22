@@ -8,12 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var core_2 = require('@angular/core');
-var core_3 = require('@angular/core');
-var router_1 = require('@angular/router');
-var hero_service_1 = require('../hero/hero.service');
-var auth_service_1 = require('../auth/auth.service');
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var core_2 = require("@angular/core");
+var core_3 = require("@angular/core");
+var router_1 = require("@angular/router");
+var hero_service_1 = require("../hero/hero.service");
+var auth_service_1 = require("../auth/auth.service");
 var TrackerComponent = (function () {
     function TrackerComponent(router, authService) {
         this.router = router;
@@ -291,29 +292,29 @@ var TrackerComponent = (function () {
     TrackerComponent.prototype.setResponseString = function () {
         //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
     };
-    __decorate([
-        core_3.Input(), 
-        __metadata('design:type', String)
-    ], TrackerComponent.prototype, "imageName", void 0);
-    __decorate([
-        core_3.Output(), 
-        __metadata('design:type', Object)
-    ], TrackerComponent.prototype, "returnFaceId", void 0);
-    __decorate([
-        core_3.Output(), 
-        __metadata('design:type', Object)
-    ], TrackerComponent.prototype, "returnResponseString", void 0);
-    TrackerComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'tracker-component',
-            templateUrl: 'tracker.component.html',
-            styleUrls: ['tracker.component.css'],
-            providers: [hero_service_1.HeroService]
-        }), 
-        __metadata('design:paramtypes', [router_1.Router, auth_service_1.AuthService])
-    ], TrackerComponent);
     return TrackerComponent;
 }());
+__decorate([
+    core_3.Input(),
+    __metadata("design:type", String)
+], TrackerComponent.prototype, "imageName", void 0);
+__decorate([
+    core_3.Output(),
+    __metadata("design:type", Object)
+], TrackerComponent.prototype, "returnFaceId", void 0);
+__decorate([
+    core_3.Output(),
+    __metadata("design:type", Object)
+], TrackerComponent.prototype, "returnResponseString", void 0);
+TrackerComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'tracker-component',
+        templateUrl: 'tracker.component.html',
+        styleUrls: ['tracker.component.css'],
+        providers: [hero_service_1.HeroService]
+    }),
+    __metadata("design:paramtypes", [router_1.Router, auth_service_1.AuthService])
+], TrackerComponent);
 exports.TrackerComponent = TrackerComponent;
 //# sourceMappingURL=tracker.component.js.map

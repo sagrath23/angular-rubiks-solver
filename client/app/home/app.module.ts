@@ -3,6 +3,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 //Angular 2 Material WebComponents
 import { MaterialModule } from '@angular/material';
 

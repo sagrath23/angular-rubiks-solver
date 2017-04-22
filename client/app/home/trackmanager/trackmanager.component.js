@@ -8,8 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var auth_service_1 = require('../auth/auth.service');
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var auth_service_1 = require("../auth/auth.service");
 var TrackmanagerComponent = (function () {
     function TrackmanagerComponent(authService) {
         this.authService = authService;
@@ -37,16 +38,16 @@ var TrackmanagerComponent = (function () {
         var me = this;
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
     };
-    TrackmanagerComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'trackmanager',
-            templateUrl: 'trackmanager.component.html',
-            providers: [auth_service_1.AuthService]
-        }), 
-        __metadata('design:paramtypes', [auth_service_1.AuthService])
-    ], TrackmanagerComponent);
     return TrackmanagerComponent;
 }());
+TrackmanagerComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'trackmanager',
+        templateUrl: 'trackmanager.component.html',
+        providers: [auth_service_1.AuthService]
+    }),
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
+], TrackmanagerComponent);
 exports.TrackmanagerComponent = TrackmanagerComponent;
 //# sourceMappingURL=trackmanager.component.js.map
