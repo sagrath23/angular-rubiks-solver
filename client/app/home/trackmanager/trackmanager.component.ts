@@ -50,6 +50,5 @@ export class TrackmanagerComponent implements OnInit {
       me.faces[me.images.indexOf(event.imageName)] = event.faceId;
 
       console.log(me.faces);
-      
     }
 }
