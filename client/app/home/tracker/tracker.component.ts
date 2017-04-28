@@ -200,12 +200,11 @@ export class TrackerComponent implements OnInit {
         }
       }
     }
-
+    var centerIndex = me.getCenterCubie(middle);
     //despues de clasificarlas, verificamos la cara que estámos analizando
-    me.defineCubeFace(middle[me.getCenterCubie(middle)]);
+    me.defineCubeFace(middle[centerIndex],[left,middle.splice(centerIndex),right]);
     //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara
     //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
-
     if(me.faceId != me.UNDEFINED){
       me.setResponseString();
     }
@@ -332,7 +331,7 @@ export class TrackerComponent implements OnInit {
     return centerIndex;
   }
 
-  defineCubeFace(centerCubbie: any): void{
+  defineCubeFace(centerCubbie: any, allCubies:any[]): void{
     var me = this;
 
     switch(centerCubbie.color){
