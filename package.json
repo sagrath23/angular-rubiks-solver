@@ -43,7 +43,6 @@
     "express": "^4.13.4",
     "hammerjs": "^2.0.8",
     "jquery": "^3.2.1",
-    "mongoose": "^4.4.20",
     "morgan": "^1.7.0",
     "q": "^1.4.1",
     "reflect-metadata": "^0.1.8",
