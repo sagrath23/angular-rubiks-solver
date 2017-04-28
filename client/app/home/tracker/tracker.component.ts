@@ -40,6 +40,7 @@ declare var tracking: Tracking;
 })
 
 export class TrackerComponent implements OnInit {
+
   readonly UP: string = 'U';
   readonly DOWN: string = 'D';
   readonly FRONT: string = 'F';
@@ -208,7 +209,6 @@ export class TrackerComponent implements OnInit {
     if(me.faceId != me.UNDEFINED){
       me.setResponseString();
     }
-
   }
 
   /*
@@ -332,63 +332,43 @@ export class TrackerComponent implements OnInit {
     return centerIndex;
   }
 
-  getMiddleTopCubie(middleCubies: any[]): number{
-
-    return 0;
-  }
-
-  getLeftBottomCubie(): number{
-    var me = this,
-        leftBottomIndex = 0;
-
-    return leftBottomIndex;
-  }
-
-  getRightBottomCubie(): number{
-    var me = this,
-        leftBottomIndex = 0;
-
-    return leftBottomIndex;
-  }
-
-
   defineCubeFace(centerCubbie: any): void{
     var me = this;
 
     switch(centerCubbie.color){
       case 'white':{
         me.faceId = me.UP;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UP});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UP,cubies: []});
       }break;
 
       case 'blue':{
         me.faceId = me.FRONT;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.FRONT});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.FRONT,cubies: []});
       }break;
 
       case 'red':{
         me.faceId = me.LEFT;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.LEFT});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.LEFT,cubies: []});
       }break;
 
       case 'green':{
         me.faceId = me.BACK;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.BACK});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.BACK,cubies: []});
       }break;
 
       case 'orange':{
         me.faceId = me.RIGHT;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.RIGHT});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.RIGHT,cubies: []});
       }break;
 
       case 'yellow':{
         me.faceId = me.DOWN;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.DOWN});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.DOWN,cubies: []});
       }break;
 
       default:{
         me.faceId = me.UNDEFINED;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UNDEFINED});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UNDEFINED,cubies: []});
       }break;
     }
   }
@@ -397,6 +377,12 @@ export class TrackerComponent implements OnInit {
     //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
     var me = this,
         response:string = '';
+
+    //a partir de la cara identificada, se evaluan las posiciones que se deben 
+    //concatenar
+    if(me.faceId === me.UP || me.faceId === me.DOWN){
+      response = me.getAllCubiesColors();
+    }
 
     me.returnResponseString.emit({imageName: me.imageName,response: ''});
   }
