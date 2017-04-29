@@ -21,6 +21,10 @@ export class TrackmanagerComponent implements OnInit {
 
     cubies: any[] = new Array(6);
 
+    baseState: string[] = ['UF', 'UR', 'UB', 'UL', 'DF', 'DR', 'DB', 'DL', 'FR', 'FL', 'BR', 'BL', 'UFR', 'URB', 'UBL', 'ULF', 'DRF', 'DFL', 'DLB', 'DBR'];
+
+    currentState: string[] = new Array(20);
+
     result: any;
 
   	constructor(private authService: AuthService) { }
@@ -70,8 +74,13 @@ export class TrackmanagerComponent implements OnInit {
       return me.result;
     }
 
+    /*
+    función que se ejecuta cuando se detecta la cara que se enceuntra en la imágen
+    */
     setFaceId(event: any):void{
       var me = this;
+
+      console.log(event,'datos');
       me.faces[me.images.indexOf(event.imageName)] = event.faceId;
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
@@ -81,6 +90,9 @@ export class TrackmanagerComponent implements OnInit {
       }
     }
 
+    /*
+    función que verifica que se hayan identificado todas las caras del cubo en las imágenes
+    */
     check():boolean{
       var me = this;
       for(var i = 0; i < me.faces.length; i++){
@@ -93,6 +105,21 @@ export class TrackmanagerComponent implements OnInit {
 
     /*
     función que identifica qué cubies están en las posiciones UF,UR,UL,UB
+
+    Alternativas 
+    Azul:     Azul-blanco
+              Azul-amarillo
+              Azul-naranja
+              Azul-rojo
+    Blanco:   Blanco-rojo
+              Blanco-naranja
+              Blanco-verde
+    Amarillo: Amarillo-rojo
+              Amarillo-naranja
+              Amarillo-verde
+    Verde:    Verde-rojo
+              Verde-naranja               
+
      */
     findUpCross():void{
       var me = this,
@@ -122,5 +149,38 @@ export class TrackmanagerComponent implements OnInit {
       }
       //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
       //de la cara superior
+      console.log(me.cubies[upFaceIndex],'cubies en la cara superior');
+      //saco las 4 posiciones de cruz de la cara
+      var cross = [
+        me.getMiddleCubie(me.cubies[frontFaceIndex][1],false),//middle
+        me.getRightCubie(me.cubies[frontFaceIndex][2]),//right
+        me.getMiddleCubie(me.cubies[frontFaceIndex][1],true),//middle
+        me.getLeftCubie(me.cubies[frontFaceIndex][0]),//left
+      ];
+      
     }
+
+    getMiddleCubie(cubies:any[],getUpCubie:boolean): any{
+      var me = this,
+          cubie = null;
+      if(getUpCubie){
+
+      }
+      else{
+
+      }
+
+      return cubie;
+    }
+
+    getRightCubie(cubies:any[]): any{
+
+      return '';
+    }
+
+    getLeftCubie(cubies:any[]): any{
+
+      return '';
+    }
+
 }

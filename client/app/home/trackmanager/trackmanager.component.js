@@ -18,6 +18,8 @@ var TrackmanagerComponent = (function () {
         //images: string[] = ['blue'];
         this.faces = new Array(6);
         this.cubies = new Array(6);
+        this.baseState = ['UF', 'UR', 'UB', 'UL', 'DF', 'DR', 'DB', 'DL', 'FR', 'FL', 'BR', 'BL', 'UFR', 'URB', 'UBL', 'ULF', 'DRF', 'DFL', 'DLB', 'DBR'];
+        this.currentState = new Array(20);
     }
     TrackmanagerComponent.prototype.ngOnInit = function () {
         console.log('loading trackers...');
@@ -59,8 +61,12 @@ var TrackmanagerComponent = (function () {
         });
         return me.result;
     };
+    /*
+    función que se ejecuta cuando se detecta la cara que se enceuntra en la imágen
+    */
     TrackmanagerComponent.prototype.setFaceId = function (event) {
         var me = this;
+        console.log(event, 'datos');
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
         me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
         if (me.check()) {
@@ -68,6 +74,9 @@ var TrackmanagerComponent = (function () {
             me.findUpCross();
         }
     };
+    /*
+    función que verifica que se hayan identificado todas las caras del cubo en las imágenes
+    */
     TrackmanagerComponent.prototype.check = function () {
         var me = this;
         for (var i = 0; i < me.faces.length; i++) {
@@ -79,6 +88,21 @@ var TrackmanagerComponent = (function () {
     };
     /*
     función que identifica qué cubies están en las posiciones UF,UR,UL,UB
+
+    Alternativas
+    Azul:     Azul-blanco
+              Azul-amarillo
+              Azul-naranja
+              Azul-rojo
+    Blanco:   Blanco-rojo
+              Blanco-naranja
+              Blanco-verde
+    Amarillo: Amarillo-rojo
+              Amarillo-naranja
+              Amarillo-verde
+    Verde:    Verde-rojo
+              Verde-naranja
+
      */
     TrackmanagerComponent.prototype.findUpCross = function () {
         var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
@@ -102,6 +126,28 @@ var TrackmanagerComponent = (function () {
         }
         //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
         //de la cara superior
+        console.log(me.cubies[upFaceIndex], 'cubies en la cara superior');
+        //saco las 4 posiciones de cruz de la cara
+        var cross = [
+            me.getMiddleCubie(me.cubies[frontFaceIndex][1], false),
+            me.getRightCubie(me.cubies[frontFaceIndex][2]),
+            me.getMiddleCubie(me.cubies[frontFaceIndex][1], true),
+            me.getLeftCubie(me.cubies[frontFaceIndex][0]),
+        ];
+    };
+    TrackmanagerComponent.prototype.getMiddleCubie = function (cubies, getUpCubie) {
+        var me = this, cubie = null;
+        if (getUpCubie) {
+        }
+        else {
+        }
+        return cubie;
+    };
+    TrackmanagerComponent.prototype.getRightCubie = function (cubies) {
+        return '';
+    };
+    TrackmanagerComponent.prototype.getLeftCubie = function (cubies) {
+        return '';
     };
     return TrackmanagerComponent;
 }());
