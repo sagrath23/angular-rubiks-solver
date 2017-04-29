@@ -1,0 +1,10 @@
+-.container-red > .rect,
+-.container-blue > .rect,
+-.container-green > .rect,
+-.container-white > .rect,
+-.container-yellow > .rect,
+-.container-orange > .rect
+-{
+-  position: fixed;
+-  z-index: 0;
+-}

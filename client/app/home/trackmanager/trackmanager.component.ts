@@ -30,7 +30,6 @@ export class TrackmanagerComponent implements OnInit {
   	}
 
     /*
-    
     //Estado objetivo 
     UF = Blanco-azul 
     UR = Blanco-naranja 
@@ -77,6 +76,7 @@ export class TrackmanagerComponent implements OnInit {
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
       if(me.check()){
+        console.log(me.faces);
         me.findUpCross();
       }
     }
@@ -84,7 +84,7 @@ export class TrackmanagerComponent implements OnInit {
     check():boolean{
       var me = this;
       for(var i = 0; i < me.faces.length; i++){
-        if(me.faces[i] === null){
+        if(typeof me.faces[i] === 'undefined'){
           return false;
         }
       }
@@ -122,8 +122,5 @@ export class TrackmanagerComponent implements OnInit {
       }
       //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
       //de la cara superior
-      
-
-
     }
 }

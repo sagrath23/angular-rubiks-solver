@@ -23,7 +23,6 @@ var TrackmanagerComponent = (function () {
         console.log('loading trackers...');
     };
     /*
-    
     //Estado objetivo
     UF = Blanco-azul
     UR = Blanco-naranja
@@ -65,13 +64,14 @@ var TrackmanagerComponent = (function () {
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
         me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
         if (me.check()) {
+            console.log(me.faces);
             me.findUpCross();
         }
     };
     TrackmanagerComponent.prototype.check = function () {
         var me = this;
         for (var i = 0; i < me.faces.length; i++) {
-            if (me.faces[i] === null) {
+            if (typeof me.faces[i] === 'undefined') {
                 return false;
             }
         }

@@ -134,13 +134,11 @@ var TrackerComponent = (function () {
                 }
             }
         }
+        var centerIndex = me.getCenterCubie(middle);
         //despues de clasificarlas, verificamos la cara que estámos analizando
-        me.defineCubeFace(middle[me.getCenterCubie(middle)]);
-        //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara
-        //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
-        if (me.faceId != me.UNDEFINED) {
-            me.setResponseString();
-        }
+        //y retornamos los colores encontrados para que el trackmanager genere el
+        //estado inicial del cubo
+        me.defineCubeFace(middle[centerIndex], [left, middle.splice(centerIndex), right]);
     };
     /*
     Analiza los patrones encontrados en la imágen y dibuja solo los estadisticamente
@@ -185,32 +183,6 @@ var TrackerComponent = (function () {
         rect.style.top = top;
     };
     /*
-    Obtiene el cubie de la esquina superior izquierda
-    */
-    TrackerComponent.prototype.getLeftTopCubie = function (leftCubies) {
-        var me = this, leftTopIndex = 0, minY = Number.MAX_VALUE;
-        for (var i = 0; i < leftCubies.length; i++) {
-            if (leftCubies[i].y < minY) {
-                leftTopIndex = i;
-                minY = leftCubies[i].y;
-            }
-        }
-        return leftTopIndex;
-    };
-    /*
-    Obtiene el cubie de la esquina superior derecha
-    */
-    TrackerComponent.prototype.getRightTopCubie = function (rightCubies) {
-        var me = this, rightTopIndex = 0, minY = Number.MAX_VALUE;
-        for (var i = 0; i < rightCubies.length; i++) {
-            if (rightCubies[i].y < minY) {
-                rightTopIndex = i;
-                minY = rightCubies[i].y;
-            }
-        }
-        return rightTopIndex;
-    };
-    /*
     obtiene el cubie central de los patrones reconocidos,
     que define la cara que estoy viendo
     */
@@ -236,54 +208,46 @@ var TrackerComponent = (function () {
         }
         return centerIndex;
     };
-    TrackerComponent.prototype.getMiddleTopCubie = function (middleCubies) {
-        return 0;
-    };
-    TrackerComponent.prototype.getLeftBottomCubie = function () {
-        var me = this, leftBottomIndex = 0;
-        return leftBottomIndex;
-    };
-    TrackerComponent.prototype.getRightBottomCubie = function () {
-        var me = this, leftBottomIndex = 0;
-        return leftBottomIndex;
-    };
-    TrackerComponent.prototype.defineCubeFace = function (centerCubbie) {
+    /*
+    retorna el identificador de la cara y los colores encontrados en la cara
+    */
+    TrackerComponent.prototype.defineCubeFace = function (centerCubbie, allCubies) {
         var me = this;
         switch (centerCubbie.color) {
             case 'white':
                 {
                     me.faceId = me.UP;
-                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.UP, cubies: [] });
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.UP, cubies: allCubies });
                 }
                 break;
             case 'blue':
                 {
                     me.faceId = me.FRONT;
-                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.FRONT, cubies: [] });
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.FRONT, cubies: allCubies });
                 }
                 break;
             case 'red':
                 {
                     me.faceId = me.LEFT;
-                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.LEFT, cubies: [] });
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.LEFT, cubies: allCubies });
                 }
                 break;
             case 'green':
                 {
                     me.faceId = me.BACK;
-                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.BACK, cubies: [] });
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.BACK, cubies: allCubies });
                 }
                 break;
             case 'orange':
                 {
                     me.faceId = me.RIGHT;
-                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.RIGHT, cubies: [] });
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.RIGHT, cubies: allCubies });
                 }
                 break;
             case 'yellow':
                 {
                     me.faceId = me.DOWN;
-                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.DOWN, cubies: [] });
+                    me.returnFaceId.emit({ imageName: me.imageName, faceId: me.DOWN, cubies: allCubies });
                 }
                 break;
             default:
@@ -293,16 +257,6 @@ var TrackerComponent = (function () {
                 }
                 break;
         }
-    };
-    TrackerComponent.prototype.setResponseString = function () {
-        //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
-        var me = this, response = '';
-        //a partir de la cara identificada, se evaluan las posiciones que se deben 
-        //concatenar
-        if (me.faceId === me.UP || me.faceId === me.DOWN) {
-            response = me.getAllCubiesColors();
-        }
-        me.returnResponseString.emit({ imageName: me.imageName, response: '' });
     };
     return TrackerComponent;
 }());

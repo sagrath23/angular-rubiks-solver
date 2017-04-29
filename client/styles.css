@@ -1,7 +1,7 @@
 h1 {
-  color: #369;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 250%;
+	color: #369;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 250%;
 }
 
 .container-red > .rect,
@@ -9,7 +9,47 @@ h1 {
 .container-green > .rect,
 .container-white > .rect,
 .container-yellow > .rect,
-.container-orange > .rect{
-  position: absolute;
-  z-index: 0;
+.container-orange > .rect {
+	position: absolute;
+	z-index: 0;
+}
+
+.loader {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #000;
+	font-family: Consolas, Menlo, Monaco, monospace;
+	font-weight: bold;
+	font-size: 30vh;
+	opacity: 0.8;
+}
+
+.loader span {
+	display: inline-block;
+	-webkit-animation: pulse 0.4s alternate infinite ease-in-out;
+	animation: pulse 0.4s alternate infinite ease-in-out;
+}
+
+.loader span:nth-child(odd) {
+	-webkit-animation-delay: 0.4s;
+	animation-delay: 0.4s;
+}
+
+@-webkit-keyframes pulse {
+	to {
+		-webkit-transform: scale(0.8);
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+
+}
+
+@keyframes pulse {
+	to {
+		-webkit-transform: scale(0.8);
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+
 }

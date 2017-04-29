@@ -202,12 +202,9 @@ export class TrackerComponent implements OnInit {
     }
     var centerIndex = me.getCenterCubie(middle);
     //despues de clasificarlas, verificamos la cara que estámos analizando
+    //y retornamos los colores encontrados para que el trackmanager genere el
+    //estado inicial del cubo
     me.defineCubeFace(middle[centerIndex],[left,middle.splice(centerIndex),right]);
-    //con la cara definida, pasamos a retornar las posiciones de los cubies de la cara
-    //al trackermanager, quien armará la cadena final y enviará a resolver el cubo
-    if(me.faceId != me.UNDEFINED){
-      me.setResponseString();
-    }
   }
 
   /*
@@ -263,39 +260,7 @@ export class TrackerComponent implements OnInit {
     rect.style.left = left;
     rect.style.top = top;
   }
-
-  /*
-  Obtiene el cubie de la esquina superior izquierda
-  */
-  getLeftTopCubie(leftCubies: any[]): number{
-    var me = this,
-        leftTopIndex = 0,
-        minY = Number.MAX_VALUE;
-
-    for(var i = 0; i < leftCubies.length; i++){
-      if(leftCubies[i].y < minY){
-        leftTopIndex = i;
-        minY = leftCubies[i].y;
-      }
-    }
-    return leftTopIndex;
-  }
-  /*
-  Obtiene el cubie de la esquina superior derecha
-  */
-  getRightTopCubie(rightCubies: any[]): number{
-    var me = this,
-        rightTopIndex = 0,
-        minY = Number.MAX_VALUE;
-
-    for(var i = 0; i < rightCubies.length; i++){
-      if(rightCubies[i].y < minY){
-        rightTopIndex = i;
-        minY = rightCubies[i].y;
-      }
-    }
-    return rightTopIndex;
-  }
+  
   /*
   obtiene el cubie central de los patrones reconocidos,
   que define la cara que estoy viendo
@@ -331,38 +296,41 @@ export class TrackerComponent implements OnInit {
     return centerIndex;
   }
 
+  /*
+  retorna el identificador de la cara y los colores encontrados en la cara
+  */
   defineCubeFace(centerCubbie: any, allCubies:any[]): void{
     var me = this;
 
     switch(centerCubbie.color){
       case 'white':{
         me.faceId = me.UP;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UP,cubies: []});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.UP,cubies: allCubies});
       }break;
 
       case 'blue':{
         me.faceId = me.FRONT;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.FRONT,cubies: []});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.FRONT,cubies: allCubies});
       }break;
 
       case 'red':{
         me.faceId = me.LEFT;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.LEFT,cubies: []});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.LEFT,cubies: allCubies});
       }break;
 
       case 'green':{
         me.faceId = me.BACK;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.BACK,cubies: []});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.BACK,cubies: allCubies});
       }break;
 
       case 'orange':{
         me.faceId = me.RIGHT;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.RIGHT,cubies: []});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.RIGHT,cubies: allCubies});
       }break;
 
       case 'yellow':{
         me.faceId = me.DOWN;
-        me.returnFaceId.emit({imageName: me.imageName, faceId: me.DOWN,cubies: []});
+        me.returnFaceId.emit({imageName: me.imageName, faceId: me.DOWN,cubies: allCubies});
       }break;
 
       default:{
@@ -370,19 +338,5 @@ export class TrackerComponent implements OnInit {
         me.returnFaceId.emit({imageName: me.imageName, faceId: me.UNDEFINED,cubies: []});
       }break;
     }
-  }
-
-  setResponseString(): void{
-    //aquí se arma la cadena de posiciones que se concatenarán para enviar al tracker manager
-    var me = this,
-        response:string = '';
-
-    //a partir de la cara identificada, se evaluan las posiciones que se deben 
-    //concatenar
-    if(me.faceId === me.UP || me.faceId === me.DOWN){
-      response = me.getAllCubiesColors();
-    }
-
-    me.returnResponseString.emit({imageName: me.imageName,response: ''});
   }
 }
