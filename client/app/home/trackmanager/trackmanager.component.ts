@@ -68,7 +68,6 @@ export class TrackmanagerComponent implements OnInit {
       me.authService.solveCube(state)
             .then((data) => {
               me.result = data;
-              console.log(me.result);
             });
 
       return me.result;
@@ -80,12 +79,10 @@ export class TrackmanagerComponent implements OnInit {
     setFaceId(event: any):void{
       var me = this;
 
-      console.log(event,'datos');
       me.faces[me.images.indexOf(event.imageName)] = event.faceId;
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
       if(me.check()){
-        console.log(me.faces);
         me.findUpCross();
       }
     }
@@ -149,38 +146,93 @@ export class TrackmanagerComponent implements OnInit {
       }
       //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
       //de la cara superior
-      console.log(me.cubies[upFaceIndex],'cubies en la cara superior');
+
       //saco las 4 posiciones de cruz de la cara
-      var cross = [
-        me.getMiddleCubie(me.cubies[frontFaceIndex][1],false),//middle
-        me.getRightCubie(me.cubies[frontFaceIndex][2]),//right
-        me.getMiddleCubie(me.cubies[frontFaceIndex][1],true),//middle
-        me.getLeftCubie(me.cubies[frontFaceIndex][0]),//left
-      ];
-      
+      var upCross = me.getCross(upFaceIndex);
+      var frontCross = me.getCross(frontFaceIndex);
+      //empezamos a comparar las posiciones de ambas cruces para hallar combinaciones 
+      //validas
+      console.log(upCross,"cruz de arriba");
+      console.log(frontCross,"cruz del frente");
+
     }
 
-    getMiddleCubie(cubies:any[],getUpCubie:boolean): any{
-      var me = this,
-          cubie = null;
-      if(getUpCubie){
+    getCross(index:number): any[]{
+      var me = this;
 
+      return [
+        me.getMiddleCubie(me.cubies[index][1],false),//middle-bottom
+        me.getBorderCubie(me.cubies[index][2]),//right
+        me.getMiddleCubie(me.cubies[index][1],true),//middle-top
+        me.getBorderCubie(me.cubies[index][0]),//left
+      ];
+    }
+    /*
+    Retorna el cubie superior o inferior de la fila del medio  dependiendo del valor de 
+    getUpCubie
+    */
+    getMiddleCubie(cubies:any[],getUpCubie:boolean): any{
+      var me = this;
+
+      if(getUpCubie){
+        //obtenemos el cubo del medio que esta más arriba
+        var index:number = -1,
+            minY:number = Number.MAX_VALUE;
+
+        for(var i = 0; i < cubies.length; i++){
+          if(cubies[i].y < minY){
+            index= i;
+            minY = cubies[i].y;
+          }
+        }
+        return cubies[index];
       }
       else{
+        //obtenemos el cubo que está al medio en la parte inferior
+        var index:number = -1,
+            maxY:number = Number.MIN_VALUE;
 
+        for(var i = 0; i < cubies.length; i++){
+          if(cubies[i].y > maxY){
+            index= i;
+            maxY = cubies[i].y;
+          }
+        }
+        return cubies[index];
+      }
+    }
+
+    /*
+    retorna el cubie del medio de la fila
+    */
+    getBorderCubie(cubies:any[]): any{
+      var me = this,
+        minY = Number.MAX_VALUE,
+        maxY = Number.MIN_VALUE,
+        minIndex = -1,
+        maxIndex = -1,
+        centerIndex = -1;
+
+      //extraemos los míninos y máximos de los cubies del medio
+      for(var i = 0; i < cubies.length; i++){
+        if(cubies[i].y < minY){
+          minIndex = i;
+          minY = cubies[i].y;
+        }
+        if(cubies[i].y > maxY){
+          maxIndex = i;
+          maxY = cubies[i].y;
+        }
       }
 
-      return cubie;
+      //con estos valores identificados, se determina el cubie del medio
+      for(var i = 0; i < cubies.length; i++){
+        if(i != minIndex && i != maxIndex){
+          centerIndex = i;
+          break;
+        }
+      }
+
+      return cubies[centerIndex];
     }
-
-    getRightCubie(cubies:any[]): any{
-
-      return '';
-    }
-
-    getLeftCubie(cubies:any[]): any{
-
-      return '';
-    }
-
 }

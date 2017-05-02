@@ -57,7 +57,6 @@ var TrackmanagerComponent = (function () {
         me.authService.solveCube(state)
             .then(function (data) {
             me.result = data;
-            console.log(me.result);
         });
         return me.result;
     };
@@ -66,11 +65,9 @@ var TrackmanagerComponent = (function () {
     */
     TrackmanagerComponent.prototype.setFaceId = function (event) {
         var me = this;
-        console.log(event, 'datos');
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
         me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
         if (me.check()) {
-            console.log(me.faces);
             me.findUpCross();
         }
     };
@@ -126,28 +123,76 @@ var TrackmanagerComponent = (function () {
         }
         //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
         //de la cara superior
-        console.log(me.cubies[upFaceIndex], 'cubies en la cara superior');
         //saco las 4 posiciones de cruz de la cara
-        var cross = [
-            me.getMiddleCubie(me.cubies[frontFaceIndex][1], false),
-            me.getRightCubie(me.cubies[frontFaceIndex][2]),
-            me.getMiddleCubie(me.cubies[frontFaceIndex][1], true),
-            me.getLeftCubie(me.cubies[frontFaceIndex][0]),
+        var upCross = me.getCross(upFaceIndex);
+        var frontCross = me.getCross(frontFaceIndex);
+        //empezamos a comparar las posiciones de ambas cruces para hallar combinaciones 
+        //validas
+        console.log(upCross, "cruz de arriba");
+        console.log(frontCross, "cruz del frente");
+    };
+    TrackmanagerComponent.prototype.getCross = function (index) {
+        var me = this;
+        return [
+            me.getMiddleCubie(me.cubies[index][1], false),
+            me.getBorderCubie(me.cubies[index][2]),
+            me.getMiddleCubie(me.cubies[index][1], true),
+            me.getBorderCubie(me.cubies[index][0]),
         ];
     };
+    /*
+    Retorna el cubie superior o inferior de la fila del medio  dependiendo del valor de
+    getUpCubie
+    */
     TrackmanagerComponent.prototype.getMiddleCubie = function (cubies, getUpCubie) {
-        var me = this, cubie = null;
+        var me = this;
         if (getUpCubie) {
+            //obtenemos el cubo del medio que esta más arriba
+            var index = -1, minY = Number.MAX_VALUE;
+            for (var i = 0; i < cubies.length; i++) {
+                if (cubies[i].y < minY) {
+                    index = i;
+                    minY = cubies[i].y;
+                }
+            }
+            return cubies[index];
         }
         else {
+            //obtenemos el cubo que está al medio en la parte inferior
+            var index = -1, maxY = Number.MIN_VALUE;
+            for (var i = 0; i < cubies.length; i++) {
+                if (cubies[i].y > maxY) {
+                    index = i;
+                    maxY = cubies[i].y;
+                }
+            }
+            return cubies[index];
         }
-        return cubie;
     };
-    TrackmanagerComponent.prototype.getRightCubie = function (cubies) {
-        return '';
-    };
-    TrackmanagerComponent.prototype.getLeftCubie = function (cubies) {
-        return '';
+    /*
+    retorna el cubie del medio de la fila
+    */
+    TrackmanagerComponent.prototype.getBorderCubie = function (cubies) {
+        var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
+        //extraemos los míninos y máximos de los cubies del medio
+        for (var i = 0; i < cubies.length; i++) {
+            if (cubies[i].y < minY) {
+                minIndex = i;
+                minY = cubies[i].y;
+            }
+            if (cubies[i].y > maxY) {
+                maxIndex = i;
+                maxY = cubies[i].y;
+            }
+        }
+        //con estos valores identificados, se determina el cubie del medio
+        for (var i = 0; i < cubies.length; i++) {
+            if (i != minIndex && i != maxIndex) {
+                centerIndex = i;
+                break;
+            }
+        }
+        return cubies[centerIndex];
     };
     return TrackmanagerComponent;
 }());

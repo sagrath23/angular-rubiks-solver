@@ -204,7 +204,7 @@ export class TrackerComponent implements OnInit {
     //despues de clasificarlas, verificamos la cara que estámos analizando
     //y retornamos los colores encontrados para que el trackmanager genere el
     //estado inicial del cubo
-    me.defineCubeFace(middle[centerIndex],[left,middle.splice(centerIndex),right]);
+    me.defineCubeFace(middle[centerIndex],[left,middle,right]);
   }
 
   /*
@@ -247,7 +247,7 @@ export class TrackerComponent implements OnInit {
     var me = this,
         rect = document.createElement('div');
     //show for debug purposes
-    //rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
+    rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
     document.querySelector('.container-'+me.imageName).appendChild(rect);
     rect.classList.add('rect');
     rect.style.border = '4px solid ' + color;
