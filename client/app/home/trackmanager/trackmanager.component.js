@@ -20,6 +20,15 @@ var TrackmanagerComponent = (function () {
         this.cubies = new Array(6);
         this.baseState = ['UF', 'UR', 'UB', 'UL', 'DF', 'DR', 'DB', 'DL', 'FR', 'FL', 'BR', 'BL', 'UFR', 'URB', 'UBL', 'ULF', 'DRF', 'DFL', 'DLB', 'DBR'];
         this.currentState = new Array(20);
+        /*Las combinaciones son iguales para Up-down, front-back y left-right */
+        this.combinations = {
+            'white': { 'blue': 'UF', 'orange': 'UR', 'red': 'UL', 'green': 'UB' },
+            'blue': { 'white': 'UF', 'yellow': 'DF', 'red': 'FL', 'orange': 'FR' },
+            'orange': { 'white': 'UR', 'yellow': 'DR', 'green': 'BR', 'blue': 'FR' },
+            'red': { 'white': 'UL', 'yellow': 'DL', 'green': 'BL', 'blue': 'FL' },
+            'yellow': { 'blue': 'DF', 'orange': 'DR', 'red': 'DL', 'green': 'DB' },
+            'green': { 'white': 'UB', 'yellow': 'DB', 'red': 'BL', 'orange': 'BR' }
+        };
     }
     TrackmanagerComponent.prototype.ngOnInit = function () {
         console.log('loading trackers...');
@@ -126,10 +135,32 @@ var TrackmanagerComponent = (function () {
         //saco las 4 posiciones de cruz de la cara
         var upCross = me.getCross(upFaceIndex);
         var frontCross = me.getCross(frontFaceIndex);
+        var leftCross = me.getCross(leftFaceIndex);
+        var rightCross = me.getCross(rightFaceIndex);
+        var upCrossChances = [Array(), Array(), Array(), Array()];
         //empezamos a comparar las posiciones de ambas cruces para hallar combinaciones 
         //validas
         console.log(upCross, "cruz de arriba");
         console.log(frontCross, "cruz del frente");
+        for (var i = 0; i < upCross.length; i++) {
+            //empezamos a mirar las combinaciones
+            for (var j = 0; j < frontCross.length; j++) {
+                if (me.isValidCombination(upCross[i], frontCross[j])) {
+                    //guardo el posible cubo resultante
+                    upCrossChances[i].push(me.combinations[upCross[i].color][frontCross[j].color]);
+                }
+            }
+        }
+        console.log(upCrossChances, 'Options...');
+    };
+    TrackmanagerComponent.prototype.isValidCombination = function (faceOne, faceTwo) {
+        var me = this;
+        //verifico que la combinación sea possible
+        if (typeof me.combinations[faceOne.color][faceTwo.color] != 'undefined') {
+            //es una posible combinación
+            return true;
+        }
+        return false;
     };
     TrackmanagerComponent.prototype.getCross = function (index) {
         var me = this;

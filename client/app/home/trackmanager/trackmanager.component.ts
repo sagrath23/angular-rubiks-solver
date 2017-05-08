@@ -27,6 +27,16 @@ export class TrackmanagerComponent implements OnInit {
 
     result: any;
 
+    /*Las combinaciones son iguales para Up-down, front-back y left-right */
+    private readonly combinations:any = {
+      'white':{'blue':'UF','orange':'UR','red':'UL','green':'UB'},
+      'blue':{'white':'UF','yellow':'DF','red':'FL','orange':'FR'},
+      'orange':{'white':'UR','yellow':'DR','green':'BR','blue':'FR'},
+      'red':{'white':'UL','yellow':'DL','green':'BL','blue':'FL'},
+      'yellow':{'blue':'DF','orange':'DR','red':'DL','green':'DB'},
+      'green':{'white':'UB','yellow':'DB','red':'BL','orange':'BR'}
+    };
+
   	constructor(private authService: AuthService) { }
 
   	ngOnInit(): void {
@@ -150,11 +160,35 @@ export class TrackmanagerComponent implements OnInit {
       //saco las 4 posiciones de cruz de la cara
       var upCross = me.getCross(upFaceIndex);
       var frontCross = me.getCross(frontFaceIndex);
+      var leftCross = me.getCross(leftFaceIndex);
+      var rightCross = me.getCross(rightFaceIndex);
+      var upCrossChances = [Array(),Array(),Array(),Array()];
       //empezamos a comparar las posiciones de ambas cruces para hallar combinaciones 
       //validas
       console.log(upCross,"cruz de arriba");
       console.log(frontCross,"cruz del frente");
 
+      for(var i = 0;i < upCross.length; i++){
+        //empezamos a mirar las combinaciones
+        for(var j = 0; j < frontCross.length; j++){
+          if(me.isValidCombination(upCross[i],frontCross[j])){
+            //guardo el posible cubo resultante
+            upCrossChances[i].push(me.combinations[upCross[i].color][frontCross[j].color]);
+          }
+        }
+      }
+
+      console.log(upCrossChances,'Options...');
+    }
+
+    isValidCombination(faceOne:any, faceTwo:any):boolean{
+      var me = this;
+      //verifico que la combinación sea possible
+      if(typeof me.combinations[faceOne.color][faceTwo.color] != 'undefined'){
+        //es una posible combinación
+        return true;
+      }
+      return false;
     }
 
     getCross(index:number): any[]{
@@ -167,6 +201,7 @@ export class TrackmanagerComponent implements OnInit {
         me.getBorderCubie(me.cubies[index][0]),//left
       ];
     }
+
     /*
     Retorna el cubie superior o inferior de la fila del medio  dependiendo del valor de 
     getUpCubie
