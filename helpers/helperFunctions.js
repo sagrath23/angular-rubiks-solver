@@ -1,8 +1,6 @@
-var Users = require('../models/users');
-var Videos = require('../models/videos');
 
 var helpers = {};
-
+/*
 //Function that checks if the request is authenticated or not.
 helpers.isAuthenticated = function(req, res, next){
 
@@ -50,4 +48,5 @@ helpers.populateDb = function(){
 	});
 }
 
+*/
 module.exports = helpers;
