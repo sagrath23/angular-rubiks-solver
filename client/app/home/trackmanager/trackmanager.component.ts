@@ -70,7 +70,7 @@ export class TrackmanagerComponent implements OnInit {
       var me = this;
 
       //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
-      //estado actual : DB UF FR FL UR DF BL UB RB UR DL DR UFL FDR RDB RDB FRU DFL URB UBL
+      //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR UFL FDR RDB RDB FRU DFL URB UBL
 
       var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
@@ -93,7 +93,7 @@ export class TrackmanagerComponent implements OnInit {
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
       if(me.check()){
-        me.findUpCross();
+        var result:string = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine();
       }
     }
 
@@ -131,7 +131,7 @@ export class TrackmanagerComponent implements OnInit {
      /*
      las fotos se tomaron de girando en sentido antihorario
      */
-    findUpCross():void{
+    findUpCross():string{
       var me = this,
           upFaceIndex = -1,
           frontFaceIndex = -1,
@@ -171,58 +171,159 @@ export class TrackmanagerComponent implements OnInit {
       //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
       //la cruz superior
       //UF => up-left & front-right
-      result += me.combinations[upCross[3].color][frontCross[1].color];
+      result += me.combinations[upCross[3].color][frontCross[1].color]+" ";
       //UR => up-bottom & right-top
-      result += me.combinations[upCross[0].color][rightCross[2].color];
+      result += me.combinations[upCross[0].color][rightCross[2].color]+" ";
       //UB => up-right & bottom-left
-      result += me.combinations[upCross[1].color][backCross[3].color];
+      result += me.combinations[upCross[1].color][backCross[3].color]+" ";
       //UL => up-top & left-bottom
-      result += me.combinations[upCross[2].color][leftCross[0].color];
+      result += me.combinations[upCross[2].color][leftCross[0].color]+" ";
 
       console.log(result);
 
+      return result;
+    }
 
-      var upCrossToFrontChances = [Array(),Array(),Array(),Array()];
-      var upCrossToLeftChances = [Array(),Array(),Array(),Array()];
-      var upCrossToRightChances = [Array(),Array(),Array(),Array()];
-      var upCrossToBackChances = [Array(),Array(),Array(),Array()];
-      //empezamos a comparar las posiciones de ambas cruces para hallar combinaciones 
-      //validas
-      console.log(upCross,"cruz de arriba");
-      console.log(frontCross,"cruz del frente");
+    /*
+    función que identifica qué cubies están en las posiciones DF,DR,DL,DB
+    */
+    findDownCross():string{
+      var me = this,
+          downFaceIndex = -1,
+          frontFaceIndex = -1,
+          leftFaceIndex = -1,
+          rightFaceIndex = -1,
+          backFaceIndex = -1;
 
-      for(var i = 0;i < upCross.length; i++){
-        //empezamos a mirar las combinaciones
-        for(var j = 0; j < frontCross.length; j++){
-          if(me.isValidCombination(upCross[i],frontCross[j])){
-            //guardo el posible cubo resultante
-            upCrossToFrontChances[i].push(me.combinations[upCross[i].color][frontCross[j].color]);
-          }
+      //busco la cara de arriba
+      for(var i:number = 0; i < me.faces.length; i++){
+        if(me.faces[i] === 'D'){
+          downFaceIndex = i;
         }
-        for(var j = 0; j < leftCross.length; j++){
-          if(me.isValidCombination(upCross[i],leftCross[j])){
-            //guardo el posible cubo resultante
-            upCrossToLeftChances[i].push(me.combinations[upCross[i].color][leftCross[j].color]);
-          }
+        if(me.faces[i] === 'F'){
+          frontFaceIndex = i;
         }
-        for(var j = 0; j < rightCross.length; j++){
-          if(me.isValidCombination(upCross[i],rightCross[j])){
-            //guardo el posible cubo resultante
-            upCrossToRightChances[i].push(me.combinations[upCross[i].color][rightCross[j].color]);
-          }
+        if(me.faces[i] === 'L'){
+          leftFaceIndex = i;
         }
-        for(var j = 0; j < backCross.length; j++){
-          if(me.isValidCombination(upCross[i],backCross[j])){
-            //guardo el posible cubo resultante
-            upCrossToBackChances[i].push(me.combinations[upCross[i].color][backCross[j].color]);
-          }
+        if(me.faces[i] === 'R'){
+          rightFaceIndex = i;
+        }
+        if(me.faces[i] === 'B'){
+          backFaceIndex = i;
         }
       }
+      //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+      //de la cara superior
 
-      console.log(upCrossToFrontChances,'Options Front...');
-      console.log(upCrossToLeftChances,'Options Left...');
-      console.log(upCrossToRightChances,'Options right...');
-      console.log(upCrossToBackChances,'Options back...');
+      //saco las 4 posiciones de cruz de la cara
+      var downCross = me.getCross(downFaceIndex);
+      var frontCross = me.getCross(frontFaceIndex);
+      var leftCross = me.getCross(leftFaceIndex);
+      var rightCross = me.getCross(rightFaceIndex);
+      var backCross = me.getCross(backFaceIndex);
+      var result:string = "";
+
+      //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
+      //estado actual : DB UF FR FL UR DF BL UB RB UR DL DR UFL FDR RDB RDB FRU DFL URB UBL
+      //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+      //la cruz superior
+      //DF => 
+      result += me.combinations[downCross[1].color][frontCross[3].color]+" ";
+      //DR => 
+      result += me.combinations[downCross[0].color][rightCross[0].color]+" ";
+      //DB => down-right & back-left
+      result += me.combinations[downCross[3].color][backCross[1].color]+" ";
+      //DL => down bottom & left-top
+      result += me.combinations[downCross[2].color][leftCross[2].color]+" ";
+
+      console.log(result);
+
+      return result;
+    }
+
+    /* 
+    funcion que identifica que cubies están en las posiciones FR y FL
+    */
+    findFrontLine():string{
+      var me = this,
+          frontFaceIndex = -1,
+          leftFaceIndex = -1,
+          rightFaceIndex = -1;
+
+      //busco la cara del frente
+      for(var i:number = 0; i < me.faces.length; i++){
+        if(me.faces[i] === 'F'){
+          frontFaceIndex = i;
+        }
+        if(me.faces[i] === 'L'){
+          leftFaceIndex = i;
+        }
+        if(me.faces[i] === 'R'){
+          rightFaceIndex = i;
+        }
+      }
+      //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+      //de la cara superior
+
+      //saco las 4 posiciones de cruz de la cara
+      var frontCross = me.getCross(frontFaceIndex);
+      var leftCross = me.getCross(leftFaceIndex);
+      var rightCross = me.getCross(rightFaceIndex);
+      var result:string = "";
+
+      //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+      //la cruz superior
+      //FR => up-left & front-right
+      result += me.combinations[frontCross[0].color][rightCross[3].color]+" ";
+      //FL => up-bottom & right-top
+      result += me.combinations[frontCross[2].color][leftCross[3].color]+" ";
+
+      console.log(result);
+
+      return result;    
+    }
+
+    /* 
+    funcion que identifica que cubies están en las posiciones BR y BL
+    */
+    findBackLine():string{
+      var me = this,
+          backFaceIndex = -1,
+          leftFaceIndex = -1,
+          rightFaceIndex = -1;
+
+      //busco la cara del frente
+      for(var i:number = 0; i < me.faces.length; i++){
+        if(me.faces[i] === 'B'){
+          backFaceIndex = i;
+        }
+        if(me.faces[i] === 'L'){
+          leftFaceIndex = i;
+        }
+        if(me.faces[i] === 'R'){
+          rightFaceIndex = i;
+        }
+      }
+      //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+      //de la cara superior
+
+      //saco las 4 posiciones de cruz de la cara
+      var backCross = me.getCross(backFaceIndex);
+      var leftCross = me.getCross(leftFaceIndex);
+      var rightCross = me.getCross(rightFaceIndex);
+      var result:string = "";
+
+      //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+      //la cruz superior
+      //BR => up-left & front-right
+      result += me.combinations[backCross[0].color][rightCross[1].color]+" ";
+      //BL => up-bottom & right-top
+      result += me.combinations[backCross[2].color][leftCross[1].color]+" ";
+
+      console.log(result);
+
+      return result;    
     }
 
     isValidCombination(faceOne:any, faceTwo:any):boolean{
