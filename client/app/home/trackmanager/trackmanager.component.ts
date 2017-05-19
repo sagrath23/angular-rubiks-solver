@@ -166,6 +166,22 @@ export class TrackmanagerComponent implements OnInit {
       var leftCross = me.getCross(leftFaceIndex);
       var rightCross = me.getCross(rightFaceIndex);
       var backCross = me.getCross(backFaceIndex);
+      var result:string = "";
+
+      //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+      //la cruz superior
+      //UF => up-left & front-right
+      result += me.combinations[upCross[3].color][frontCross[1].color];
+      //UR => up-bottom & right-top
+      result += me.combinations[upCross[0].color][rightCross[2].color];
+      //UB => up-right & bottom-left
+      result += me.combinations[upCross[1].color][backCross[3].color];
+      //UL => up-top & left-bottom
+      result += me.combinations[upCross[2].color][leftCross[0].color];
+
+      console.log(result);
+
+
       var upCrossToFrontChances = [Array(),Array(),Array(),Array()];
       var upCrossToLeftChances = [Array(),Array(),Array(),Array()];
       var upCrossToRightChances = [Array(),Array(),Array(),Array()];
