@@ -83,7 +83,7 @@ export class TrackmanagerComponent implements OnInit {
 
       //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
       //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
-                                                                            
+
       var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
       //para resolver
@@ -449,19 +449,18 @@ export class TrackmanagerComponent implements OnInit {
       //blanco-azul-amarillo-verde-naranja-rojo
       //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
       //la cruz superior
-      //URF => 
-      console.log(downEdges[3].color+','+rightEdges[2].color+','+frontEdges[0].color);
-      result += me.edgesCombinations[downEdges[3].color][rightEdges[2].color][frontEdges[0].color]+" ";
-      //URB => 
-      console.log(downEdges[0].color+','+rightEdges[1].color+','+backEdges[3].color);
-      result += me.edgesCombinations[downEdges[0].color][rightEdges[1].color][backEdges[3].color]+" ";
-      //UBL => 
-      console.log(downEdges[1].color+','+backEdges[1].color+','+leftEdges[3].color);
-      result += me.edgesCombinations[downEdges[1].color][backEdges[2].color][leftEdges[0].color]+" ";
-      //ULF => 
-      console.log(downEdges[2].color+','+leftEdges[3].color+','+frontEdges[1].color);
-      result += me.edgesCombinations[downEdges[2].color][leftEdges[3].color][frontEdges[1].color]+" ";
-
+      //DRF => 
+      //console.log(downEdges[3].color+','+rightEdges[2].color+','+frontEdges[0].color);
+      result += me.edgesCombinations[downEdges[0].color][rightEdges[0].color][frontEdges[3].color]+" ";
+      //DFL => 
+      //console.log(downEdges[0].color+','+rightEdges[1].color+','+backEdges[3].color);
+      result += me.edgesCombinations[downEdges[1].color][frontEdges[2].color][leftEdges[2].color]+" ";
+      //DLB => 
+      //console.log(downEdges[1].color+','+backEdges[1].color+','+leftEdges[3].color);
+      result += me.edgesCombinations[downEdges[2].color][leftEdges[2].color][backEdges[0].color]+" ";
+      //DBR => 
+      //console.log(downEdges[2].color+','+leftEdges[3].color+','+frontEdges[1].color);
+      result += me.edgesCombinations[downEdges[3].color][leftEdges[3].color][frontEdges[1].color]+" ";
       console.log(result);
 
       return result;
