@@ -35,7 +35,7 @@ var TrackmanagerComponent = (function () {
         this.edgesCombinations = {
             'white': { 'blue': { 'red': 'ULF', 'orange': 'UFR' }, 'green': { 'red': 'UBL', 'orange': 'URB' }, 'red': { 'blue': 'ULF', 'green': 'UBL' }, 'orange': { 'blue': 'UFR', 'green': 'URB' } },
             'blue': { 'white': { 'red': 'ULF', 'orange': 'UFR' }, 'yellow': { 'red': 'DFL', 'orange': 'DRF' }, 'red': { 'white': 'ULF', 'yellow': 'DFL' }, 'orange': { 'white': 'ULF', 'yellow': 'DFL' } },
-            'orange': { 'white': { 'blue': 'UFR', 'green': 'URB' }, 'yellow': { 'blue': 'DRF', 'green': 'DBR' }, 'green': { 'white': 'URB', 'yellow': 'DBR' }, 'blue': { 'white': 'URB', 'yellow': 'DBR' } },
+            'orange': { 'white': { 'blue': 'UFR', 'green': 'URB' }, 'yellow': { 'blue': 'DRF', 'green': 'DBR' }, 'green': { 'white': 'URB', 'yellow': 'DBR' }, 'blue': { 'white': 'URB', 'yellow': 'DRF' } },
             'red': { 'white': { 'blue': 'ULF', 'green': 'UBL' }, 'yellow': { 'blue': 'DFL', 'green': 'DLB' }, 'green': { 'white': 'UBL', 'yellow': 'DLB' }, 'blue': { 'white': 'ULF', 'yellow': 'DFL' } },
             'yellow': { 'blue': { 'red': 'DFL', 'orange': 'DRF' }, 'orange': { 'blue': 'DRF', 'green': 'DBR' }, 'red': { 'blue': 'DFL', 'green': 'DLB' }, 'green': { 'red': 'DLB', 'orange': 'DBR' } },
             'green': { 'white': { 'red': 'UBL', 'orange': 'URB' }, 'yellow': { 'red': 'DLB', 'orange': 'DBR' }, 'red': { 'white': 'UBL', 'yellow': 'DLB' }, 'orange': { 'white': 'URB', 'yellow': 'DBR' } }
@@ -70,8 +70,8 @@ var TrackmanagerComponent = (function () {
     TrackmanagerComponent.prototype.resolveCube = function () {
         var me = this;
         //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
-        //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR UFL FDR RDB RDB FRU DFL URB UBL
-        var state = 'BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB';
+        //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
+        var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
         //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
         //para resolver
         me.authService.solveCube(state)
@@ -279,6 +279,9 @@ var TrackmanagerComponent = (function () {
         console.log(result);
         return result;
     };
+    /*
+     función que identifica que cubies están en las posiciones UFR, URB, UBL, ULF
+     */
     TrackmanagerComponent.prototype.findUpEdges = function () {
         var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
         //busco la cara de arriba
@@ -308,21 +311,78 @@ var TrackmanagerComponent = (function () {
         var rightEdges = me.getEdges(rightFaceIndex);
         var backEdges = me.getEdges(backFaceIndex);
         var result = "";
+        console.log(upEdges);
+        console.log(frontEdges);
+        console.log(leftEdges);
+        console.log(rightEdges);
+        console.log(backEdges);
+        //blanco-azul-amarillo-verde-naranja-rojo
         //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
         //la cruz superior
-        //UF => up-left & front-right
-        result += me.edgesCombinations[upEdges[3].color][frontEdges[1].color][leftEdges[1].color] + " ";
-        //UR => up-bottom & right-top
-        result += me.edgesCombinations[upEdges[3].color][frontEdges[1].color][rightEdges[1].color] + " ";
-        //UB => up-right & bottom-left
-        result += me.edgesCombinations[upEdges[3].color][backEdges[1].color][leftEdges[1].color] + " ";
-        //UL => up-top & left-bottom
-        result += me.edgesCombinations[upEdges[3].color][backEdges[1].color][rightEdges[1].color] + " ";
+        //URF => 
+        console.log(upEdges[3].color + ',' + rightEdges[2].color + ',' + frontEdges[0].color);
+        result += me.edgesCombinations[upEdges[3].color][rightEdges[2].color][frontEdges[0].color] + " ";
+        //URB => 
+        console.log(upEdges[0].color + ',' + rightEdges[1].color + ',' + backEdges[3].color);
+        result += me.edgesCombinations[upEdges[0].color][rightEdges[1].color][backEdges[3].color] + " ";
+        //UBL => 
+        console.log(upEdges[1].color + ',' + backEdges[1].color + ',' + leftEdges[3].color);
+        result += me.edgesCombinations[upEdges[1].color][backEdges[2].color][leftEdges[0].color] + " ";
+        //ULF => 
+        console.log(upEdges[2].color + ',' + leftEdges[3].color + ',' + frontEdges[1].color);
+        result += me.edgesCombinations[upEdges[2].color][leftEdges[3].color][frontEdges[1].color] + " ";
         console.log(result);
         return result;
     };
+    /*
+     función que identifica que cubies están en las posiciones DRF, DFL, DLB, DBR
+     */
     TrackmanagerComponent.prototype.findDownEdges = function () {
-        return "";
+        var me = this, downFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
+        //busco la cara de arriba
+        for (var i = 0; i < me.faces.length; i++) {
+            if (me.faces[i] === 'D') {
+                downFaceIndex = i;
+            }
+            if (me.faces[i] === 'F') {
+                frontFaceIndex = i;
+            }
+            if (me.faces[i] === 'L') {
+                leftFaceIndex = i;
+            }
+            if (me.faces[i] === 'R') {
+                rightFaceIndex = i;
+            }
+            if (me.faces[i] === 'B') {
+                backFaceIndex = i;
+            }
+        }
+        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        //de la cara superior
+        //saco las 4 posiciones de las esquinas de las caras
+        var downEdges = me.getEdges(downFaceIndex);
+        var frontEdges = me.getEdges(frontFaceIndex);
+        var leftEdges = me.getEdges(leftFaceIndex);
+        var rightEdges = me.getEdges(rightFaceIndex);
+        var backEdges = me.getEdges(backFaceIndex);
+        var result = "";
+        //blanco-azul-amarillo-verde-naranja-rojo
+        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        //la cruz superior
+        //URF => 
+        console.log(downEdges[3].color + ',' + rightEdges[2].color + ',' + frontEdges[0].color);
+        result += me.edgesCombinations[downEdges[3].color][rightEdges[2].color][frontEdges[0].color] + " ";
+        //URB => 
+        console.log(downEdges[0].color + ',' + rightEdges[1].color + ',' + backEdges[3].color);
+        result += me.edgesCombinations[downEdges[0].color][rightEdges[1].color][backEdges[3].color] + " ";
+        //UBL => 
+        console.log(downEdges[1].color + ',' + backEdges[1].color + ',' + leftEdges[3].color);
+        result += me.edgesCombinations[downEdges[1].color][backEdges[2].color][leftEdges[0].color] + " ";
+        //ULF => 
+        console.log(downEdges[2].color + ',' + leftEdges[3].color + ',' + frontEdges[1].color);
+        result += me.edgesCombinations[downEdges[2].color][leftEdges[3].color][frontEdges[1].color] + " ";
+        console.log(result);
+        return result;
     };
     TrackmanagerComponent.prototype.isValidCombination = function (faceOne, faceTwo) {
         var me = this;
@@ -345,10 +405,10 @@ var TrackmanagerComponent = (function () {
     TrackmanagerComponent.prototype.getEdges = function (index) {
         var me = this;
         return [
-            me.getEdgeCubie(me.cubies[index][0], true),
-            me.getEdgeCubie(me.cubies[index][0], false),
+            me.getEdgeCubie(me.cubies[index][2], false),
             me.getEdgeCubie(me.cubies[index][2], true),
-            me.getEdgeCubie(me.cubies[index][2], false) //right-bottom
+            me.getEdgeCubie(me.cubies[index][0], true),
+            me.getEdgeCubie(me.cubies[index][0], false) //left-bottom
         ];
     };
     /*
