@@ -128,6 +128,9 @@ export class TrackmanagerComponent implements OnInit {
               Verde-naranja               
 
      */
+     /*
+     las fotos se tomaron de girando en sentido antihorario
+     */
     findUpCross():void{
       var me = this,
           upFaceIndex = -1,
@@ -151,7 +154,7 @@ export class TrackmanagerComponent implements OnInit {
           rightFaceIndex = i;
         }
         if(me.faces[i] === 'B'){
-          leftFaceIndex = i;
+          backFaceIndex = i;
         }
       }
       //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
@@ -162,7 +165,11 @@ export class TrackmanagerComponent implements OnInit {
       var frontCross = me.getCross(frontFaceIndex);
       var leftCross = me.getCross(leftFaceIndex);
       var rightCross = me.getCross(rightFaceIndex);
-      var upCrossChances = [Array(),Array(),Array(),Array()];
+      var backCross = me.getCross(backFaceIndex);
+      var upCrossToFrontChances = [Array(),Array(),Array(),Array()];
+      var upCrossToLeftChances = [Array(),Array(),Array(),Array()];
+      var upCrossToRightChances = [Array(),Array(),Array(),Array()];
+      var upCrossToBackChances = [Array(),Array(),Array(),Array()];
       //empezamos a comparar las posiciones de ambas cruces para hallar combinaciones 
       //validas
       console.log(upCross,"cruz de arriba");
@@ -173,12 +180,33 @@ export class TrackmanagerComponent implements OnInit {
         for(var j = 0; j < frontCross.length; j++){
           if(me.isValidCombination(upCross[i],frontCross[j])){
             //guardo el posible cubo resultante
-            upCrossChances[i].push(me.combinations[upCross[i].color][frontCross[j].color]);
+            upCrossToFrontChances[i].push(me.combinations[upCross[i].color][frontCross[j].color]);
+          }
+        }
+        for(var j = 0; j < leftCross.length; j++){
+          if(me.isValidCombination(upCross[i],leftCross[j])){
+            //guardo el posible cubo resultante
+            upCrossToLeftChances[i].push(me.combinations[upCross[i].color][leftCross[j].color]);
+          }
+        }
+        for(var j = 0; j < rightCross.length; j++){
+          if(me.isValidCombination(upCross[i],rightCross[j])){
+            //guardo el posible cubo resultante
+            upCrossToRightChances[i].push(me.combinations[upCross[i].color][rightCross[j].color]);
+          }
+        }
+        for(var j = 0; j < backCross.length; j++){
+          if(me.isValidCombination(upCross[i],backCross[j])){
+            //guardo el posible cubo resultante
+            upCrossToBackChances[i].push(me.combinations[upCross[i].color][backCross[j].color]);
           }
         }
       }
 
-      console.log(upCrossChances,'Options...');
+      console.log(upCrossToFrontChances,'Options Front...');
+      console.log(upCrossToLeftChances,'Options Left...');
+      console.log(upCrossToRightChances,'Options right...');
+      console.log(upCrossToBackChances,'Options back...');
     }
 
     isValidCombination(faceOne:any, faceTwo:any):boolean{
