@@ -25,6 +25,8 @@ export class TrackmanagerComponent implements OnInit {
 
     currentState: string[] = new Array(20);
 
+    state: string;
+
     result: any;
 
     /*Las combinaciones son iguales para Up-down, front-back y left-right */
@@ -83,11 +85,10 @@ export class TrackmanagerComponent implements OnInit {
 
       //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
       //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
-
-      var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
+      //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
       //para resolver
-      me.authService.solveCube(state)
+      me.authService.solveCube(me.state)
             .then((data) => {
               me.result = data;
             });
@@ -105,7 +106,9 @@ export class TrackmanagerComponent implements OnInit {
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
       if(me.check()){
-        var result:string = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
+        me.state = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
+
+        console.log(me.state);
       }
     }
 
@@ -450,17 +453,13 @@ export class TrackmanagerComponent implements OnInit {
       //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
       //la cruz superior
       //DRF => 
-      //console.log(downEdges[3].color+','+rightEdges[2].color+','+frontEdges[0].color);
-      result += me.edgesCombinations[downEdges[0].color][rightEdges[0].color][frontEdges[3].color]+" ";
+      result += me.edgesCombinations[downEdges[0].color][rightEdges[2].color][frontEdges[3].color]+" ";
       //DFL => 
-      //console.log(downEdges[0].color+','+rightEdges[1].color+','+backEdges[3].color);
       result += me.edgesCombinations[downEdges[1].color][frontEdges[2].color][leftEdges[2].color]+" ";
       //DLB => 
-      //console.log(downEdges[1].color+','+backEdges[1].color+','+leftEdges[3].color);
-      result += me.edgesCombinations[downEdges[2].color][leftEdges[2].color][backEdges[0].color]+" ";
+      result += me.edgesCombinations[downEdges[2].color][leftEdges[1].color][backEdges[1].color]+" ";
       //DBR => 
-      //console.log(downEdges[2].color+','+leftEdges[3].color+','+frontEdges[1].color);
-      result += me.edgesCombinations[downEdges[3].color][leftEdges[3].color][frontEdges[1].color]+" ";
+      result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color]+" ";
       console.log(result);
 
       return result;
