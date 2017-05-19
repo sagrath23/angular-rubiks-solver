@@ -33,8 +33,12 @@ var TrackmanagerComponent = (function () {
         combinaciones de las esquinas
         */
         this.edgesCombinations = {
-            'white': { 'blue': { 'red': 'ULF', 'orange': 'UFR' }, 'green': { 'red': 'UBL', 'orange': 'URB' } },
-            'yellow': { 'blue': { 'red': 'DFL', 'orange': 'DRF' }, 'green': { 'red': 'DLB', 'orange': 'DBR' } }
+            'white': { 'blue': { 'red': 'ULF', 'orange': 'UFR' }, 'green': { 'red': 'UBL', 'orange': 'URB' }, 'red': { 'blue': 'ULF', 'green': 'UBL' }, 'orange': { 'blue': 'UFR', 'green': 'URB' } },
+            'blue': { 'white': { 'red': 'ULF', 'orange': 'UFR' }, 'yellow': { 'red': 'DFL', 'orange': 'DRF' }, 'red': { 'white': 'ULF', 'yellow': 'DFL' }, 'orange': { 'white': 'ULF', 'yellow': 'DFL' } },
+            'orange': { 'white': { 'blue': 'UFR', 'green': 'URB' }, 'yellow': { 'blue': 'DRF', 'green': 'DBR' }, 'green': { 'white': 'URB', 'yellow': 'DBR' }, 'blue': { 'white': 'URB', 'yellow': 'DBR' } },
+            'red': { 'white': { 'blue': 'ULF', 'green': 'UBL' }, 'yellow': { 'blue': 'DFL', 'green': 'DLB' }, 'green': { 'white': 'UBL', 'yellow': 'DLB' }, 'blue': { 'white': 'ULF', 'yellow': 'DFL' } },
+            'yellow': { 'blue': { 'red': 'DFL', 'orange': 'DRF' }, 'orange': { 'blue': 'DRF', 'green': 'DBR' }, 'red': { 'blue': 'DFL', 'green': 'DLB' }, 'green': { 'red': 'DLB', 'orange': 'DBR' } },
+            'green': { 'white': { 'red': 'UBL', 'orange': 'URB' }, 'yellow': { 'red': 'DLB', 'orange': 'DBR' }, 'red': { 'white': 'UBL', 'yellow': 'DLB' }, 'orange': { 'white': 'URB', 'yellow': 'DBR' } }
         };
     }
     TrackmanagerComponent.prototype.ngOnInit = function () {
@@ -297,7 +301,7 @@ var TrackmanagerComponent = (function () {
         }
         //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
         //de la cara superior
-        //saco las 4 posiciones de cruz de la cara
+        //saco las 4 posiciones de las esquinas de las caras
         var upEdges = me.getEdges(upFaceIndex);
         var frontEdges = me.getEdges(frontFaceIndex);
         var leftEdges = me.getEdges(leftFaceIndex);
@@ -307,13 +311,13 @@ var TrackmanagerComponent = (function () {
         //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
         //la cruz superior
         //UF => up-left & front-right
-        result += me.combinations[upEdges[3].color][frontEdges[1].color][leftEdges[1].color] + " ";
+        result += me.edgesCombinations[upEdges[3].color][frontEdges[1].color][leftEdges[1].color] + " ";
         //UR => up-bottom & right-top
-        result += me.combinations[upEdges[3].color][frontEdges[1].color][rightEdges[1].color] + " ";
+        result += me.edgesCombinations[upEdges[3].color][frontEdges[1].color][rightEdges[1].color] + " ";
         //UB => up-right & bottom-left
-        result += me.combinations[upEdges[3].color][backEdges[1].color][leftEdges[1].color] + " ";
+        result += me.edgesCombinations[upEdges[3].color][backEdges[1].color][leftEdges[1].color] + " ";
         //UL => up-top & left-bottom
-        result += me.combinations[upEdges[3].color][backEdges[1].color][rightEdges[1].color] + " ";
+        result += me.edgesCombinations[upEdges[3].color][backEdges[1].color][rightEdges[1].color] + " ";
         console.log(result);
         return result;
     };
