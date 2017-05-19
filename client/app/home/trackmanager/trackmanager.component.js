@@ -29,6 +29,13 @@ var TrackmanagerComponent = (function () {
             'yellow': { 'blue': 'DF', 'orange': 'DR', 'red': 'DL', 'green': 'DB' },
             'green': { 'white': 'UB', 'yellow': 'DB', 'red': 'BL', 'orange': 'BR' }
         };
+        /*
+        combinaciones de las esquinas
+        */
+        this.edgesCombinations = {
+            'white': { 'blue': { 'red': 'ULF', 'orange': 'UFR' }, 'green': { 'red': 'UBL', 'orange': 'URB' } },
+            'yellow': { 'blue': { 'red': 'DFL', 'orange': 'DRF' }, 'green': { 'red': 'DLB', 'orange': 'DBR' } }
+        };
     }
     TrackmanagerComponent.prototype.ngOnInit = function () {
         console.log('loading trackers...');
@@ -77,7 +84,7 @@ var TrackmanagerComponent = (function () {
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
         me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
         if (me.check()) {
-            var result = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine();
+            var result = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
         }
     };
     /*
@@ -268,6 +275,51 @@ var TrackmanagerComponent = (function () {
         console.log(result);
         return result;
     };
+    TrackmanagerComponent.prototype.findUpEdges = function () {
+        var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
+        //busco la cara de arriba
+        for (var i = 0; i < me.faces.length; i++) {
+            if (me.faces[i] === 'U') {
+                upFaceIndex = i;
+            }
+            if (me.faces[i] === 'F') {
+                frontFaceIndex = i;
+            }
+            if (me.faces[i] === 'L') {
+                leftFaceIndex = i;
+            }
+            if (me.faces[i] === 'R') {
+                rightFaceIndex = i;
+            }
+            if (me.faces[i] === 'B') {
+                backFaceIndex = i;
+            }
+        }
+        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        //de la cara superior
+        //saco las 4 posiciones de cruz de la cara
+        var upEdges = me.getEdges(upFaceIndex);
+        var frontEdges = me.getEdges(frontFaceIndex);
+        var leftEdges = me.getEdges(leftFaceIndex);
+        var rightEdges = me.getEdges(rightFaceIndex);
+        var backEdges = me.getEdges(backFaceIndex);
+        var result = "";
+        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        //la cruz superior
+        //UF => up-left & front-right
+        result += me.combinations[upEdges[3].color][frontEdges[1].color][leftEdges[1].color] + " ";
+        //UR => up-bottom & right-top
+        result += me.combinations[upEdges[3].color][frontEdges[1].color][rightEdges[1].color] + " ";
+        //UB => up-right & bottom-left
+        result += me.combinations[upEdges[3].color][backEdges[1].color][leftEdges[1].color] + " ";
+        //UL => up-top & left-bottom
+        result += me.combinations[upEdges[3].color][backEdges[1].color][rightEdges[1].color] + " ";
+        console.log(result);
+        return result;
+    };
+    TrackmanagerComponent.prototype.findDownEdges = function () {
+        return "";
+    };
     TrackmanagerComponent.prototype.isValidCombination = function (faceOne, faceTwo) {
         var me = this;
         //verifico que la combinación sea possible
@@ -283,7 +335,16 @@ var TrackmanagerComponent = (function () {
             me.getMiddleCubie(me.cubies[index][1], false),
             me.getBorderCubie(me.cubies[index][2]),
             me.getMiddleCubie(me.cubies[index][1], true),
-            me.getBorderCubie(me.cubies[index][0]),
+            me.getBorderCubie(me.cubies[index][0]) //left
+        ];
+    };
+    TrackmanagerComponent.prototype.getEdges = function (index) {
+        var me = this;
+        return [
+            me.getEdgeCubie(me.cubies[index][0], true),
+            me.getEdgeCubie(me.cubies[index][0], false),
+            me.getEdgeCubie(me.cubies[index][2], true),
+            me.getEdgeCubie(me.cubies[index][2], false) //right-bottom
         ];
     };
     /*
@@ -339,6 +400,26 @@ var TrackmanagerComponent = (function () {
             }
         }
         return cubies[centerIndex];
+    };
+    TrackmanagerComponent.prototype.getEdgeCubie = function (cubies, top) {
+        var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
+        //extraemos los míninos y máximos de los cubies del medio
+        for (var i = 0; i < cubies.length; i++) {
+            if (cubies[i].y < minY) {
+                minIndex = i;
+                minY = cubies[i].y;
+            }
+            if (cubies[i].y > maxY) {
+                maxIndex = i;
+                maxY = cubies[i].y;
+            }
+        }
+        if (top) {
+            return cubies[minIndex];
+        }
+        else {
+            return cubies[maxIndex];
+        }
     };
     return TrackmanagerComponent;
 }());

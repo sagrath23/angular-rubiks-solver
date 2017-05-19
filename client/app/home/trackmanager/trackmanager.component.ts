@@ -37,6 +37,14 @@ export class TrackmanagerComponent implements OnInit {
       'green':{'white':'UB','yellow':'DB','red':'BL','orange':'BR'}
     };
 
+    /*
+    combinaciones de las esquinas
+    */
+    private readonly edgesCombinations:any = {
+      'white':{'blue': {'red':'ULF','orange':'UFR'}, 'green': {'red':'UBL','orange':'URB'} },
+      'yellow':{'blue': {'red':'DFL','orange':'DRF'}, 'green': {'red':'DLB','orange':'DBR'} }
+    };
+
   	constructor(private authService: AuthService) { }
 
   	ngOnInit(): void {
@@ -93,7 +101,7 @@ export class TrackmanagerComponent implements OnInit {
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
       if(me.check()){
-        var result:string = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine();
+        var result:string = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
       }
     }
 
@@ -326,6 +334,63 @@ export class TrackmanagerComponent implements OnInit {
       return result;    
     }
 
+    findUpEdges():string{
+      var me = this,
+          upFaceIndex = -1,
+          frontFaceIndex = -1,
+          leftFaceIndex = -1,
+          rightFaceIndex = -1,
+          backFaceIndex = -1;
+
+      //busco la cara de arriba
+      for(var i:number = 0; i < me.faces.length; i++){
+        if(me.faces[i] === 'U'){
+          upFaceIndex = i;
+        }
+        if(me.faces[i] === 'F'){
+          frontFaceIndex = i;
+        }
+        if(me.faces[i] === 'L'){
+          leftFaceIndex = i;
+        }
+        if(me.faces[i] === 'R'){
+          rightFaceIndex = i;
+        }
+        if(me.faces[i] === 'B'){
+          backFaceIndex = i;
+        }
+      }
+      //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+      //de la cara superior
+
+      //saco las 4 posiciones de cruz de la cara
+      var upEdges = me.getEdges(upFaceIndex);
+      var frontEdges = me.getEdges(frontFaceIndex);
+      var leftEdges = me.getEdges(leftFaceIndex);
+      var rightEdges = me.getEdges(rightFaceIndex);
+      var backEdges = me.getEdges(backFaceIndex);
+      var result:string = "";
+
+      //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+      //la cruz superior
+      //UF => up-left & front-right
+      result += me.combinations[upEdges[3].color][frontEdges[1].color][leftEdges[1].color]+" ";
+      //UR => up-bottom & right-top
+      result += me.combinations[upEdges[3].color][frontEdges[1].color][rightEdges[1].color]+" ";
+      //UB => up-right & bottom-left
+      result += me.combinations[upEdges[3].color][backEdges[1].color][leftEdges[1].color]+" ";
+      //UL => up-top & left-bottom
+      result += me.combinations[upEdges[3].color][backEdges[1].color][rightEdges[1].color]+" ";
+
+      console.log(result);
+
+      return result;
+    }
+
+    findDownEdges():string{
+      return "";
+    }
+
     isValidCombination(faceOne:any, faceTwo:any):boolean{
       var me = this;
       //verifico que la combinación sea possible
@@ -343,7 +408,18 @@ export class TrackmanagerComponent implements OnInit {
         me.getMiddleCubie(me.cubies[index][1],false),//middle-bottom
         me.getBorderCubie(me.cubies[index][2]),//right
         me.getMiddleCubie(me.cubies[index][1],true),//middle-top
-        me.getBorderCubie(me.cubies[index][0]),//left
+        me.getBorderCubie(me.cubies[index][0])//left
+      ];
+    }
+
+    getEdges(index:number):any[]{
+      var me = this;
+
+      return [
+        me.getEdgeCubie(me.cubies[index][0],true),//left-top
+        me.getEdgeCubie(me.cubies[index][0],false),//left-bottom
+        me.getEdgeCubie(me.cubies[index][2],true),//right-top
+        me.getEdgeCubie(me.cubies[index][2],false)//right-bottom
       ];
     }
 
@@ -414,5 +490,33 @@ export class TrackmanagerComponent implements OnInit {
       }
 
       return cubies[centerIndex];
+    }
+
+    getEdgeCubie(cubies:any[], top:boolean): any{
+      var me = this,
+        minY = Number.MAX_VALUE,
+        maxY = Number.MIN_VALUE,
+        minIndex = -1,
+        maxIndex = -1,
+        centerIndex = -1;
+
+      //extraemos los míninos y máximos de los cubies del medio
+      for(var i = 0; i < cubies.length; i++){
+        if(cubies[i].y < minY){
+          minIndex = i;
+          minY = cubies[i].y;
+        }
+        if(cubies[i].y > maxY){
+          maxIndex = i;
+          maxY = cubies[i].y;
+        }
+      }
+
+      if(top){
+        return cubies[minIndex];
+      }
+      else{
+        return cubies[maxIndex];
+      }
     }
 }
