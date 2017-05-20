@@ -5,17 +5,17 @@ import { Location }                 from '@angular/common';
 
 import 'rxjs/add/operator/switchMap';
 
-import { HeroService } from '../hero/hero.service';
+import { AuthService } from '../auth/auth.service';
 import { Hero } from '../hero/hero';
 
 @Component({
   moduleId: module.id,
-  selector: 'my-hero-detail',
-  templateUrl: 'hero-detail.component.html',
-  providers: [HeroService]
+  selector: 'response',
+  templateUrl: 'response.component.html',
+  providers: [AuthService]
 })
 
-export class HeroDetailComponent implements OnInit {
+export class ResponseComponent implements OnInit {
 
 	@Input()
 	hero: Hero;
