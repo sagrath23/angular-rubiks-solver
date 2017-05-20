@@ -88,7 +88,7 @@ export class TrackmanagerComponent implements OnInit {
       //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
       //para resolver
-      me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
+      //me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
       me.authService.solveCube(me.state)
             .then((data) => {
               me.result = data;
