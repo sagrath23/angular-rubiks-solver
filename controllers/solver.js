@@ -12,7 +12,11 @@ solver.solve = function(req, res) {
     });
   }
 
+  console.log(req.body.state);
+
   var result = RubiksCubeSolver.prototype.solve(req.body.state);
+
+  console.log(result);
 
   if (result) {
     var response = {
