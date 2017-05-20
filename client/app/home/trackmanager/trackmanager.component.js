@@ -75,7 +75,8 @@ var TrackmanagerComponent = (function () {
         //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
         //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
         //para resolver
-        //me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
+        //me.state = "DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL";
+        //DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
         me.authService.solveCube(me.state)
             .then(function (data) {
             me.result = data;
@@ -143,11 +144,11 @@ var TrackmanagerComponent = (function () {
         //UF => 
         result += me.combinations[upCross[3].color][frontCross[1].color] + " ";
         //UR => 
-        result += me.combinations[upCross[2].color][rightCross[0].color] + " ";
+        result += me.combinations[upCross[0].color][rightCross[2].color] + " ";
         //UB => 
         result += me.combinations[upCross[1].color][backCross[3].color] + " ";
         //UL => 
-        result += me.combinations[upCross[0].color][leftCross[2].color] + " ";
+        result += me.combinations[upCross[2].color][leftCross[0].color] + " ";
         console.log(result);
         return result;
     };
@@ -188,11 +189,11 @@ var TrackmanagerComponent = (function () {
         //DF => 
         result += me.combinations[downCross[1].color][frontCross[3].color] + " ";
         //DR => 
-        result += me.combinations[downCross[2].color][rightCross[2].color] + " ";
+        result += me.combinations[downCross[0].color][rightCross[0].color] + " ";
         //DB => 
         result += me.combinations[downCross[3].color][backCross[1].color] + " ";
         //DL => down bottom & left-top
-        result += me.combinations[downCross[0].color][leftCross[0].color] + " ";
+        result += me.combinations[downCross[2].color][leftCross[2].color] + " ";
         console.log(result);
         return result;
     };
@@ -359,7 +360,7 @@ var TrackmanagerComponent = (function () {
         //DLB => 
         result += me.edgesCombinations[downEdges[2].color][leftEdges[1].color][backEdges[1].color] + " ";
         //DBR => 
-        result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color] + " ";
+        result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color];
         console.log(result);
         return result;
     };
@@ -482,17 +483,7 @@ TrackmanagerComponent = __decorate([
         selector: 'trackmanager',
         templateUrl: 'trackmanager.component.html',
         providers: [auth_service_1.AuthService]
-    })
-    /*
-    giro en sentido antihorario
-    
-    arriba naranja
-    abajo rojo =>
-    
-    arriba rojo
-    abajo naranja => DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
-    */
-    ,
+    }),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], TrackmanagerComponent);
 exports.TrackmanagerComponent = TrackmanagerComponent;

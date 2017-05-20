@@ -13,15 +13,6 @@ import { TrackerComponent } from '../tracker/tracker.component';
   providers: [AuthService]
 })
 
-/*
-giro en sentido antihorario
-
-arriba naranja
-abajo rojo =>
-
-arriba rojo
-abajo naranja => DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
-*/
 export class TrackmanagerComponent implements OnInit {
 
     images: string[] = ['white','blue','red','orange','yellow','green'];
@@ -97,11 +88,8 @@ export class TrackmanagerComponent implements OnInit {
       //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
       //para resolver
-      //me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
-<<<<<<< HEAD
-=======
-      
->>>>>>> e528a549ba78792cab936f4fa4f4946c1b7f3732
+      //me.state = "DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL";
+                  //DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
       me.authService.solveCube(me.state)
             .then((data) => {
               me.result = data;
@@ -184,11 +172,11 @@ export class TrackmanagerComponent implements OnInit {
       //UF => 
       result += me.combinations[upCross[3].color][frontCross[1].color]+" ";
       //UR => 
-      result += me.combinations[upCross[2].color][rightCross[0].color]+" ";
+      result += me.combinations[upCross[0].color][rightCross[2].color]+" ";
       //UB => 
       result += me.combinations[upCross[1].color][backCross[3].color]+" ";
       //UL => 
-      result += me.combinations[upCross[0].color][leftCross[2].color]+" ";
+      result += me.combinations[upCross[2].color][leftCross[0].color]+" ";
       
       console.log(result);
 
@@ -240,11 +228,11 @@ export class TrackmanagerComponent implements OnInit {
       //DF => 
       result += me.combinations[downCross[1].color][frontCross[3].color]+" ";
       //DR => 
-      result += me.combinations[downCross[2].color][rightCross[2].color]+" ";
+      result += me.combinations[downCross[0].color][rightCross[0].color]+" ";
       //DB => 
       result += me.combinations[downCross[3].color][backCross[1].color]+" ";
       //DL => down bottom & left-top
-      result += me.combinations[downCross[0].color][leftCross[0].color]+" ";
+      result += me.combinations[downCross[2].color][leftCross[2].color]+" ";
 
       console.log(result);
 
@@ -453,7 +441,7 @@ export class TrackmanagerComponent implements OnInit {
       //DLB => 
       result += me.edgesCombinations[downEdges[2].color][leftEdges[1].color][backEdges[1].color]+" ";
       //DBR => 
-      result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color]+" ";
+      result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color];
       console.log(result);
 
       return result;
