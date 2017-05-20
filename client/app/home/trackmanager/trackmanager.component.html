@@ -15,5 +15,5 @@
 </md-grid-list>
 <button md-raised-button (click)="resolveCube()">Resolver!</button>
 <div *ngIf="result">
-{{result}}
+{{result | json}}
 </div>
