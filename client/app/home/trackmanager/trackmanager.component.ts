@@ -21,8 +21,6 @@ export class TrackmanagerComponent implements OnInit {
 
     cubies: any[] = new Array(6);
 
-    baseState: string[] = ['UF', 'UR', 'UB', 'UL', 'DF', 'DR', 'DB', 'DL', 'FR', 'FL', 'BR', 'BL', 'UFR', 'URB', 'UBL', 'ULF', 'DRF', 'DFL', 'DLB', 'DBR'];
-
     currentState: string[] = new Array(20);
 
     state: string;
@@ -79,6 +77,8 @@ export class TrackmanagerComponent implements OnInit {
     DFL = Amarillo-azul-rojo
     DLB = Amarillo-rojo-verde
     DBR = Amarillo-verde-naranja
+    //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
+    //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
      */
     resolveCube(): string {
       var me = this;
@@ -88,7 +88,8 @@ export class TrackmanagerComponent implements OnInit {
       //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
       //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
       //para resolver
-      me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
+      //me.state = "DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL";
+                  //DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
       me.authService.solveCube(me.state)
             .then((data) => {
               me.result = data;
@@ -127,25 +128,7 @@ export class TrackmanagerComponent implements OnInit {
     }
 
     /*
-    función que identifica qué cubies están en las posiciones UF,UR,UL,UB
-
-    Alternativas 
-    Azul:     Azul-blanco
-              Azul-amarillo
-              Azul-naranja
-              Azul-rojo
-    Blanco:   Blanco-rojo
-              Blanco-naranja
-              Blanco-verde
-    Amarillo: Amarillo-rojo
-              Amarillo-naranja
-              Amarillo-verde
-    Verde:    Verde-rojo
-              Verde-naranja               
-
-     */
-     /*
-     las fotos se tomaron de girando en sentido antihorario
+    función que identifica qué cubies están en las posiciones UF UR UB UL
      */
     findUpCross():string{
       var me = this,
@@ -186,22 +169,22 @@ export class TrackmanagerComponent implements OnInit {
 
       //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
       //la cruz superior
-      //UF => up-left & front-right
+      //UF => 
       result += me.combinations[upCross[3].color][frontCross[1].color]+" ";
-      //UR => up-bottom & right-top
+      //UR => 
       result += me.combinations[upCross[0].color][rightCross[2].color]+" ";
-      //UB => up-right & bottom-left
+      //UB => 
       result += me.combinations[upCross[1].color][backCross[3].color]+" ";
-      //UL => up-top & left-bottom
+      //UL => 
       result += me.combinations[upCross[2].color][leftCross[0].color]+" ";
-
+      
       console.log(result);
 
       return result;
     }
 
     /*
-    función que identifica qué cubies están en las posiciones DF,DR,DL,DB
+    función que identifica qué cubies están en las posiciones DF DR DB DL
     */
     findDownCross():string{
       var me = this,
@@ -240,15 +223,13 @@ export class TrackmanagerComponent implements OnInit {
       var backCross = me.getCross(backFaceIndex);
       var result:string = "";
 
-      //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
-      //estado actual : DB UF FR FL UR DF BL UB RB UR DL DR UFL FDR RDB RDB FRU DFL URB UBL
       //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-      //la cruz superior
+      //la cruz inferior
       //DF => 
       result += me.combinations[downCross[1].color][frontCross[3].color]+" ";
       //DR => 
       result += me.combinations[downCross[0].color][rightCross[0].color]+" ";
-      //DB => down-right & back-left
+      //DB => 
       result += me.combinations[downCross[3].color][backCross[1].color]+" ";
       //DL => down bottom & left-top
       result += me.combinations[downCross[2].color][leftCross[2].color]+" ";
@@ -460,12 +441,16 @@ export class TrackmanagerComponent implements OnInit {
       //DLB => 
       result += me.edgesCombinations[downEdges[2].color][leftEdges[1].color][backEdges[1].color]+" ";
       //DBR => 
-      result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color]+" ";
+      result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color];
       console.log(result);
 
       return result;
     }
 
+    /*
+    Función que verifica si la combinación que se está probando de un cubie de dos valores
+    es valida
+    */
     isValidCombination(faceOne:any, faceTwo:any):boolean{
       var me = this;
       //verifico que la combinación sea possible
@@ -476,6 +461,9 @@ export class TrackmanagerComponent implements OnInit {
       return false;
     }
 
+    /*
+    Función que retorna la cruz sobre la cara
+    */
     getCross(index:number): any[]{
       var me = this;
 
@@ -487,6 +475,9 @@ export class TrackmanagerComponent implements OnInit {
       ];
     }
 
+    /*
+    Función que retorna la línea sobre la cara que se está revisando
+    */
     getEdges(index:number):any[]{
       var me = this;
 
