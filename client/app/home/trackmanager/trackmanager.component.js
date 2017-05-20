@@ -18,7 +18,6 @@ var TrackmanagerComponent = (function () {
         //images: string[] = ['blue'];
         this.faces = new Array(6);
         this.cubies = new Array(6);
-        this.baseState = ['UF', 'UR', 'UB', 'UL', 'DF', 'DR', 'DB', 'DL', 'FR', 'FL', 'BR', 'BL', 'UFR', 'URB', 'UBL', 'ULF', 'DRF', 'DFL', 'DLB', 'DBR'];
         this.currentState = new Array(20);
         /*Las combinaciones son iguales para Up-down, front-back y left-right */
         this.combinations = {
@@ -66,6 +65,8 @@ var TrackmanagerComponent = (function () {
     DFL = Amarillo-azul-rojo
     DLB = Amarillo-rojo-verde
     DBR = Amarillo-verde-naranja
+    //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
+    //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
      */
     TrackmanagerComponent.prototype.resolveCube = function () {
         var me = this;
@@ -74,7 +75,7 @@ var TrackmanagerComponent = (function () {
         //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
         //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
         //para resolver
-        me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
+        //me.state = "BR DF UR LB BD FU FL DL RD FR LU BU UBL FDR FRU BUR ULF LDF RDB DLB";
         me.authService.solveCube(me.state)
             .then(function (data) {
             me.result = data;
@@ -106,26 +107,8 @@ var TrackmanagerComponent = (function () {
         return true;
     };
     /*
-    función que identifica qué cubies están en las posiciones UF,UR,UL,UB
-
-    Alternativas
-    Azul:     Azul-blanco
-              Azul-amarillo
-              Azul-naranja
-              Azul-rojo
-    Blanco:   Blanco-rojo
-              Blanco-naranja
-              Blanco-verde
-    Amarillo: Amarillo-rojo
-              Amarillo-naranja
-              Amarillo-verde
-    Verde:    Verde-rojo
-              Verde-naranja
-
+    función que identifica qué cubies están en las posiciones UF UR UB UL
      */
-    /*
-    las fotos se tomaron de girando en sentido antihorario
-    */
     TrackmanagerComponent.prototype.findUpCross = function () {
         var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
         //busco la cara de arriba
@@ -157,19 +140,19 @@ var TrackmanagerComponent = (function () {
         var result = "";
         //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
         //la cruz superior
-        //UF => up-left & front-right
+        //UF => 
         result += me.combinations[upCross[3].color][frontCross[1].color] + " ";
-        //UR => up-bottom & right-top
-        result += me.combinations[upCross[0].color][rightCross[2].color] + " ";
-        //UB => up-right & bottom-left
+        //UR => 
+        result += me.combinations[upCross[2].color][rightCross[0].color] + " ";
+        //UB => 
         result += me.combinations[upCross[1].color][backCross[3].color] + " ";
-        //UL => up-top & left-bottom
-        result += me.combinations[upCross[2].color][leftCross[0].color] + " ";
+        //UL => 
+        result += me.combinations[upCross[0].color][leftCross[2].color] + " ";
         console.log(result);
         return result;
     };
     /*
-    función que identifica qué cubies están en las posiciones DF,DR,DL,DB
+    función que identifica qué cubies están en las posiciones DF DR DB DL
     */
     TrackmanagerComponent.prototype.findDownCross = function () {
         var me = this, downFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
@@ -200,18 +183,16 @@ var TrackmanagerComponent = (function () {
         var rightCross = me.getCross(rightFaceIndex);
         var backCross = me.getCross(backFaceIndex);
         var result = "";
-        //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
-        //estado actual : DB UF FR FL UR DF BL UB RB UR DL DR UFL FDR RDB RDB FRU DFL URB UBL
         //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz superior
+        //la cruz inferior
         //DF => 
         result += me.combinations[downCross[1].color][frontCross[3].color] + " ";
         //DR => 
-        result += me.combinations[downCross[0].color][rightCross[0].color] + " ";
-        //DB => down-right & back-left
+        result += me.combinations[downCross[2].color][rightCross[2].color] + " ";
+        //DB => 
         result += me.combinations[downCross[3].color][backCross[1].color] + " ";
         //DL => down bottom & left-top
-        result += me.combinations[downCross[2].color][leftCross[2].color] + " ";
+        result += me.combinations[downCross[0].color][leftCross[0].color] + " ";
         console.log(result);
         return result;
     };
@@ -382,6 +363,10 @@ var TrackmanagerComponent = (function () {
         console.log(result);
         return result;
     };
+    /*
+    Función que verifica si la combinación que se está probando de un cubie de dos valores
+    es valida
+    */
     TrackmanagerComponent.prototype.isValidCombination = function (faceOne, faceTwo) {
         var me = this;
         //verifico que la combinación sea possible
@@ -391,6 +376,9 @@ var TrackmanagerComponent = (function () {
         }
         return false;
     };
+    /*
+    Función que retorna la cruz sobre la cara
+    */
     TrackmanagerComponent.prototype.getCross = function (index) {
         var me = this;
         return [
@@ -400,6 +388,9 @@ var TrackmanagerComponent = (function () {
             me.getBorderCubie(me.cubies[index][0]) //left
         ];
     };
+    /*
+    Función que retorna la línea sobre la cara que se está revisando
+    */
     TrackmanagerComponent.prototype.getEdges = function (index) {
         var me = this;
         return [
@@ -491,7 +482,17 @@ TrackmanagerComponent = __decorate([
         selector: 'trackmanager',
         templateUrl: 'trackmanager.component.html',
         providers: [auth_service_1.AuthService]
-    }),
+    })
+    /*
+    giro en sentido antihorario
+    
+    arriba naranja
+    abajo rojo =>
+    
+    arriba rojo
+    abajo naranja => DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
+    */
+    ,
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], TrackmanagerComponent);
 exports.TrackmanagerComponent = TrackmanagerComponent;
