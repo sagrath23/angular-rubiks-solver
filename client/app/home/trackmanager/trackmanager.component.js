@@ -10,10 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var common_1 = require("@angular/common");
 var auth_service_1 = require("../auth/auth.service");
 var TrackmanagerComponent = (function () {
-    function TrackmanagerComponent(authService) {
+    function TrackmanagerComponent(authService, router, route, location) {
         this.authService = authService;
+        this.router = router;
+        this.route = route;
+        this.location = location;
         this.images = ['white', 'blue', 'red', 'orange', 'yellow', 'green'];
         //images: string[] = ['blue'];
         this.faces = new Array(6);
@@ -80,6 +85,8 @@ var TrackmanagerComponent = (function () {
         me.authService.solveCube(me.state)
             .then(function (data) {
             me.result = data;
+            //send data to response component
+            me.router.navigate(['/response', me.state, me.result]);
         });
         return me.result;
     };
@@ -484,7 +491,7 @@ TrackmanagerComponent = __decorate([
         templateUrl: 'trackmanager.component.html',
         providers: [auth_service_1.AuthService]
     }),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService, router_1.Router, router_1.ActivatedRoute, common_1.Location])
 ], TrackmanagerComponent);
 exports.TrackmanagerComponent = TrackmanagerComponent;
 //# sourceMappingURL=trackmanager.component.js.map

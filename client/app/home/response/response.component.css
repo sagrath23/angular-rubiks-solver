@@ -1,0 +1,11 @@
+.response{
+	position:relative;
+	width:100%;
+	border: 1px solid cyan;
+}
+
+.response #cube{
+	position:relative;
+	left:15px;
+	top:15px;
+}
