@@ -527,7 +527,6 @@ Cube.prototype.getRenderData = function(){
 
 	return result;
 }
-
 function RubiksCube(canvas, width){
 	this.canvas = document.getElementById(canvas);
 	this.turnSpeed = 250;

@@ -23,7 +23,7 @@ var tracker_component_1 = require("./tracker/tracker.component");
 var trackmanager_component_1 = require("./trackmanager/trackmanager.component");
 var auth_service_1 = require("./auth/auth.service");
 var video_list_component_1 = require("./videolist/video-list.component");
-//import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+var response_component_1 = require("./response/response.component");
 //import { HeroesComponent }     from './heroes/heroes.component';
 //import { DashboardComponent }  from './dashboard/dashboard.component';
 //import { HeroService }         from './hero/hero.service';
@@ -43,7 +43,7 @@ AppModule = __decorate([
             http_1.HttpModule,
             app_routing_module_1.AppRoutingModule
         ],
-        declarations: [app_component_1.AppComponent, login_component_1.LoginComponent, video_list_component_1.VideoListComponent, tracker_component_1.TrackerComponent, trackmanager_component_1.TrackmanagerComponent],
+        declarations: [app_component_1.AppComponent, login_component_1.LoginComponent, video_list_component_1.VideoListComponent, tracker_component_1.TrackerComponent, trackmanager_component_1.TrackmanagerComponent, response_component_1.ResponseComponent],
         providers: [auth_service_1.AuthService],
         bootstrap: [app_component_1.AppComponent]
     })

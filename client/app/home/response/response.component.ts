@@ -10,7 +10,7 @@ import { Hero } from '../hero/hero';
 
 @Component({
   moduleId: module.id,
-  selector: 'response',
+  selector: 'response-component',
   templateUrl: 'response.component.html',
   providers: [AuthService]
 })
@@ -18,22 +18,21 @@ import { Hero } from '../hero/hero';
 export class ResponseComponent implements OnInit {
 
 	@Input()
-	hero: Hero;
+	state: string;
 
-	constructor(private heroService: HeroService, 
+	@Input()
+	response: string;
+
+	constructor(private authService: AuthService, 
 		private route: ActivatedRoute, 
 		private location: Location) {}
 
 	ngOnInit(): void {
-  		this.route.params.switchMap((params: Params) => this.heroService.getHero(+params['id'])).subscribe(hero => this.hero = hero);
+		console.log("Mostrando respuesta");
+		console.log(this.state);
 	}
 
 	goBack(): void {
   		this.location.back();
 	}
-
-	save(): void {
-  		this.heroService.update(this.hero)
-    			.then(() => this.goBack());	
-	}	
 }
