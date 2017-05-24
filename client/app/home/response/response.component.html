@@ -1,7 +1,29 @@
-<div class="response">
+
+<!--<div class="response">
 	<canvas id="cube"></canvas> 
 	<div id='controls'></div>
 	<div id='flat-cube'></div>
+	{{state}}<br>
+	{{response | json}}
+</div>
+-->
+
+<md-grid-list cols="4" rowHeight="200px">
+  <md-grid-tile [colspan]= 4 [rowspan]= 4 [style.background]= 'lightblue'>
+	  <canvas id="cube"></canvas> 
+  </md-grid-tile>
+  <md-grid-tile [colspan]= 4 [rowspan]= 4 [style.background]= 'lightblue'>
+	  <div id='flat-cube'></div> 
+  </md-grid-tile>
+  <md-grid-tile [colspan]= 2 [rowspan]= 2 [style.background]= 'lightblue'>
+	  tres
+  </md-grid-tile>
+  <md-grid-tile [colspan]= 3 [rowspan]= 3 [style.background]= 'lightblue'>
+	  <div id='controls'></div>
+  </md-grid-tile>
+</md-grid-list>
+
+<div class="response">
 	{{state}}<br>
 	{{response | json}}
 </div>

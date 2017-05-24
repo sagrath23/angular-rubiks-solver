@@ -65,7 +65,7 @@ export class ResponseComponent implements OnInit {
 		me.oldWidth = width;
 		//llamamos a la librería que dibuja el cubo y las caras
 
-		var width:number = 1200;
+		//var width:number = 1200;
 
 		//cubo 3D
 		me.cube = new(Function.prototype.bind.apply(RubiksCube, [null, 'cube', width]));
@@ -78,8 +78,9 @@ export class ResponseComponent implements OnInit {
 		me.cube.tick();
 		me.cube.render();
 		//asigno el estado actual del cubo
-		
 
+		//dejo la animación ejecutandose
+		//requestAnimationFrame(run);
 	}
 
 	goBack(): void {
