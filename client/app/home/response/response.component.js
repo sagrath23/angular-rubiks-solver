@@ -48,7 +48,15 @@ var ResponseComponent = (function () {
         me.cube.render();
         //asigno el estado actual del cubo
         //dejo la animación ejecutandose
-        //requestAnimationFrame(run);
+        requestAnimationFrame(me.run);
+    };
+    ResponseComponent.prototype.run = function () {
+        console.log(this);
+        this.cube.tick();
+        this.cube.render();
+        //asigno el estado actual del cubo
+        //dejo la animación ejecutandose
+        requestAnimationFrame(this.run);
     };
     ResponseComponent.prototype.goBack = function () {
         this.location.back();

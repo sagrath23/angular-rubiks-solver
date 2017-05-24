@@ -19,6 +19,8 @@ declare var rubiksCube: RubiksCube;
 declare var RubiksCube: Function;
 declare var FlatCube: Function;
 declare var RubiksCubeControls: Function;
+declare var requestAnimationFrame: Function;
+
 
 @Component({
 	moduleId: module.id,
@@ -80,7 +82,19 @@ export class ResponseComponent implements OnInit {
 		//asigno el estado actual del cubo
 
 		//dejo la animación ejecutandose
-		//requestAnimationFrame(run);
+		requestAnimationFrame(me.run);
+	}
+
+	run(): void {
+
+		console.log(this);
+
+		this.cube.tick();
+		this.cube.render();
+		//asigno el estado actual del cubo
+
+		//dejo la animación ejecutandose
+		requestAnimationFrame(this.run);
 	}
 
 	goBack(): void {
