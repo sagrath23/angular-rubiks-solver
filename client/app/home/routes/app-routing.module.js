@@ -11,7 +11,8 @@ var router_1 = require("@angular/router");
 var trackmanager_component_1 = require("../trackmanager/trackmanager.component");
 var routes = [
     { path: '', redirectTo: '/track', pathMatch: 'full' },
-    { path: 'track', component: trackmanager_component_1.TrackmanagerComponent }
+    { path: 'track', component: trackmanager_component_1.TrackmanagerComponent } /*,
+    { path: 'response/:state/:response',  component: ResponseComponent }*/
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {

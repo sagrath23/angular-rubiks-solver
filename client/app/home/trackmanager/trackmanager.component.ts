@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Hero } from '../hero/hero';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -49,7 +49,7 @@ export class TrackmanagerComponent implements OnInit {
       'green':{'white':{'red':'UBL','orange':'URB'},'yellow':{'red':'DLB','orange':'DBR'},'red':{'white':'UBL','yellow':'DLB'},'orange':{'white':'URB','yellow':'DBR'}}
     };
 
-  	constructor(private authService: AuthService) { }
+  	constructor(private authService: AuthService, private router:Router, private route: ActivatedRoute, private location: Location) { }
 
   	ngOnInit(): void {
     	console.log('loading trackers...');
@@ -93,6 +93,8 @@ export class TrackmanagerComponent implements OnInit {
       me.authService.solveCube(me.state)
             .then((data) => {
               me.result = data;
+              //send data to response component
+              //me.router.navigate(['/response', me.state, me.result]);
             });
 
       return me.result;

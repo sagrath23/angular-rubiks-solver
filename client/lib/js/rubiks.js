@@ -527,7 +527,6 @@ Cube.prototype.getRenderData = function(){
 
 	return result;
 }
-
 function RubiksCube(canvas, width){
 	this.canvas = document.getElementById(canvas);
 	this.turnSpeed = 250;
@@ -575,7 +574,7 @@ function RubiksCube(canvas, width){
 			}
 		}
 	}
-	//this.solver = new RubiksCubeSolver();
+	this.solver = new RubiksCubeSolver();
 
 	var onmousedown = function(e){
 		this.mouseDown = true;

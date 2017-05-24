@@ -13,16 +13,11 @@ import 'hammerjs';
 import { AppComponent }  from './app.component';
 
 //App Components
-import { LoginComponent } 	   	from './login/login.component';
 import {TrackerComponent}       from './tracker/tracker.component';
 import {TrackmanagerComponent}  from './trackmanager/trackmanager.component';
 import { AuthService }			from './auth/auth.service';
-import { VideoListComponent }	from './videolist/video-list.component';
 
-//import { HeroDetailComponent } from './hero-detail/hero-detail.component';
-//import { HeroesComponent }     from './heroes/heroes.component';
-//import { DashboardComponent }  from './dashboard/dashboard.component';
-//import { HeroService }         from './hero/hero.service';
+import { ResponseComponent } from './response/response.component';
 
 //App routes
 import { AppRoutingModule }    from './routes/app-routing.module';
@@ -34,7 +29,7 @@ import { AppRoutingModule }    from './routes/app-routing.module';
 		  FormsModule ,
 		  HttpModule,
     	AppRoutingModule],
-  	declarations: [ AppComponent , LoginComponent , VideoListComponent, TrackerComponent, TrackmanagerComponent ],
+  	declarations: [ AppComponent , TrackerComponent, TrackmanagerComponent, ResponseComponent ],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })
