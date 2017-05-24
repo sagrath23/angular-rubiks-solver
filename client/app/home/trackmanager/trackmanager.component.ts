@@ -94,7 +94,7 @@ export class TrackmanagerComponent implements OnInit {
             .then((data) => {
               me.result = data;
               //send data to response component
-              me.router.navigate(['/response', me.state, me.result]);
+              //me.router.navigate(['/response', me.state, me.result]);
             });
 
       return me.result;

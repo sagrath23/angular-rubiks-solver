@@ -1,18 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ActivatedRoute, Params }   from '@angular/router';
-import { Location }                 from '@angular/common';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
 
 import 'rxjs/add/operator/switchMap';
 
 import { AuthService } from '../auth/auth.service';
-import { Hero } from '../hero/hero';
+
+/*
+interface RubiksCube{
+	RubiksCube: Function;
+}
+
+declare var rubiksCube: RubiksCube;
+*/
+
+declare var RubiksCube: Function;
+declare var FlatCube: Function;
+declare var RubiksCubeControls: Function;
 
 @Component({
-  moduleId: module.id,
-  selector: 'response-component',
-  templateUrl: 'response.component.html',
-  providers: [AuthService]
+	moduleId: module.id,
+	selector: 'response-component',
+	templateUrl: 'response.component.html',
+	providers: [AuthService]
 })
 
 export class ResponseComponent implements OnInit {
@@ -23,16 +34,34 @@ export class ResponseComponent implements OnInit {
 	@Input()
 	response: string;
 
-	constructor(private authService: AuthService, 
-		private route: ActivatedRoute, 
-		private location: Location) {}
+	cube: any;
+
+	flatCube: any;
+
+	controls: any;
+
+	constructor(private authService: AuthService,
+		private route: ActivatedRoute,
+		private location: Location) { }
 
 	ngOnInit(): void {
 		console.log("Mostrando respuesta");
 		console.log(this.state);
+
+		var me = this;
+		//llamamos a la librería que dibuja el cubo y las caras
+		var width:number = 1200;
+
+		//cubo 3D
+		me.cube = new(Function.prototype.bind.apply(RubiksCube, [null, 'cube', width]));
+		//cubo plano (vista de desarrollo)
+		me.flatCube = new(Function.prototype.bind.apply(FlatCube, [null, 'flat-cube', width, false]));
+		//controles de navegación
+		me.controls = new(Function.prototype.bind.apply(RubiksCubeControls, [null, 'controls', me.cube, width]));
+
 	}
 
 	goBack(): void {
-  		this.location.back();
+		this.location.back();
 	}
 }

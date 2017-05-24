@@ -23,6 +23,15 @@ var ResponseComponent = (function () {
     ResponseComponent.prototype.ngOnInit = function () {
         console.log("Mostrando respuesta");
         console.log(this.state);
+        var me = this;
+        //llamamos a la librería que dibuja el cubo y las caras
+        var width = 1200;
+        //cubo 3D
+        me.cube = new (Function.prototype.bind.apply(RubiksCube, [null, 'cube', width]));
+        //cubo plano (vista de desarrollo)
+        me.flatCube = new (Function.prototype.bind.apply(FlatCube, [null, 'flat-cube', width, false]));
+        //controles de navegación
+        me.controls = new (Function.prototype.bind.apply(RubiksCubeControls, [null, 'controls', me.cube, width]));
     };
     ResponseComponent.prototype.goBack = function () {
         this.location.back();

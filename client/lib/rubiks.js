@@ -575,7 +575,7 @@ function RubiksCube(canvas, width){
 			}
 		}
 	}
-	this.solver = new RubiksCubeSolver();
+	//this.solver = new RubiksCubeSolver();
 
 	var onmousedown = function(e){
 		this.mouseDown = true;
