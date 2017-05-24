@@ -24,14 +24,29 @@ var ResponseComponent = (function () {
         console.log("Mostrando respuesta");
         console.log(this.state);
         var me = this;
+        var down = false;
+        var parent = document.getElementById('cube').parentElement;
+        var width = Math.min(parent.offsetWidth / 2 - 30, parent.offsetHeight / 5 * 3);
+        if (width < 250) {
+            width = window.innerWidth / 2 - 30;
+        }
+        if (width < 250) {
+            width = window.innerWidth - 30;
+            down = true;
+        }
+        me.oldWidth = width;
         //llamamos a la librería que dibuja el cubo y las caras
         var width = 1200;
         //cubo 3D
         me.cube = new (Function.prototype.bind.apply(RubiksCube, [null, 'cube', width]));
         //cubo plano (vista de desarrollo)
-        me.flatCube = new (Function.prototype.bind.apply(FlatCube, [null, 'flat-cube', width, false]));
+        me.flatCube = new (Function.prototype.bind.apply(FlatCube, [null, 'flat-cube', width, down]));
         //controles de navegación
         me.controls = new (Function.prototype.bind.apply(RubiksCubeControls, [null, 'controls', me.cube, width]));
+        //dibujo el cubo 3D;
+        me.cube.tick();
+        me.cube.render();
+        //asigno el estado actual del cubo
     };
     ResponseComponent.prototype.goBack = function () {
         this.location.back();

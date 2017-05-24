@@ -7,8 +7,8 @@
 
     const routes: Routes = [
       { path: '', redirectTo: '/track', pathMatch: 'full' },
-      { path: 'track',  component: TrackmanagerComponent },
-      { path: 'response/:state/:response',  component: ResponseComponent }
+      { path: 'track',  component: TrackmanagerComponent }/*,
+      { path: 'response/:state/:response',  component: ResponseComponent }*/
     ];
 
     @NgModule({
