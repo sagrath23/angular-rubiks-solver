@@ -25,6 +25,8 @@ export class TrackmanagerComponent implements OnInit {
 
     state: string;
 
+    colorsPerFaces: any;
+
     result: any;
 
     /*Las combinaciones son iguales para Up-down, front-back y left-right */
@@ -93,6 +95,7 @@ export class TrackmanagerComponent implements OnInit {
       me.authService.solveCube(me.state)
             .then((data) => {
               me.result = data;
+              
               //send data to response component
               //me.router.navigate(['/response', me.state, me.result]);
             });
@@ -110,10 +113,55 @@ export class TrackmanagerComponent implements OnInit {
       me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
 
       if(me.check()){
+        //se crea el estado actual del cubo a partir de las imágenes
         me.state = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
+        //y se extraen todos los colores de cada cara
+        me.colorsPerFaces = me.getAllColors();
 
         console.log(me.state);
+        console.log(me.colorsPerFaces);
       }
+    }
+
+    getAllColors(): Array<any> {
+      var me = this,
+          upFaceIndex = -1,
+          frontFaceIndex = -1,
+          leftFaceIndex = -1,
+          rightFaceIndex = -1,
+          backFaceIndex = -1,
+          downFaceIndex = -1,
+          colorsPerFaces:Array<any> = [];
+
+      //busco la cara de arriba
+      for(var i:number = 0; i < me.faces.length; i++){
+        if(me.faces[i] === 'U'){
+          upFaceIndex = i;
+        }
+        if(me.faces[i] === 'F'){
+          frontFaceIndex = i;
+        }
+        if(me.faces[i] === 'L'){
+          leftFaceIndex = i;
+        }
+        if(me.faces[i] === 'R'){
+          rightFaceIndex = i;
+        }
+        if(me.faces[i] === 'B'){
+          backFaceIndex = i;
+        }
+        if(me.faces[i] === 'D'){
+          downFaceIndex = i;
+        }
+      }
+
+      var indexes = [ upFaceIndex, frontFaceIndex, leftFaceIndex, rightFaceIndex, backFaceIndex, downFaceIndex]   
+      for(var i:number = 0; i < indexes.length; i++){
+        var cross = me.getCross(indexes[i]),
+            edges = me.getEdges(indexes[i]);
+        colorsPerFaces.push(cross.concat(edges)); 
+      }    
+      return colorsPerFaces;    
     }
 
     /*

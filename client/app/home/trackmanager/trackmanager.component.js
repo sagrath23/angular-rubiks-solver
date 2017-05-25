@@ -98,9 +98,43 @@ var TrackmanagerComponent = (function () {
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
         me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
         if (me.check()) {
+            //se crea el estado actual del cubo a partir de las imágenes
             me.state = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
+            //y se extraen todos los colores de cada cara
+            me.colorsPerFaces = me.getAllColors();
             console.log(me.state);
+            console.log(me.colorsPerFaces);
         }
+    };
+    TrackmanagerComponent.prototype.getAllColors = function () {
+        var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1, downFaceIndex = -1, colorsPerFaces = [];
+        //busco la cara de arriba
+        for (var i = 0; i < me.faces.length; i++) {
+            if (me.faces[i] === 'U') {
+                upFaceIndex = i;
+            }
+            if (me.faces[i] === 'F') {
+                frontFaceIndex = i;
+            }
+            if (me.faces[i] === 'L') {
+                leftFaceIndex = i;
+            }
+            if (me.faces[i] === 'R') {
+                rightFaceIndex = i;
+            }
+            if (me.faces[i] === 'B') {
+                backFaceIndex = i;
+            }
+            if (me.faces[i] === 'D') {
+                downFaceIndex = i;
+            }
+        }
+        var indexes = [upFaceIndex, frontFaceIndex, leftFaceIndex, rightFaceIndex, backFaceIndex, downFaceIndex];
+        for (var i = 0; i < indexes.length; i++) {
+            var cross = me.getCross(indexes[i]), edges = me.getEdges(indexes[i]);
+            colorsPerFaces.push(cross.concat(edges));
+        }
+        return colorsPerFaces;
     };
     /*
     función que verifica que se hayan identificado todas las caras del cubo en las imágenes

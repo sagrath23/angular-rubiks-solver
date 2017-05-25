@@ -15,6 +15,6 @@
 </md-grid-list>
 <button md-raised-button (click)="resolveCube()">Resolver!</button>
 <div *ngIf="result">
-<response-component [response]="result" [state]="state"></response-component>
+<response-component [response]="result" [state]="state" [colors]="colorsPerFaces"></response-component>
 <!--{{result | json}}-->
 </div>
