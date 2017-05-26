@@ -20,7 +20,6 @@ var TrackmanagerComponent = (function () {
         this.route = route;
         this.location = location;
         this.images = ['white', 'blue', 'red', 'orange', 'yellow', 'green'];
-        //images: string[] = ['blue'];
         this.faces = new Array(6);
         this.cubies = new Array(6);
         this.currentState = new Array(20);
@@ -37,12 +36,42 @@ var TrackmanagerComponent = (function () {
         combinaciones de las esquinas
         */
         this.edgesCombinations = {
-            'white': { 'blue': { 'red': 'ULF', 'orange': 'UFR' }, 'green': { 'red': 'UBL', 'orange': 'URB' }, 'red': { 'blue': 'ULF', 'green': 'UBL' }, 'orange': { 'blue': 'UFR', 'green': 'URB' } },
-            'blue': { 'white': { 'red': 'ULF', 'orange': 'UFR' }, 'yellow': { 'red': 'DFL', 'orange': 'DRF' }, 'red': { 'white': 'ULF', 'yellow': 'DFL' }, 'orange': { 'white': 'ULF', 'yellow': 'DFL' } },
-            'orange': { 'white': { 'blue': 'UFR', 'green': 'URB' }, 'yellow': { 'blue': 'DRF', 'green': 'DBR' }, 'green': { 'white': 'URB', 'yellow': 'DBR' }, 'blue': { 'white': 'URB', 'yellow': 'DRF' } },
-            'red': { 'white': { 'blue': 'ULF', 'green': 'UBL' }, 'yellow': { 'blue': 'DFL', 'green': 'DLB' }, 'green': { 'white': 'UBL', 'yellow': 'DLB' }, 'blue': { 'white': 'ULF', 'yellow': 'DFL' } },
-            'yellow': { 'blue': { 'red': 'DFL', 'orange': 'DRF' }, 'orange': { 'blue': 'DRF', 'green': 'DBR' }, 'red': { 'blue': 'DFL', 'green': 'DLB' }, 'green': { 'red': 'DLB', 'orange': 'DBR' } },
-            'green': { 'white': { 'red': 'UBL', 'orange': 'URB' }, 'yellow': { 'red': 'DLB', 'orange': 'DBR' }, 'red': { 'white': 'UBL', 'yellow': 'DLB' }, 'orange': { 'white': 'URB', 'yellow': 'DBR' } }
+            'white': {
+                'blue': { 'red': 'ULF', 'orange': 'UFR' },
+                'green': { 'red': 'UBL', 'orange': 'URB' },
+                'red': { 'blue': 'ULF', 'green': 'UBL' },
+                'orange': { 'blue': 'UFR', 'green': 'URB' }
+            },
+            'blue': {
+                'white': { 'red': 'ULF', 'orange': 'UFR' },
+                'yellow': { 'red': 'DFL', 'orange': 'DRF' },
+                'red': { 'white': 'ULF', 'yellow': 'DFL' },
+                'orange': { 'white': 'ULF', 'yellow': 'DFL' }
+            },
+            'orange': {
+                'white': { 'blue': 'UFR', 'green': 'URB' },
+                'yellow': { 'blue': 'DRF', 'green': 'DBR' },
+                'green': { 'white': 'URB', 'yellow': 'DBR' },
+                'blue': { 'white': 'URB', 'yellow': 'DRF' }
+            },
+            'red': {
+                'white': { 'blue': 'ULF', 'green': 'UBL' },
+                'yellow': { 'blue': 'DFL', 'green': 'DLB' },
+                'green': { 'white': 'UBL', 'yellow': 'DLB' },
+                'blue': { 'white': 'ULF', 'yellow': 'DFL' }
+            },
+            'yellow': {
+                'blue': { 'red': 'DFL', 'orange': 'DRF' },
+                'orange': { 'blue': 'DRF', 'green': 'DBR' },
+                'red': { 'blue': 'DFL', 'green': 'DLB' },
+                'green': { 'red': 'DLB', 'orange': 'DBR' }
+            },
+            'green': {
+                'white': { 'red': 'UBL', 'orange': 'URB' },
+                'yellow': { 'red': 'DLB', 'orange': 'DBR' },
+                'red': { 'white': 'UBL', 'yellow': 'DLB' },
+                'orange': { 'white': 'URB', 'yellow': 'DBR' }
+            }
         };
     }
     TrackmanagerComponent.prototype.ngOnInit = function () {
@@ -75,18 +104,14 @@ var TrackmanagerComponent = (function () {
      */
     TrackmanagerComponent.prototype.resolveCube = function () {
         var me = this;
-        //Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
-        //estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
-        //var state = 'DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL';
-        //enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
-        //para resolver
-        //me.state = "DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL";
-        //DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
+        // Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
+        // estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
+        // enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
         me.authService.solveCube(me.state)
             .then(function (data) {
             me.result = data;
-            //send data to response component
-            //me.router.navigate(['/response', me.state, me.result]);
+            // send data to response component
+            // me.router.navigate(['/response', me.state, me.result]);
         });
         return me.result;
     };
@@ -98,9 +123,9 @@ var TrackmanagerComponent = (function () {
         me.faces[me.images.indexOf(event.imageName)] = event.faceId;
         me.cubies[me.images.indexOf(event.imageName)] = event.cubies;
         if (me.check()) {
-            //se crea el estado actual del cubo a partir de las imágenes
+            // se crea el estado actual del cubo a partir de las imágenes
             me.state = me.findUpCross() + me.findDownCross() + me.findFrontLine() + me.findBackLine() + me.findUpEdges() + me.findDownEdges();
-            //y se extraen todos los colores de cada cara
+            // y se extraen todos los colores de cada cara
             me.colorsPerFaces = me.getAllColors();
             console.log(me.state);
             console.log(me.colorsPerFaces);
@@ -108,7 +133,7 @@ var TrackmanagerComponent = (function () {
     };
     TrackmanagerComponent.prototype.getAllColors = function () {
         var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1, downFaceIndex = -1, colorsPerFaces = [];
-        //busco la cara de arriba
+        // busco la cara de arriba
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'U') {
                 upFaceIndex = i;
@@ -129,10 +154,11 @@ var TrackmanagerComponent = (function () {
                 downFaceIndex = i;
             }
         }
-        var indexes = [upFaceIndex, frontFaceIndex, leftFaceIndex, rightFaceIndex, backFaceIndex, downFaceIndex];
+        var indexes = [backFaceIndex, leftFaceIndex, upFaceIndex, rightFaceIndex, frontFaceIndex, downFaceIndex];
         for (var i = 0; i < indexes.length; i++) {
-            var cross = me.getCross(indexes[i]), edges = me.getEdges(indexes[i]);
-            colorsPerFaces.push(cross.concat(edges));
+            var cross = me.getCross(indexes[i]), edges = me.getEdges(indexes[i]), faceColors = [edges[1], cross[1], edges[0], cross[2], cross[0], edges[2], cross[3], edges[3]];
+            // middle = me.get
+            colorsPerFaces.push(faceColors); // cross.concat(edges)); 
         }
         return colorsPerFaces;
     };
@@ -153,7 +179,7 @@ var TrackmanagerComponent = (function () {
      */
     TrackmanagerComponent.prototype.findUpCross = function () {
         var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
-        //busco la cara de arriba
+        // busco la cara de arriba
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'U') {
                 upFaceIndex = i;
@@ -171,24 +197,19 @@ var TrackmanagerComponent = (function () {
                 backFaceIndex = i;
             }
         }
-        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
-        //de la cara superior
-        //saco las 4 posiciones de cruz de la cara
-        var upCross = me.getCross(upFaceIndex);
-        var frontCross = me.getCross(frontFaceIndex);
-        var leftCross = me.getCross(leftFaceIndex);
-        var rightCross = me.getCross(rightFaceIndex);
-        var backCross = me.getCross(backFaceIndex);
-        var result = "";
-        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz superior
-        //UF => 
+        // ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        // de la cara superior
+        // saco las 4 posiciones de cruz de la cara
+        var upCross = me.getCross(upFaceIndex), frontCross = me.getCross(frontFaceIndex), leftCross = me.getCross(leftFaceIndex), rightCross = me.getCross(rightFaceIndex), backCross = me.getCross(backFaceIndex), result = '';
+        // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        // la cruz superior
+        // UF => 
         result += me.combinations[upCross[3].color][frontCross[1].color] + " ";
-        //UR => 
+        // UR => 
         result += me.combinations[upCross[0].color][rightCross[2].color] + " ";
-        //UB => 
+        // UB => 
         result += me.combinations[upCross[1].color][backCross[3].color] + " ";
-        //UL => 
+        // UL => 
         result += me.combinations[upCross[2].color][leftCross[0].color] + " ";
         console.log(result);
         return result;
@@ -198,7 +219,7 @@ var TrackmanagerComponent = (function () {
     */
     TrackmanagerComponent.prototype.findDownCross = function () {
         var me = this, downFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
-        //busco la cara de arriba
+        // busco la cara de arriba
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'D') {
                 downFaceIndex = i;
@@ -216,24 +237,19 @@ var TrackmanagerComponent = (function () {
                 backFaceIndex = i;
             }
         }
-        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
-        //de la cara superior
-        //saco las 4 posiciones de cruz de la cara
-        var downCross = me.getCross(downFaceIndex);
-        var frontCross = me.getCross(frontFaceIndex);
-        var leftCross = me.getCross(leftFaceIndex);
-        var rightCross = me.getCross(rightFaceIndex);
-        var backCross = me.getCross(backFaceIndex);
-        var result = "";
-        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz inferior
-        //DF => 
+        // ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        // de la cara superior
+        // saco las 4 posiciones de cruz de la cara
+        var downCross = me.getCross(downFaceIndex), frontCross = me.getCross(frontFaceIndex), leftCross = me.getCross(leftFaceIndex), rightCross = me.getCross(rightFaceIndex), backCross = me.getCross(backFaceIndex), result = '';
+        // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        // la cruz inferior
+        // DF => 
         result += me.combinations[downCross[1].color][frontCross[3].color] + " ";
-        //DR => 
+        // DR => 
         result += me.combinations[downCross[0].color][rightCross[0].color] + " ";
-        //DB => 
+        // DB => 
         result += me.combinations[downCross[3].color][backCross[1].color] + " ";
-        //DL => down bottom & left-top
+        // DL => down bottom & left-top
         result += me.combinations[downCross[2].color][leftCross[2].color] + " ";
         console.log(result);
         return result;
@@ -243,7 +259,7 @@ var TrackmanagerComponent = (function () {
     */
     TrackmanagerComponent.prototype.findFrontLine = function () {
         var me = this, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1;
-        //busco la cara del frente
+        // busco la cara del frente
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'F') {
                 frontFaceIndex = i;
@@ -255,18 +271,15 @@ var TrackmanagerComponent = (function () {
                 rightFaceIndex = i;
             }
         }
-        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
-        //de la cara superior
-        //saco las 4 posiciones de cruz de la cara
-        var frontCross = me.getCross(frontFaceIndex);
-        var leftCross = me.getCross(leftFaceIndex);
-        var rightCross = me.getCross(rightFaceIndex);
-        var result = "";
-        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz superior
-        //FR => up-left & front-right
+        // ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        // de la cara superior
+        // saco las 4 posiciones de cruz de la cara
+        var frontCross = me.getCross(frontFaceIndex), leftCross = me.getCross(leftFaceIndex), rightCross = me.getCross(rightFaceIndex), result = '';
+        // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        // la cruz superior
+        // FR => up-left & front-right
         result += me.combinations[frontCross[0].color][rightCross[3].color] + " ";
-        //FL => up-bottom & right-top
+        // FL => up-bottom & right-top
         result += me.combinations[frontCross[2].color][leftCross[3].color] + " ";
         console.log(result);
         return result;
@@ -276,7 +289,7 @@ var TrackmanagerComponent = (function () {
     */
     TrackmanagerComponent.prototype.findBackLine = function () {
         var me = this, backFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1;
-        //busco la cara del frente
+        // busco la cara del frente
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'B') {
                 backFaceIndex = i;
@@ -288,18 +301,15 @@ var TrackmanagerComponent = (function () {
                 rightFaceIndex = i;
             }
         }
-        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
-        //de la cara superior
-        //saco las 4 posiciones de cruz de la cara
-        var backCross = me.getCross(backFaceIndex);
-        var leftCross = me.getCross(leftFaceIndex);
-        var rightCross = me.getCross(rightFaceIndex);
-        var result = "";
-        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz superior
-        //BR => up-left & front-right
+        // ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        // de la cara superior
+        // saco las 4 posiciones de cruz de la cara
+        var backCross = me.getCross(backFaceIndex), leftCross = me.getCross(leftFaceIndex), rightCross = me.getCross(rightFaceIndex), result = '';
+        // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        // la cruz superior
+        // BR => up-left & front-right
         result += me.combinations[backCross[0].color][rightCross[1].color] + " ";
-        //BL => up-bottom & right-top
+        // BL => up-bottom & right-top
         result += me.combinations[backCross[2].color][leftCross[1].color] + " ";
         console.log(result);
         return result;
@@ -309,7 +319,7 @@ var TrackmanagerComponent = (function () {
      */
     TrackmanagerComponent.prototype.findUpEdges = function () {
         var me = this, upFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
-        //busco la cara de arriba
+        // busco la cara de arriba
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'U') {
                 upFaceIndex = i;
@@ -327,34 +337,24 @@ var TrackmanagerComponent = (function () {
                 backFaceIndex = i;
             }
         }
-        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
-        //de la cara superior
-        //saco las 4 posiciones de las esquinas de las caras
-        var upEdges = me.getEdges(upFaceIndex);
-        var frontEdges = me.getEdges(frontFaceIndex);
-        var leftEdges = me.getEdges(leftFaceIndex);
-        var rightEdges = me.getEdges(rightFaceIndex);
-        var backEdges = me.getEdges(backFaceIndex);
-        var result = "";
+        // ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        // de la cara superior
+        // saco las 4 posiciones de las esquinas de las caras
+        var upEdges = me.getEdges(upFaceIndex), frontEdges = me.getEdges(frontFaceIndex), leftEdges = me.getEdges(leftFaceIndex), rightEdges = me.getEdges(rightFaceIndex), backEdges = me.getEdges(backFaceIndex), result = '';
         console.log(upEdges);
         console.log(frontEdges);
         console.log(leftEdges);
         console.log(rightEdges);
         console.log(backEdges);
-        //blanco-azul-amarillo-verde-naranja-rojo
-        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz superior
-        //URF => 
-        console.log(upEdges[3].color + ',' + rightEdges[2].color + ',' + frontEdges[0].color);
+        // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        // la cruz superior
+        // URF => 
         result += me.edgesCombinations[upEdges[3].color][rightEdges[2].color][frontEdges[0].color] + " ";
-        //URB => 
-        console.log(upEdges[0].color + ',' + rightEdges[1].color + ',' + backEdges[3].color);
+        // URB => 
         result += me.edgesCombinations[upEdges[0].color][rightEdges[1].color][backEdges[3].color] + " ";
-        //UBL => 
-        console.log(upEdges[1].color + ',' + backEdges[1].color + ',' + leftEdges[3].color);
+        // UBL => 
         result += me.edgesCombinations[upEdges[1].color][backEdges[2].color][leftEdges[0].color] + " ";
-        //ULF => 
-        console.log(upEdges[2].color + ',' + leftEdges[3].color + ',' + frontEdges[1].color);
+        // ULF => 
         result += me.edgesCombinations[upEdges[2].color][leftEdges[3].color][frontEdges[1].color] + " ";
         console.log(result);
         return result;
@@ -364,7 +364,7 @@ var TrackmanagerComponent = (function () {
      */
     TrackmanagerComponent.prototype.findDownEdges = function () {
         var me = this, downFaceIndex = -1, frontFaceIndex = -1, leftFaceIndex = -1, rightFaceIndex = -1, backFaceIndex = -1;
-        //busco la cara de arriba
+        // busco la cara de arriba
         for (var i = 0; i < me.faces.length; i++) {
             if (me.faces[i] === 'D') {
                 downFaceIndex = i;
@@ -382,25 +382,19 @@ var TrackmanagerComponent = (function () {
                 backFaceIndex = i;
             }
         }
-        //ahora, procedemos a identificar las caras de los cubies que están en las posiciones
-        //de la cara superior
-        //saco las 4 posiciones de las esquinas de las caras
-        var downEdges = me.getEdges(downFaceIndex);
-        var frontEdges = me.getEdges(frontFaceIndex);
-        var leftEdges = me.getEdges(leftFaceIndex);
-        var rightEdges = me.getEdges(rightFaceIndex);
-        var backEdges = me.getEdges(backFaceIndex);
-        var result = "";
-        //blanco-azul-amarillo-verde-naranja-rojo
-        //con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
-        //la cruz superior
-        //DRF => 
+        // ahora, procedemos a identificar las caras de los cubies que están en las posiciones
+        // de la cara superior
+        // saco las 4 posiciones de las esquinas de las caras
+        var downEdges = me.getEdges(downFaceIndex), frontEdges = me.getEdges(frontFaceIndex), leftEdges = me.getEdges(leftFaceIndex), rightEdges = me.getEdges(rightFaceIndex), backEdges = me.getEdges(backFaceIndex), result = '';
+        // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
+        // la cruz superior
+        // DRF => 
         result += me.edgesCombinations[downEdges[0].color][rightEdges[2].color][frontEdges[3].color] + " ";
-        //DFL => 
+        // DFL => 
         result += me.edgesCombinations[downEdges[1].color][frontEdges[2].color][leftEdges[2].color] + " ";
-        //DLB => 
+        // DLB => 
         result += me.edgesCombinations[downEdges[2].color][leftEdges[1].color][backEdges[1].color] + " ";
-        //DBR => 
+        // DBR => 
         result += me.edgesCombinations[downEdges[3].color][backEdges[0].color][rightEdges[0].color];
         console.log(result);
         return result;
@@ -411,9 +405,9 @@ var TrackmanagerComponent = (function () {
     */
     TrackmanagerComponent.prototype.isValidCombination = function (faceOne, faceTwo) {
         var me = this;
-        //verifico que la combinación sea possible
-        if (typeof me.combinations[faceOne.color][faceTwo.color] != 'undefined') {
-            //es una posible combinación
+        // verifico que la combinación sea possible
+        if (typeof me.combinations[faceOne.color][faceTwo.color] !== 'undefined') {
+            // es una posible combinación
             return true;
         }
         return false;
@@ -427,7 +421,7 @@ var TrackmanagerComponent = (function () {
             me.getMiddleCubie(me.cubies[index][1], false),
             me.getBorderCubie(me.cubies[index][2]),
             me.getMiddleCubie(me.cubies[index][1], true),
-            me.getBorderCubie(me.cubies[index][0]) //left
+            me.getBorderCubie(me.cubies[index][0]) // left
         ];
     };
     /*
@@ -439,7 +433,7 @@ var TrackmanagerComponent = (function () {
             me.getEdgeCubie(me.cubies[index][2], false),
             me.getEdgeCubie(me.cubies[index][2], true),
             me.getEdgeCubie(me.cubies[index][0], true),
-            me.getEdgeCubie(me.cubies[index][0], false) //left-bottom
+            me.getEdgeCubie(me.cubies[index][0], false) // left-bottom
         ];
     };
     /*
@@ -447,9 +441,8 @@ var TrackmanagerComponent = (function () {
     getUpCubie
     */
     TrackmanagerComponent.prototype.getMiddleCubie = function (cubies, getUpCubie) {
-        var me = this;
         if (getUpCubie) {
-            //obtenemos el cubo del medio que esta más arriba
+            // obtenemos el cubo del medio que esta más arriba
             var index = -1, minY = Number.MAX_VALUE;
             for (var i = 0; i < cubies.length; i++) {
                 if (cubies[i].y < minY) {
@@ -460,7 +453,7 @@ var TrackmanagerComponent = (function () {
             return cubies[index];
         }
         else {
-            //obtenemos el cubo que está al medio en la parte inferior
+            // obtenemos el cubo que está al medio en la parte inferior
             var index = -1, maxY = Number.MIN_VALUE;
             for (var i = 0; i < cubies.length; i++) {
                 if (cubies[i].y > maxY) {
@@ -475,8 +468,8 @@ var TrackmanagerComponent = (function () {
     retorna el cubie del medio de la fila
     */
     TrackmanagerComponent.prototype.getBorderCubie = function (cubies) {
-        var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
-        //extraemos los míninos y máximos de los cubies del medio
+        var minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
+        // extraemos los míninos y máximos de los cubies del medio
         for (var i = 0; i < cubies.length; i++) {
             if (cubies[i].y < minY) {
                 minIndex = i;
@@ -487,9 +480,9 @@ var TrackmanagerComponent = (function () {
                 maxY = cubies[i].y;
             }
         }
-        //con estos valores identificados, se determina el cubie del medio
+        // con estos valores identificados, se determina el cubie del medio
         for (var i = 0; i < cubies.length; i++) {
-            if (i != minIndex && i != maxIndex) {
+            if (i !== minIndex && i !== maxIndex) {
                 centerIndex = i;
                 break;
             }
@@ -497,8 +490,8 @@ var TrackmanagerComponent = (function () {
         return cubies[centerIndex];
     };
     TrackmanagerComponent.prototype.getEdgeCubie = function (cubies, top) {
-        var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
-        //extraemos los míninos y máximos de los cubies del medio
+        var minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1;
+        // extraemos los míninos y máximos de los cubies del medio
         for (var i = 0; i < cubies.length; i++) {
             if (cubies[i].y < minY) {
                 minIndex = i;

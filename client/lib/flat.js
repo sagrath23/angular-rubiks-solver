@@ -1,7 +1,16 @@
 var FlatCube = function(containerId, size, down){
 	var WHITE="#ffffff", YELLOW="#ffff00" , GREEN="#009900" , BLUE="#000099", RED="#cc0000", ORANGE="#ff8000", CLEAR = "#000000";
 	var colors = [GREEN,RED,WHITE,ORANGE,BLUE,YELLOW];
+	var colorsObject = {
+		'white': WHITE,
+		'blue': BLUE,
+		'red': RED,
+		'orange': ORANGE,
+		'yellow': YELLOW,
+		'green': GREEN
+	};
 
+	this.colorsObject = colorsObject;
 
 	this.container = document.getElementById(containerId);
 
@@ -51,8 +60,22 @@ var FlatCube = function(containerId, size, down){
 };
 
 FlatCube.prototype.setCurrentState = function(colors){
+	//var me = this;
 	console.log("called from API");
+	console.log(this);
 	console.log(colors);
+	//se asignan los colores a las caras
+	for(var i = 0; i < colors.length; i++){
+		//a cada cara se le asignan los colores que correspondan
+		for(var j = 0; j < colors[i].length; j++){
+			if(j <= 3) {
+				this.faces[i].stickers[j].setColor(this.colorsObject[colors[i][j].color]);
+			} else {
+				this.faces[i].stickers[j+1].setColor(this.colorsObject[colors[i][j].color]);
+			}
+			
+		}
+	}
 
 };
 
@@ -260,7 +283,7 @@ var FlatFace = function(cube, size, top, left, color){
 	var tops = [0, 0, 0, 1, 1, 1, 2, 2, 2];
 	var lefts = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 	for(var i=0; i<9; i++){
-		var sticker = new FlatSticker(size/3, tops[i]*size/3, lefts[i]*size/3, color);
+		var sticker = new FlatSticker(i,size/3, tops[i]*size/3, lefts[i]*size/3, color);
 		this.stickers.push(sticker);
 		this.container.appendChild(sticker.container);
 	}
@@ -276,8 +299,9 @@ var FlatFace = function(cube, size, top, left, color){
 	}, this);
 };
 
-var FlatSticker = function(size, top, left, color){
+var FlatSticker = function(layout,size, top, left, color){
 	this.container = document.createElement('div');
+	this.container.innerHTML = layout;
 	this.container.style.width = (size-2) + 'px';
 	this.container.style.height = (size-2) + 'px';
 	this.container.style.border = '1px solid black';
