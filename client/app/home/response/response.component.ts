@@ -37,6 +37,9 @@ export class ResponseComponent implements OnInit {
 	@Input()
 	response: string;
 
+	@Input()
+	colors: any;
+
 	cube: any;
 
 	flatCube: any;
@@ -80,6 +83,7 @@ export class ResponseComponent implements OnInit {
 		me.cube.tick();
 		me.cube.render();
 		//asigno el estado actual del cubo
+		me.flatCube.setCurrentState(me.colors);
 
 		//dejo la animación ejecutandose
 		requestAnimationFrame(me.run);

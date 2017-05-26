@@ -47,6 +47,7 @@ var ResponseComponent = (function () {
         me.cube.tick();
         me.cube.render();
         //asigno el estado actual del cubo
+        me.flatCube.setCurrentState(me.colors);
         //dejo la animación ejecutandose
         requestAnimationFrame(me.run);
     };
@@ -71,6 +72,10 @@ __decorate([
     core_1.Input(),
     __metadata("design:type", String)
 ], ResponseComponent.prototype, "response", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], ResponseComponent.prototype, "colors", void 0);
 ResponseComponent = __decorate([
     core_1.Component({
         moduleId: module.id,

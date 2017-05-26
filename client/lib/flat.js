@@ -50,6 +50,12 @@ var FlatCube = function(containerId, size, down){
 	this.container.appendChild(this.picker.container);
 };
 
+FlatCube.prototype.setCurrentState = function(colors){
+	console.log("called from API");
+	console.log(colors);
+
+};
+
 FlatCube.prototype.getState = function() {
 	
 	var me = this;
