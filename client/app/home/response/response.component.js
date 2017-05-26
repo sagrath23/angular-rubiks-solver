@@ -51,11 +51,11 @@ var ResponseComponent = (function () {
         //asigno el estado actual del cubo
         me.flatCube.setCurrentState(me.colors);
         //dejo la animación ejecutandose
+        //así se pasan las funciones en TS
         requestAnimationFrame(function () { return me.run(); });
     };
     ResponseComponent.prototype.run = function () {
         var me = this;
-        console.log(me);
         me.cube.tick();
         me.cube.render();
         // dejo la animación ejecutandose
@@ -63,6 +63,11 @@ var ResponseComponent = (function () {
     };
     ResponseComponent.prototype.goBack = function () {
         this.location.back();
+    };
+    ResponseComponent.prototype.showAnimation = function () {
+        var me = this;
+        console.log('showing response...');
+        me.cube.makeMoves(me.response.result);
     };
     return ResponseComponent;
 }());
@@ -72,7 +77,7 @@ __decorate([
 ], ResponseComponent.prototype, "state", void 0);
 __decorate([
     core_1.Input(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], ResponseComponent.prototype, "response", void 0);
 __decorate([
     core_1.Input(),

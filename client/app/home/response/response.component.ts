@@ -8,14 +8,6 @@ import 'rxjs/add/operator/switchMap';
 
 import { AuthService } from '../auth/auth.service';
 
-/*
-interface RubiksCube{
-	RubiksCube: Function;
-}
-
-declare var rubiksCube: RubiksCube;
-*/
-
 declare var RubiksCube: Function;
 declare var FlatCube: Function;
 declare var RubiksCubeControls: Function;
@@ -34,7 +26,7 @@ export class ResponseComponent implements OnInit {
 	state: string;
 
 	@Input()
-	response: string;
+	response: any;
 
 	@Input()
 	colors: any;
@@ -83,12 +75,12 @@ export class ResponseComponent implements OnInit {
 		//asigno el estado actual del cubo
 		me.flatCube.setCurrentState(me.colors);
 		//dejo la animación ejecutandose
+		//así se pasan las funciones en TS
 		requestAnimationFrame(() => me.run());
 	}
 
 	run(): void {
 		let me = this;
-		console.log(me);
 		me.cube.tick();
 		me.cube.render();
 		// dejo la animación ejecutandose
@@ -97,5 +89,11 @@ export class ResponseComponent implements OnInit {
 
 	goBack(): void {
 		this.location.back();
+	}
+
+	showAnimation(): void {
+		let me = this;
+		console.log('showing response...');
+		me.cube.makeMoves(me.response.result);
 	}
 }
