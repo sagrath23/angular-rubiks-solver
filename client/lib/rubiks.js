@@ -639,7 +639,7 @@ RubiksCube.prototype.getSolution = function() {
 }
 
 RubiksCube.prototype.isSolvable = function(){
-	return !this.rotating && this.solver.setState(this.getState());
+	return !this.rotating;// && this.solver.setState(this.getState());
 }
 
 RubiksCube.prototype.scramble = function(num) {
@@ -685,9 +685,11 @@ RubiksCube.prototype.tick = function() {
 };
 
 RubiksCube.prototype.updateColors = function() {
+	console.log('updateColors Cube');
 	if(this.rotating){
 		return;
 	}
+	console.log("pass it on...");
 	this.blocks.forEach(function(block){
 		var p = block.getPosition();
 		var colors = this.flatCube.getColors( 
@@ -695,6 +697,7 @@ RubiksCube.prototype.updateColors = function() {
 			p.x < 0 ? -1 : p.x > 0 ? 1 : 0, 
 			p.z < 0 ? -1 : p.z > 0 ? 1 : 0
 		);
+		console.log(colors);
 		block.updateColors(colors);
 	}, this);
 	if(!this.rotating){

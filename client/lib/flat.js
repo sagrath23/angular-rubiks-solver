@@ -1,7 +1,16 @@
 var FlatCube = function(containerId, size, down){
 	var WHITE="#ffffff", YELLOW="#ffff00" , GREEN="#009900" , BLUE="#000099", RED="#cc0000", ORANGE="#ff8000", CLEAR = "#000000";
 	var colors = [GREEN,RED,WHITE,ORANGE,BLUE,YELLOW];
+	var colorsObject = {
+		'white': WHITE,
+		'blue': BLUE,
+		'red': RED,
+		'orange': ORANGE,
+		'yellow': YELLOW,
+		'green': GREEN
+	};
 
+	this.colorsObject = colorsObject;
 
 	this.container = document.getElementById(containerId);
 
@@ -51,8 +60,23 @@ var FlatCube = function(containerId, size, down){
 };
 
 FlatCube.prototype.setCurrentState = function(colors){
+	//var me = this;
 	console.log("called from API");
+	console.log(this);
 	console.log(colors);
+	//se asignan los colores a las caras
+	for(var i = 0; i < colors.length; i++){
+		//a cada cara se le asignan los colores que correspondan
+		for(var j = 0; j < colors[i].length; j++){
+			if(j <= 3) {
+				this.faces[i].stickers[j].setColor(this.colorsObject[colors[i][j].color]);
+			} else {
+				this.faces[i].stickers[j+1].setColor(this.colorsObject[colors[i][j].color]);
+			}
+			
+		}
+	}
+	this.update();
 
 };
 
@@ -86,14 +110,19 @@ FlatCube.prototype.getState = function() {
 }
 
 FlatCube.prototype.update = function() {
+	console.log('updating!!!');
 	if(this.message.firstChild){
 		this.message.removeChild(this.message.firstChild);
 	}
 	if(this.cube){
+		console.log('Cube!!!');
 		this.cube.updateColors();
 		if(!this.cube.isSolvable()){
 			this.message.appendChild(document.createTextNode(this.cube.solver.currentState));
 		}
+	}
+	else{
+		console.log('noCube :(');
 	}
 };
 
