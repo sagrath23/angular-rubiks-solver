@@ -157,8 +157,7 @@ var TrackmanagerComponent = (function () {
         var indexes = [backFaceIndex, leftFaceIndex, upFaceIndex, rightFaceIndex, frontFaceIndex, downFaceIndex];
         for (var i = 0; i < indexes.length; i++) {
             var cross = me.getCross(indexes[i]), edges = me.getEdges(indexes[i]), faceColors = [edges[1], cross[1], edges[0], cross[2], cross[0], edges[2], cross[3], edges[3]];
-            // middle = me.get
-            colorsPerFaces.push(faceColors); // cross.concat(edges)); 
+            colorsPerFaces.push(faceColors);
         }
         return colorsPerFaces;
     };

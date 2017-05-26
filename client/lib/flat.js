@@ -76,6 +76,7 @@ FlatCube.prototype.setCurrentState = function(colors){
 			
 		}
 	}
+	this.update();
 
 };
 
@@ -109,14 +110,19 @@ FlatCube.prototype.getState = function() {
 }
 
 FlatCube.prototype.update = function() {
+	console.log('updating!!!');
 	if(this.message.firstChild){
 		this.message.removeChild(this.message.firstChild);
 	}
 	if(this.cube){
+		console.log('Cube!!!');
 		this.cube.updateColors();
 		if(!this.cube.isSolvable()){
 			this.message.appendChild(document.createTextNode(this.cube.solver.currentState));
 		}
+	}
+	else{
+		console.log('noCube :(');
 	}
 };
 
@@ -283,7 +289,7 @@ var FlatFace = function(cube, size, top, left, color){
 	var tops = [0, 0, 0, 1, 1, 1, 2, 2, 2];
 	var lefts = [0, 1, 2, 0, 1, 2, 0, 1, 2];
 	for(var i=0; i<9; i++){
-		var sticker = new FlatSticker(i,size/3, tops[i]*size/3, lefts[i]*size/3, color);
+		var sticker = new FlatSticker(size/3, tops[i]*size/3, lefts[i]*size/3, color);
 		this.stickers.push(sticker);
 		this.container.appendChild(sticker.container);
 	}
@@ -299,9 +305,8 @@ var FlatFace = function(cube, size, top, left, color){
 	}, this);
 };
 
-var FlatSticker = function(layout,size, top, left, color){
+var FlatSticker = function(size, top, left, color){
 	this.container = document.createElement('div');
-	this.container.innerHTML = layout;
 	this.container.style.width = (size-2) + 'px';
 	this.container.style.height = (size-2) + 'px';
 	this.container.style.border = '1px solid black';

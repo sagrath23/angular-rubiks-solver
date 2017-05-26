@@ -36,28 +36,30 @@ var ResponseComponent = (function () {
         }
         me.oldWidth = width;
         //llamamos a la librería que dibuja el cubo y las caras
-        //var width:number = 1200;
         //cubo 3D
         me.cube = new (Function.prototype.bind.apply(RubiksCube, [null, 'cube', width]));
         //cubo plano (vista de desarrollo)
         me.flatCube = new (Function.prototype.bind.apply(FlatCube, [null, 'flat-cube', width, down]));
         //controles de navegación
         me.controls = new (Function.prototype.bind.apply(RubiksCubeControls, [null, 'controls', me.cube, width]));
+        //referencio las instancias del cubo plano y el cubo 3D
+        me.cube.flatCube = me.flatCube;
+        me.flatCube.cube = me.cube;
         //dibujo el cubo 3D;
         me.cube.tick();
         me.cube.render();
         //asigno el estado actual del cubo
         me.flatCube.setCurrentState(me.colors);
         //dejo la animación ejecutandose
-        requestAnimationFrame(me.run);
+        requestAnimationFrame(function () { return me.run(); });
     };
     ResponseComponent.prototype.run = function () {
-        console.log(this);
-        this.cube.tick();
-        this.cube.render();
-        //asigno el estado actual del cubo
-        //dejo la animación ejecutandose
-        requestAnimationFrame(this.run);
+        var me = this;
+        console.log(me);
+        me.cube.tick();
+        me.cube.render();
+        // dejo la animación ejecutandose
+        requestAnimationFrame(function () { return me.run(); });
     };
     ResponseComponent.prototype.goBack = function () {
         this.location.back();
@@ -83,9 +85,7 @@ ResponseComponent = __decorate([
         templateUrl: 'response.component.html',
         providers: [auth_service_1.AuthService]
     }),
-    __metadata("design:paramtypes", [auth_service_1.AuthService,
-        router_1.ActivatedRoute,
-        common_1.Location])
+    __metadata("design:paramtypes", [auth_service_1.AuthService, router_1.ActivatedRoute, common_1.Location])
 ], ResponseComponent);
 exports.ResponseComponent = ResponseComponent;
 //# sourceMappingURL=response.component.js.map
