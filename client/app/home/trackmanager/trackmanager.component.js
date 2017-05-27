@@ -37,40 +37,40 @@ var TrackmanagerComponent = (function () {
         */
         this.edgesCombinations = {
             'white': {
-                'blue': { 'red': 'ULF', 'orange': 'UFR' },
-                'green': { 'red': 'UBL', 'orange': 'URB' },
-                'red': { 'blue': 'ULF', 'green': 'UBL' },
-                'orange': { 'blue': 'UFR', 'green': 'URB' }
+                'blue': { 'red': 'UFL', 'orange': 'UFR' },
+                'green': { 'red': 'UBL', 'orange': 'UBR' },
+                'red': { 'blue': 'ULF', 'green': 'ULB' },
+                'orange': { 'blue': 'URF', 'green': 'URB' }
             },
             'blue': {
-                'white': { 'red': 'ULF', 'orange': 'UFR' },
-                'yellow': { 'red': 'DFL', 'orange': 'DRF' },
-                'red': { 'white': 'ULF', 'yellow': 'DFL' },
-                'orange': { 'white': 'ULF', 'yellow': 'DFL' }
+                'white': { 'red': 'FUL', 'orange': 'FUR' },
+                'yellow': { 'red': 'FDL', 'orange': 'FDR' },
+                'red': { 'white': 'FLU', 'yellow': 'FLD' },
+                'orange': { 'white': 'FRU', 'yellow': 'FRD' }
             },
             'orange': {
-                'white': { 'blue': 'UFR', 'green': 'URB' },
-                'yellow': { 'blue': 'DRF', 'green': 'DBR' },
-                'green': { 'white': 'URB', 'yellow': 'DBR' },
-                'blue': { 'white': 'URB', 'yellow': 'DRF' }
+                'white': { 'blue': 'RUF', 'green': 'RUB' },
+                'yellow': { 'blue': 'RDF', 'green': 'RDB' },
+                'green': { 'white': 'RBU', 'yellow': 'RBD' },
+                'blue': { 'white': 'RFU', 'yellow': 'RFD' }
             },
             'red': {
-                'white': { 'blue': 'ULF', 'green': 'UBL' },
-                'yellow': { 'blue': 'DFL', 'green': 'DLB' },
-                'green': { 'white': 'UBL', 'yellow': 'DLB' },
-                'blue': { 'white': 'ULF', 'yellow': 'DFL' }
+                'white': { 'blue': 'LUF', 'green': 'LUB' },
+                'yellow': { 'blue': 'LDF', 'green': 'LDB' },
+                'green': { 'white': 'LBU', 'yellow': 'LBD' },
+                'blue': { 'white': 'LFU', 'yellow': 'LFD' }
             },
             'yellow': {
-                'blue': { 'red': 'DFL', 'orange': 'DRF' },
-                'orange': { 'blue': 'DRF', 'green': 'DBR' },
-                'red': { 'blue': 'DFL', 'green': 'DLB' },
-                'green': { 'red': 'DLB', 'orange': 'DBR' }
+                'blue': { 'red': 'DFL', 'orange': 'DFR' },
+                'orange': { 'blue': 'DRF', 'green': 'DRB' },
+                'red': { 'blue': 'DLF', 'green': 'DLB' },
+                'green': { 'red': 'DBL', 'orange': 'DBR' }
             },
             'green': {
-                'white': { 'red': 'UBL', 'orange': 'URB' },
-                'yellow': { 'red': 'DLB', 'orange': 'DBR' },
-                'red': { 'white': 'UBL', 'yellow': 'DLB' },
-                'orange': { 'white': 'URB', 'yellow': 'DBR' }
+                'white': { 'red': 'BUL', 'orange': 'BUR' },
+                'yellow': { 'red': 'BDL', 'orange': 'BDR' },
+                'red': { 'white': 'BLU', 'yellow': 'BLD' },
+                'orange': { 'white': 'BRU', 'yellow': 'BRD' }
             }
         };
     }
@@ -107,13 +107,8 @@ var TrackmanagerComponent = (function () {
         // Estado objetivo UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR
         // estado actual : DB UF FR FL UR DF BL UB BR UL DL DR ULF DRF DBR DLB UFR DFL URB UBL
         // enviamos el estado al back para que sea procesado y retorne los movimientos necesarios
-        me.authService.solveCube(me.state)
-            .then(function (data) {
-            me.result = data;
-            // send data to response component
-            // me.router.navigate(['/response', me.state, me.result]);
-        });
-        return me.result;
+        me.result = { test: true };
+        //return me.result;
     };
     /*
     función que se ejecuta cuando se detecta la cara que se enceuntra en la imágen
@@ -388,7 +383,7 @@ var TrackmanagerComponent = (function () {
         // con las cruces, y conociendo el sentido en que se rotaron las caras, puedo calcular las posiciones de
         // la cruz superior
         // DRF => 
-        result += me.edgesCombinations[downEdges[0].color][rightEdges[2].color][frontEdges[3].color] + " ";
+        result += me.edgesCombinations[downEdges[0].color][rightEdges[3].color][frontEdges[3].color] + " ";
         // DFL => 
         result += me.edgesCombinations[downEdges[1].color][frontEdges[2].color][leftEdges[2].color] + " ";
         // DLB => 

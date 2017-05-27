@@ -94,6 +94,15 @@ export class ResponseComponent implements OnInit {
 	showAnimation(): void {
 		let me = this;
 		console.log('showing response...');
-		me.cube.makeMoves(me.response.result);
+		me.state = me.cube.getState();
+
+		me.authService.solveCube(me.state)
+            .then((data) => {
+              me.response = data;
+              me.cube.makeMoves(me.response.result);
+              // send data to response component
+              // me.router.navigate(['/response', me.state, me.result]);
+            });
+		
 	}
 }

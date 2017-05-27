@@ -67,7 +67,14 @@ var ResponseComponent = (function () {
     ResponseComponent.prototype.showAnimation = function () {
         var me = this;
         console.log('showing response...');
-        me.cube.makeMoves(me.response.result);
+        me.state = me.cube.getState();
+        me.authService.solveCube(me.state)
+            .then(function (data) {
+            me.response = data;
+            me.cube.makeMoves(me.response.result);
+            // send data to response component
+            // me.router.navigate(['/response', me.state, me.result]);
+        });
     };
     return ResponseComponent;
 }());

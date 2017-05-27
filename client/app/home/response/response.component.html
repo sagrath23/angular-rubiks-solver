@@ -9,12 +9,6 @@
 -->
 
 <md-grid-list cols="4" rowHeight="200px">
-	<md-grid-tile [colspan]= 4 [rowspan]= 1 [style.background]= 'lightblue'>
-		<p>Estado Inicial: </p><br>
-		<p>{{state}}</p><br>
-		<p>Movimientos para resolver el cubo: </p><br>
-		<p>{{response | json}}</p>				
-	</md-grid-tile>
 	<md-grid-tile [colspan]= 4 [rowspan]= 4 [style.background]= 'lightblue'>
 		<canvas id="cube"></canvas> 
 	</md-grid-tile>		
