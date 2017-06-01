@@ -18,7 +18,8 @@ var FlatCube = function(containerId, size, down){
 		this.container.removeChild(this.container.firstChild);
 	}
 
-	this.container.style.position = 'absolute';
+	//this.container.style.position = 'absolute';
+	/*
 	if(down){
 		this.container.style.top = size*45/28 + 45 + 'px';
 		this.container.style.left = '15px';
@@ -26,6 +27,7 @@ var FlatCube = function(containerId, size, down){
 		this.container.style.top = '15px';
 		this.container.style.left = size + 30 + 'px';
 	}
+	*/
 
 	this.faceSize = size/3 || 100;
 
@@ -52,11 +54,13 @@ var FlatCube = function(containerId, size, down){
 	this.message.style.fontSize = this.faceSize/9 + 'px';
 	this.container.appendChild(this.message);
 
+	/*
 	this.picker = new FlatColorPicker(colors, this.faceSize/4);
 	this.picker.container.style.right = 0;
 	this.picker.container.style.left = 0;
 	this.picker.container.style.bottom  = 0;
 	this.container.appendChild(this.picker.container);
+	*/
 };
 
 FlatCube.prototype.setCurrentState = function(colors){
