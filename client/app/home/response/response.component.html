@@ -7,7 +7,9 @@
 	{{response | json}}
 </div>
 -->
-
+<hr>
+<button id="nextStepButton" md-raised-button (click)="nextStep()">siguiente paso</button>
+<button md-raised-button (click)="showAnimation()">Resolver!</button>
 <md-grid-list cols="8" rowHeight="200px">
 	<md-grid-tile [colspan]= 4 [rowspan]= 4 [style.background]= 'lightblue'>
 		<canvas id="cube"></canvas> 
@@ -15,9 +17,11 @@
   	<md-grid-tile [colspan]= 4 [rowspan]= 4 [style.background]= 'lightblue'>
 	  	<div id='flat-cube'></div> 
   	</md-grid-tile>
-  	<md-grid-tile [colspan]= 5 [rowspan]= 4 [style.background]= 'lightblue'>
+	<md-grid-tile [colspan]= 8 [rowspan]= 1 [style.background]= 'lightblue'>
+	  	Estado inicial: {{state}}<br>
+		Movimientos: {{response | json}} 
+  	</md-grid-tile>  
+  	<md-grid-tile style="display: none;" [colspan]= 5 [rowspan]= 4 [style.background]= 'lightblue'>
 	  	<div id='controls'></div>
   	</md-grid-tile>
 </md-grid-list>
-
-<button md-raised-button (click)="showAnimation()">Ver secuencia de pasos!</button>

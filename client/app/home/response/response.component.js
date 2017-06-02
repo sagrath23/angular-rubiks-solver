@@ -19,6 +19,8 @@ var ResponseComponent = (function () {
         this.authService = authService;
         this.route = route;
         this.location = location;
+        this.movements = [];
+        this.currentMovement = 0;
     }
     ResponseComponent.prototype.ngOnInit = function () {
         console.log("Mostrando respuesta");
@@ -50,6 +52,17 @@ var ResponseComponent = (function () {
         me.cube.render();
         //asigno el estado actual del cubo
         me.flatCube.setCurrentState(me.colors);
+        //load response
+        if (me.movements.length === 0) {
+            me.state = me.cube.getState();
+            me.authService.solveCube(me.state)
+                .then(function (data) {
+                me.response = data;
+                me.movements = me.response.result.split(" ");
+                console.log(me.movements);
+                //me.controls.setSolution(me.response.result);
+            });
+        }
         //dejo la animación ejecutandose
         //así se pasan las funciones en TS
         requestAnimationFrame(function () { return me.run(); });
@@ -67,14 +80,22 @@ var ResponseComponent = (function () {
     ResponseComponent.prototype.showAnimation = function () {
         var me = this;
         console.log('showing response...');
-        me.state = me.cube.getState();
-        me.authService.solveCube(me.state)
-            .then(function (data) {
-            me.response = data;
-            me.cube.makeMoves(me.response.result);
-            // send data to response component
-            // me.router.navigate(['/response', me.state, me.result]);
-        });
+        me.cube.makeMoves(me.response.result);
+    };
+    ResponseComponent.prototype.nextStep = function () {
+        var me = this;
+        if (me.currentMovement < me.movements.length) {
+            //make a movement
+            me.cube.makeMove(me.movements[me.currentMovement]);
+            me.currentMovement++;
+        }
+        else {
+            console.log("disable button");
+            //disable next Button
+            document.getElementById("nextStepButton").disabled = true;
+        }
+    };
+    ResponseComponent.prototype.prevStep = function () {
     };
     return ResponseComponent;
 }());

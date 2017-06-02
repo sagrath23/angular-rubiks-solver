@@ -37,6 +37,10 @@ export class ResponseComponent implements OnInit {
 
 	controls: any;
 
+	movements: Array<string> = [];
+
+	currentMovement: number = 0;
+
 	oldWidth: number;
 
 	constructor(private authService: AuthService, private route: ActivatedRoute, private location: Location) { }
@@ -74,6 +78,19 @@ export class ResponseComponent implements OnInit {
 		me.cube.render();
 		//asigno el estado actual del cubo
 		me.flatCube.setCurrentState(me.colors);
+
+		//load response
+		if(me.movements.length === 0){
+			me.state = me.cube.getState();
+			me.authService.solveCube(me.state)
+				.then((data) => {
+					me.response = data;
+					me.movements = me.response.result.split(" ");
+					console.log(me.movements);
+					//me.controls.setSolution(me.response.result);
+				});
+		}
+			
 		//dejo la animación ejecutandose
 		//así se pasan las funciones en TS
 		requestAnimationFrame(() => me.run());
@@ -94,15 +111,25 @@ export class ResponseComponent implements OnInit {
 	showAnimation(): void {
 		let me = this;
 		console.log('showing response...');
-		me.state = me.cube.getState();
+		me.cube.makeMoves(me.response.result);
+	}
 
-		me.authService.solveCube(me.state)
-            .then((data) => {
-              me.response = data;
-              me.cube.makeMoves(me.response.result);
-              // send data to response component
-              // me.router.navigate(['/response', me.state, me.result]);
-            });
+	nextStep(): void{
+		var me = this;
+		
+		if(me.currentMovement < me.movements.length){
+			//make a movement
+			me.cube.makeMove(me.movements[me.currentMovement]);
+			me.currentMovement++;
+		}
+		else{
+			console.log("disable button");
+			//disable next Button
+			document.getElementById("nextStepButton").disabled = true;
+		}
+	}
+
+	prevStep(): void{
 		
 	}
 }
