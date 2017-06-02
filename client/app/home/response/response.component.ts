@@ -125,7 +125,7 @@ export class ResponseComponent implements OnInit {
 		else{
 			console.log("disable button");
 			//disable next Button
-			document.getElementById("nextStepButton").disabled = true;
+			//document.getElementById("nextStepButton").disabled = true;
 		}
 	}
 

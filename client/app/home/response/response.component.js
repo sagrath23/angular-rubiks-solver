@@ -92,7 +92,7 @@ var ResponseComponent = (function () {
         else {
             console.log("disable button");
             //disable next Button
-            document.getElementById("nextStepButton").disabled = true;
+            //document.getElementById("nextStepButton").disabled = true;
         }
     };
     ResponseComponent.prototype.prevStep = function () {
