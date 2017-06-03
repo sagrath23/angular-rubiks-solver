@@ -26,13 +26,13 @@ var TrackerComponent = (function () {
         this.LEFT = 'L';
         this.RIGHT = 'R';
         this.UNDEFINED = 'N/A';
-        //formas encontradas que corresponden con los filtros definidos
+        //  formas encontradas que corresponden con los filtros definidos
         this.shapes = [];
-        //
+        // 
         this.cubies = [];
-        //margen de error entre superficies encontradas
+        //  margen de error entre superficies encontradas
         this.deltaError = 0.15;
-        //identificador de la cara de la imágen
+        //  identificador de la cara de la imágen
         this.faceId = this.UNDEFINED;
         this.returnFaceId = new core_2.EventEmitter();
         this.returnResponseString = new core_2.EventEmitter();
@@ -87,11 +87,11 @@ var TrackerComponent = (function () {
         console.log(me.imageName + ' image loaded...');
         me.img = document.getElementById('img-' + me.imageName);
         var demoContainer = document.querySelector('.container-' + me.imageName);
-        //aplicamos un filtro para mejorar la imágen
-        //tracking.Image.separableConvolve(pixels, width, height, horizWeights, vertWeights, opaque);
-        //le pasamos a la librería JS un arreglo de 2 posiciones:
-        //en la primera se envía el contexto de this
-        //en la segunda posición se envía un arreglo de parametros para la función
+        //  aplicamos un filtro para mejorar la imágen
+        // tracking.Image.separableConvolve(pixels, width, height, horizWeights, vertWeights, opaque);
+        // le pasamos a la librería JS un arreglo de 2 posiciones:
+        // en la primera se envía el contexto de this
+        // en la segunda posición se envía un arreglo de parametros para la función
         var colorsToTrack = [null, ['yellow', 'white', 'blue', 'red', 'green', 'orange']];
         me.tracker = new (Function.prototype.bind.apply(tracking.ColorTracker, colorsToTrack));
         me.tracker.on('track', function (event) {
@@ -101,7 +101,7 @@ var TrackerComponent = (function () {
             me.analizeShapes();
             me.clasifyShapes();
         });
-        //analizamos las figuras encontradas
+        // analizamos las figuras encontradas
         tracking.track('#img-' + me.imageName, this.tracker);
     };
     /*
@@ -110,7 +110,7 @@ var TrackerComponent = (function () {
     */
     TrackerComponent.prototype.clasifyShapes = function () {
         var me = this, left = [], middle = [], right = [], minX = Number.MAX_VALUE, maxX = Number.MIN_VALUE;
-        //busco el mínimo y el máximo
+        // busco el mínimo y el máximo
         for (var i = 0; i < me.cubies.length; i++) {
             if (me.cubies[i].x < minX) {
                 minX = me.cubies[i].x;
@@ -119,7 +119,7 @@ var TrackerComponent = (function () {
                 maxX = me.cubies[i].x;
             }
         }
-        //con estos valores, clasifico los cubies a la izquierda, derecha o al medio
+        // con estos valores, clasifico los cubies a la izquierda, derecha o al medio
         for (var i = 0; i < me.cubies.length; i++) {
             var actualCubie = me.cubies[i], deltaXmin = Math.abs(actualCubie.x - minX), deltaXmax = Math.abs(actualCubie.x - maxX), errorXmin = (deltaXmin / (actualCubie.width)), errorXmax = (deltaXmax / (actualCubie.width));
             if (errorXmin <= 0.15) {
@@ -135,9 +135,9 @@ var TrackerComponent = (function () {
             }
         }
         var centerIndex = me.getCenterCubie(middle);
-        //despues de clasificarlas, verificamos la cara que estámos analizando
-        //y retornamos los colores encontrados para que el trackmanager genere el
-        //estado inicial del cubo
+        // despues de clasificarlas, verificamos la cara que estámos analizando
+        // y retornamos los colores encontrados para que el trackmanager genere el
+        // estado inicial del cubo
         me.defineCubeFace(middle[centerIndex], [left, middle, right]);
     };
     /*
@@ -148,19 +148,19 @@ var TrackerComponent = (function () {
         var me = this;
         for (var i in me.shapes) {
             var actualShape = me.shapes[i], countSimils = 0;
-            //se compara con los otras formas encontradas, para determinar si debe o no
-            //pintarla
+            // se compara con los otras formas encontradas, para determinar si debe o no
+            // pintarla
             for (var j in me.shapes) {
                 if (i != j) {
                     var currentShape = me.shapes[j], deltaW = Math.abs(currentShape.width - actualShape.width), deltaH = Math.abs(currentShape.height - actualShape.height), currentErrorW = deltaW / actualShape.width, currentErrorH = deltaH / actualShape.height;
-                    //miramos si el delta es menos a un x porciento
+                    // miramos si el delta es menos a un x porciento
                     if ((currentErrorW <= me.deltaError) && (currentErrorH <= me.deltaError)) {
                         countSimils++;
                     }
                 }
             }
             if (countSimils > 4) {
-                //debe graficarse
+                // debe graficarse
                 me.cubies.push(actualShape);
                 me.plotRectangle(actualShape.x, actualShape.y, actualShape.width, actualShape.height, actualShape.color);
             }
@@ -171,8 +171,8 @@ var TrackerComponent = (function () {
     */
     TrackerComponent.prototype.plotRectangle = function (x, y, width, height, color) {
         var me = this, rect = document.createElement('div');
-        //show for debug purposes
-        //rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
+        // show for debug purposes
+        // rect.innerHTML += "("+x+","+y+") - "+width+"x"+height+" ";
         document.querySelector('.container-' + me.imageName).appendChild(rect);
         rect.classList.add('rect');
         rect.style.border = '4px solid ' + color;
@@ -187,8 +187,8 @@ var TrackerComponent = (function () {
     que define la cara que estoy viendo
     */
     TrackerComponent.prototype.getCenterCubie = function (middleCubies) {
-        var me = this, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
-        //extraemos los míninos y máximos de los cubies del medio
+        var minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE, minIndex = -1, maxIndex = -1, centerIndex = -1;
+        // extraemos los míninos y máximos de los cubies del medio
         for (var i = 0; i < middleCubies.length; i++) {
             if (middleCubies[i].y < minY) {
                 minIndex = i;
@@ -199,9 +199,9 @@ var TrackerComponent = (function () {
                 maxY = middleCubies[i].y;
             }
         }
-        //con estos valores identificados, se
+        // con estos valores identificados, se
         for (var i = 0; i < middleCubies.length; i++) {
-            if (i != minIndex && i != maxIndex) {
+            if (i !== minIndex && i !== maxIndex) {
                 centerIndex = i;
                 break;
             }

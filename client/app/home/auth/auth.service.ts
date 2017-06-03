@@ -12,7 +12,7 @@ import { Video } 	from '../videoplayer/video';
 export class AuthService {
 
 	private authUrl = 'user';  // URL to web api
-  private solverUrl = 'solver';//URL to solver API
+    private solverUrl = 'solver';//URL to solver API
 	private videosUrl = 'videos';
 
 	private loggedUser: User;
